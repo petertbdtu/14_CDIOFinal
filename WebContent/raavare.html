@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Råvareadministration</title>
+    <script src="jquery-3.3.1.js"></script>
+    <script src="Agent.js"></script>
+    <script>
+        $(function(){
+            loadRaavare();
+            $( "#raavareOpret" ).click(function() {
+                opretRaavare();
+            });
+        })
+        function loadRaavare() {
+            $("#raavareTableBody").empty();
+            //Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data).
+            // $('').append('html'), appends html to an html element.
+            Agent.getJson("rest/raavare",
+                function(data) {
+                    $.each(data, function (i, element) {
+                        $("#produktbatchtable").append(generateRaavareHTML(element));
+                    });
+                }
+            );
+        }
+        //Convenience function for generating html
+        function generateRaavareHTML(raavare) {
+            return 	'<tr><td>' + raavare.id + '</td>' +
+                '<td>' + raavare.name + '</td>' +
+                '</tr>';
+        }
+        function opretRaavare() {
+            var raavareData = {}
+            raavareData.id = $("#id").val();
+            raavareData.name = $("#name").val();
+            //$("#raavareTableBody").append(generateRaavareHTML(raavareData)); //for testing
+            Agent.postJson('rest/raavare', raavareData, function(data){
+                $("#raavareTableBody").append(generateRaavareHTML(raavareData));
+            }, function(xhr, statusmsg, errormsg) {
+                alert(xhr);
+                alert(statusmsg);
+                alert(errormsg);
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <h2>Råvareadministration</h2>
+    </br>
+    <div>
+        <table border = "1" id = "raavareTable">
+            <thead>
+            <tr>
+                <th>Nr.</th>
+                <th>Navn</th>
+                <th>Rette?</th>
+            </tr>
+            </thead>
+            <tbody id = "raavareTableBody">
+
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h2>Råvareopretning</h2>
+        <table>
+            <tr>
+               <th>Nr.</th>
+               <th>Navn</th>
+            </tr>
+            <tr>
+                <td><input type = text id = "id"></td>
+                <td><input type = text id = "name"></td>
+            </tr>
+        </table>
+        <button id = "raavareOpret">Opret</button>
+    </div>
+</body>
+</html>
