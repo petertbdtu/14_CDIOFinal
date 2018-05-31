@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Produktbatch Administration</title></head>
+<script src="jquery-3.3.1.js"></script>
+<script src="Agent.js"></script>
+<script>
+
+$(function(){
+    loadProduktbatches();
+    $( "#opretroduktbatch" ).click(function() {
+    	opretProduktbatch();
+	});
+})
+
+function loadProduktbatches() {
+	$("#ingredienttablebody").empty();
+	//Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data). 
+	// $('').append('html'), appends html to an html element.
+	Agent.getJson("rest/produktbatch",
+		function(data) {
+			$.each(data, function (i, element) {
+				$("#produktbatchtable").append(generateIngredientHTML(element));
+			});
+		}
+	);
+}
+
+//Convenience function for generating html
+function generateProduktbatchHTML(produktbatch) {
+	return 	'<tr><td>' + produktbatch.id + '</td>' +
+			'<td>' + produktbatch.recept + '</td>' +
+			'<td>' + produktbatch.status + '</td>' +
+			'</tr>';
+}
+
+function opretProduktbatch() {
+   	var produktbatchData = {}
+   	produktbatchData.id = $("#id").val();
+   	produktbatchData.recept = $("#name").val();
+   	produktbatchData.status = 0; // Initial status is 'not active'. Maybe don't do this client-side?
+   	Agent.postJson('rest/produktbatch', produktbatchData, function(data){
+			$("#produktbatchtablebody").append(generateIngredientHTML(produktbatchData));
+		}, function(xhr, statusmsg, errormsg) {
+			alert(xhr);
+			alert(statusmsg);
+			alert(errormsg);
+		});
+}
+
+</script>
+<body>
+	ID: <input type="text" id="id"> <br>
+	Recept: <input type="text" id="recept"> <br>
+	<button id="opretproduktbatch">Opret Produktbatch</button>
+	
+	<div class="container" id="produktbatches">
+	<h1>Produktbatches</h1>
+		<table>
+			<thead>
+				<tr>
+					<td>ID</td>
+					<td>Recept</td>
+					<td>Status</td>
+				</tr>
+			</thead>
+			<tbody id="produktbatchtablebody">
+
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
