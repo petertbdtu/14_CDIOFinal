@@ -11,7 +11,48 @@
             $( "#raavareOpret" ).click(function() {
                 opretRaavare();
             });
+
+            var curID;
+
+            $("#raavareTable").on('click', '.editbutton', function() {
+                var self = $(this).closest("tr");
+                var col1_value = self.find(".rvId").text();
+                var col2_value = self.find(".rvName").text();
+                self.find(".rvId").html("<input type = text class = rvIdEdit>");
+                self.find(".rvName").html("<input type = text class = rvNameEdit>");
+                self.find(".rvIdEdit").val(col1_value);
+                self.find(".rvNameEdit").val(col2_value);
+                self.find(".editbutton").text("Ok");
+                self.find(".editbutton").toggleClass('editbutton okbutton');
+                curID = col1_value;
+            });
+
+            $("#raavareTable").on('click', '.okbutton', function() {
+                var self = $(this).closest("tr");
+                var col1_value = self.find(".rvIdEdit").val();
+                var col2_value = self.find(".rvNameEdit").val();
+                self.find(".rvId").html("");
+                self.find(".rvName").html("");
+                self.find(".rvId").text(col1_value);
+                self.find(".rvName").text(col2_value);
+                self.find(".okbutton").text("Ret");
+                self.find(".okbutton").toggleClass('okbutton editbutton');
+                //her skal der så postes ændringer til datalaget
+                //var raavareData = {}
+                //raavareData.id = col1_value;
+                //raavareData.name = col2_value;
+                //raavaraData.changeId = curID
+                //curID = 0;
+                //Agent.postJson('rest/raavare/edit', raavareData, function(data){
+                //    $("#raavareTableBody").append(generateRaavareHTML(raavareData));
+                //}, function(xhr, statusmsg, errormsg) {
+                //    alert(xhr);
+                //    alert(statusmsg);
+                //    alert(errormsg);
+                //});
+            });
         })
+
         function loadRaavare() {
             $("#raavareTableBody").empty();
             //Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data).
@@ -19,21 +60,23 @@
             Agent.getJson("rest/raavare",
                 function(data) {
                     $.each(data, function (i, element) {
-                        $("#produktbatchtable").append(generateRaavareHTML(element));
+                        $("#raavareTable").append(generateRaavareHTML(element));
                     });
                 }
             );
         }
         //Convenience function for generating html
         function generateRaavareHTML(raavare) {
-            return 	'<tr><td>' + raavare.id + '</td>' +
-                '<td>' + raavare.name + '</td>' +
+            return 	'<tr><td class = rvId>' + raavare.id + '</td>' +
+                '<td class = rvName>' + raavare.name + '</td>' +
+                '<td><button class = "editbutton">Ret</button></td>' +
                 '</tr>';
         }
         function opretRaavare() {
             var raavareData = {}
             raavareData.id = $("#id").val();
             raavareData.name = $("#name").val();
+            raavareData.curID = 0; //ID we want to override, 0 means no overwriting
             //$("#raavareTableBody").append(generateRaavareHTML(raavareData)); //for testing
             Agent.postJson('rest/raavare', raavareData, function(data){
                 $("#raavareTableBody").append(generateRaavareHTML(raavareData));
