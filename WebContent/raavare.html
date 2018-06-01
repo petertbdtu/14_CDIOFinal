@@ -7,44 +7,44 @@
     <script src="Agent.js"></script>
     <script>
         $(function(){
-            loadRaavare();
-            $( "#raavareOpret" ).click(function() {
-                opretRaavare();
+            loadIngredient();
+            $( "#ingredientOpret" ).click(function() {
+                opretIngredient();
             });
 
             var curID;
 
-            $("#raavareTable").on('click', '.editbutton', function() {
+            $("#ingredientTable").on('click', '.editbutton', function() {
                 var self = $(this).closest("tr");
-                var col1_value = self.find(".rvId").text();
-                var col2_value = self.find(".rvName").text();
-                self.find(".rvId").html("<input type = text class = rvIdEdit>");
-                self.find(".rvName").html("<input type = text class = rvNameEdit>");
-                self.find(".rvIdEdit").val(col1_value);
-                self.find(".rvNameEdit").val(col2_value);
+                var col1_value = self.find(".inId").text();
+                var col2_value = self.find(".inName").text();
+                self.find(".inId").html("<input type = text class = inIdEdit>");
+                self.find(".inName").html("<input type = text class = inNameEdit>");
+                self.find(".inIdEdit").val(col1_value);
+                self.find(".inNameEdit").val(col2_value);
                 self.find(".editbutton").text("Ok");
                 self.find(".editbutton").toggleClass('editbutton okbutton');
                 curID = col1_value;
             });
 
-            $("#raavareTable").on('click', '.okbutton', function() {
+            $("#ingredientTable").on('click', '.okbutton', function() {
                 var self = $(this).closest("tr");
-                var col1_value = self.find(".rvIdEdit").val();
-                var col2_value = self.find(".rvNameEdit").val();
-                self.find(".rvId").html("");
-                self.find(".rvName").html("");
-                self.find(".rvId").text(col1_value);
-                self.find(".rvName").text(col2_value);
+                var col1_value = self.find(".inIdEdit").val();
+                var col2_value = self.find(".inNameEdit").val();
+                self.find(".inId").html("");
+                self.find(".inName").html("");
+                self.find(".inId").text(col1_value);
+                self.find(".inName").text(col2_value);
                 self.find(".okbutton").text("Ret");
                 self.find(".okbutton").toggleClass('okbutton editbutton');
                 //her skal der så postes ændringer til datalaget
-                //var raavareData = {}
-                //raavareData.id = col1_value;
-                //raavareData.name = col2_value;
-                //raavaraData.changeId = curID
+                //var ingredientData = {}
+                //ingredientData.id = col1_value;
+                //ingredientData.name = col2_value;
+                //ingredientData.changeId = curID
                 //curID = 0;
-                //Agent.postJson('rest/raavare/edit', raavareData, function(data){
-                //    $("#raavareTableBody").append(generateRaavareHTML(raavareData));
+                //Agent.postJson('rest/ingredient/edit', ingredientData, function(data){
+                //    $("#ingredientTableBody").append(generateIngredientHTML(ingredientData));
                 //}, function(xhr, statusmsg, errormsg) {
                 //    alert(xhr);
                 //    alert(statusmsg);
@@ -53,33 +53,33 @@
             });
         })
 
-        function loadRaavare() {
-            $("#raavareTableBody").empty();
+        function loadIngredient() {
+            $("#ingredientTableBody").empty();
             //Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data).
             // $('').append('html'), appends html to an html element.
-            Agent.getJson("rest/raavare",
+            Agent.getJson("rest/ingredient",
                 function(data) {
                     $.each(data, function (i, element) {
-                        $("#raavareTable").append(generateRaavareHTML(element));
+                        $("#ingredientTable").append(generateIngredientHTML(element));
                     });
                 }
             );
         }
         //Convenience function for generating html
-        function generateRaavareHTML(raavare) {
-            return 	'<tr><td class = rvId>' + raavare.id + '</td>' +
-                '<td class = rvName>' + raavare.name + '</td>' +
+        function generateIngredientHTML(ingredient) {
+            return 	'<tr><td class = inId>' + ingredient.id + '</td>' +
+                '<td class = inName>' + ingredient.name + '</td>' +
                 '<td><button class = "editbutton">Ret</button></td>' +
                 '</tr>';
         }
-        function opretRaavare() {
-            var raavareData = {}
-            raavareData.id = $("#id").val();
-            raavareData.name = $("#name").val();
-            raavareData.curID = 0; //ID we want to override, 0 means no overwriting
-            //$("#raavareTableBody").append(generateRaavareHTML(raavareData)); //for testing
-            Agent.postJson('rest/raavare', raavareData, function(data){
-                $("#raavareTableBody").append(generateRaavareHTML(raavareData));
+        function opretIngredient() {
+            var ingredientData = {}
+            ingredientData.id = $("#id").val();
+            ingredientData.name = $("#name").val();
+            ingredientData.curID = 0; //ID we want to override, 0 means no overwriting
+            $("#ingredientTableBody").append(generateIngredientHTML(ingredientData)); //for testing
+            Agent.postJson('rest/ingredient', ingredientData, function(data){
+                $("#ingredientTableBody").append(generateIngredientHTML(ingredientData));
             }, function(xhr, statusmsg, errormsg) {
                 alert(xhr);
                 alert(statusmsg);
@@ -93,7 +93,7 @@
     <h2>Råvareadministration</h2>
     </br>
     <div>
-        <table border = "1" id = "raavareTable">
+        <table border = "1" id = "ingredientTable">
             <thead>
             <tr>
                 <th>Nr.</th>
@@ -101,7 +101,7 @@
                 <th>Rette?</th>
             </tr>
             </thead>
-            <tbody id = "raavareTableBody">
+            <tbody id = "ingredientTableBody">
 
             </tbody>
         </table>
@@ -119,7 +119,7 @@
                 <td><input type = text id = "name"></td>
             </tr>
         </table>
-        <button id = "raavareOpret">Opret</button>
+        <button id = "ingredientOpret">Opret</button>
     </div>
 </body>
 </html>
