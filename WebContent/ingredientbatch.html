@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<title>Råvarebatch</title>
+<link rel="stylesheet" href="ingredientbatch.css">
+<script src="JavaScript.js"></script>
+</head>
+
+<body>
+ <div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+	</div>
+
+<h2 class="header">Vælg råvare.</h2>
+
+<div class="dropdown">
+	<button onclick="myFunction()" class="dropbtn">Vælg råvare</button>
+	<div id="myDropdown" class="dropdownContent">
+		<a href="#">material1</a>
+		<a href="#">material2</a>
+		<a href="#">material3</a>	
+	</div>
+</div>
+
+
+<div class="container" id="batchamount-container">
+	<form class="form-batchamount" id="form-batchamount">
+		<label for="inputAmount" class="sr-only">Mængde</label>
+        <input type="number" id="inputAmount" class="form-control" placeholder="Mængde" autofocus>
+        <label for="inputBatchNumber" class="sr-only">Batch nummer</label>
+        <input type="number" id="inputBatchNumber" class="form-control" placeholder="Batch nummer">
+        <button class="btn"  type="button" id="addButton" onclick="alert()">Tilføj batch</button>
+	</form>
+</div>
+
+</body>
+
+</html>
+
+

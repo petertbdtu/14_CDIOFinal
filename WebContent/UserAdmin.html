@@ -2,57 +2,55 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>UserAdmin</title>
+<title>Brugeradministration</title>
 <script src="jquery-3.1.1.js"></script>
 <script src="jquery.serialize-object.js"></script>
 <script src="ingredientedit.js"></script>
 </head>
 <body>
-
-
  <div id="menu">
 		<b>Menu</b><br>
-		<a href="Login.html">Log out</a>
+		<a href="index.html">Log ud</a>
 	</div>
 	
-<h1>User Administrator</h1>	
+<h1>Brugeradministration</h1>	
 
 <div id= "maincontainer">
 <DIV class="usercontainer">
-	<h2>Create User</h2>
+	<h2>Opret bruger</h2>
 	<form method="post">
 		Bruger ID<br>
 		<input type="var" name ="userid"><br>	
-		First Name : <br>
+		Fornavn<br>
 		<input type="text" name="firstname"><br>
-		Last Name :<br>
+		Efternavn<br>
 		<input type="text" name="lastname"><br>
-		initials :<br>
+		Initialer<br>
 		<input type="text" name="ini"><br>
-		Role :<br>
-		<input type="radio" name="Aktiv"> Adminstrator
-		<input type="radio" name="Aktiv"> Farmaceut
-		<input type="radio" name="Aktiv"> Product Manager<br>
+		Rolle<br>
+		<input type="radio" name="aktiv"> Administrator
+		<input type="radio" name="aktiv"> Farmaceut
+		<input type="radio" name="Aktiv"> Produktionsleder<br>
 		
-		Activ: <br>
-		<input type="radio" name="Aktiv"> Yes
-		<input type="radio" name="Aktiv"> No
+		Aktiv<br>
+		<input type="radio" name="aktiv"> Ja
+		<input type="radio" name="aktiv"> Nej
 		<br>
 		
-		<input type="submit" value="Finish">
+		<input type="submit">
 		</form>
 
 <div class="usercontainer" id="Users">
-	<h1>Users</h1>
+	<h1>Brugere</h1>
 	<table>
 	<thead>
 	<tr>
-	<td>UserID</td>
-	<td>firstname</td>
-	<td>lastname</td>
-	<td>ini</td>
-	<td>Role</td>
-	<td>Activ</td>
+	<td>ID</td>
+	<td>Fornavn</td>
+	<td>Efternavn</td>
+	<td>Initialer</td>
+	<td>Rolle</td>
+	<td>Aktiv</td>
 	</tr>
 	</thead>
 	</table>
@@ -65,9 +63,9 @@
 	</table>
 	<hr>
 	<form>
-		Deaktivere user with ID:
-		<input type="number" id="deaktivedid">
-		<button onclick="deaktivedUser();">deaktived User</button>
+		Deaktiver bruger med ID:
+		<input type="number" id="deactivateid">
+		<button onclick="deactivateUser();">Deaktiver</button>
 		</form>
 	</div>
 </DIV>	
