@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Råvareadministration</title>
+    <script src="jquery-3.3.1.js"></script>
+    <script src="Agent.js"></script>
+    <script>
+        $(function(){
+            loadIngredient();
+            $( "#ingredientOpret" ).click(function() {
+                opretIngredient();
+            });
+
+            var curID;
+
+            $("#ingredientTable").on('click', '.editbutton', function() {
+                var self = $(this).closest("tr");
+                var col1_value = self.find(".inId").text();
+                var col2_value = self.find(".inName").text();
+                self.find(".inId").html("<input type = text class = inIdEdit>");
+                self.find(".inName").html("<input type = text class = inNameEdit>");
+                self.find(".inIdEdit").val(col1_value);
+                self.find(".inNameEdit").val(col2_value);
+                self.find(".editbutton").text("Ok");
+                self.find(".editbutton").toggleClass('editbutton okbutton');
+                curID = col1_value;
+            });
+
+            $("#ingredientTable").on('click', '.okbutton', function() {
+                var self = $(this).closest("tr");
+                var col1_value = self.find(".inIdEdit").val();
+                var col2_value = self.find(".inNameEdit").val();
+                self.find(".inId").html("");
+                self.find(".inName").html("");
+                self.find(".inId").text(col1_value);
+                self.find(".inName").text(col2_value);
+                self.find(".okbutton").text("Ret");
+                self.find(".okbutton").toggleClass('okbutton editbutton');
+                //her skal der så postes ændringer til datalaget
+                //var ingredientData = {}
+                //ingredientData.id = col1_value;
+                //ingredientData.name = col2_value;
+                //ingredientData.changeId = curID
+                //curID = 0;
+                //Agent.postJson('rest/ingredient/edit', ingredientData, function(data){
+                //    $("#ingredientTableBody").append(generateIngredientHTML(ingredientData));
+                //}, function(xhr, statusmsg, errormsg) {
+                //    alert(xhr);
+                //    alert(statusmsg);
+                //    alert(errormsg);
+                //});
+            });
+        })
+
+        function loadIngredient() {
+            $("#ingredientTableBody").empty();
+            //Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data).
+            // $('').append('html'), appends html to an html element.
+            Agent.getJson("rest/ingredient",
+                function(data) {
+                    $.each(data, function (i, element) {
+                        $("#ingredientTable").append(generateIngredientHTML(element));
+                    });
+                }
+            );
+        }
+        //Convenience function for generating html
+        function generateIngredientHTML(ingredient) {
+            return 	'<tr><td class = inId>' + ingredient.id + '</td>' +
+                '<td class = inName>' + ingredient.name + '</td>' +
+                '<td><button class = "editbutton">Ret</button></td>' +
+                '</tr>';
+        }
+        function opretIngredient() {
+            var ingredientData = {}
+            ingredientData.id = $("#id").val();
+            ingredientData.name = $("#name").val();
+            ingredientData.curID = 0; //ID we want to override, 0 means no overwriting
+            $("#ingredientTableBody").append(generateIngredientHTML(ingredientData)); //for testing
+            Agent.postJson('rest/ingredient', ingredientData, function(data){
+                $("#ingredientTableBody").append(generateIngredientHTML(ingredientData));
+            }, function(xhr, statusmsg, errormsg) {
+                alert(xhr);
+                alert(statusmsg);
+                alert(errormsg);
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <h2>Råvareadministration</h2>
+    </br>
+    <div>
+        <table border = "1" id = "ingredientTable">
+            <thead>
+            <tr>
+                <th>Nr.</th>
+                <th>Navn</th>
+                <th>Rette?</th>
+            </tr>
+            </thead>
+            <tbody id = "ingredientTableBody">
+
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h2>Råvareopretning</h2>
+        <table>
+            <tr>
+               <th>Nr.</th>
+               <th>Navn</th>
+            </tr>
+            <tr>
+                <td><input type = text id = "id"></td>
+                <td><input type = text id = "name"></td>
+            </tr>
+        </table>
+        <button id = "ingredientOpret">Opret</button>
+    </div>
+</body>
+</html>
