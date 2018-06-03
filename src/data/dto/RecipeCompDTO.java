@@ -3,13 +3,10 @@ package data.dto;
 public class RecipeCompDTO {
 	String ingredient;
 	int amount;
-	int tolerance;
+	double tolerance; //0-20% tolerance
 	
 
-	public RecipeCompDTO(String ingredient, int amount, int tolerance) {
-		this.ingredient = ingredient;
-		this.amount = amount;
-		this.tolerance = tolerance;
+	public RecipeCompDTO() {
 	}
 
 	public String getIngredient() {
@@ -28,7 +25,7 @@ public class RecipeCompDTO {
 		this.amount = amount;
 	}
 
-	public int getTolerance() {
+	public double getTolerance() {
 		return tolerance;
 	}
 
