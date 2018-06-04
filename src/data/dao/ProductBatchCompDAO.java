@@ -21,6 +21,10 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 		}
 	}
 
+	public static ProductBatchCompDAO getInstance() {
+		return instance;
+	}
+	
 	@Override
 	public ProductBatchCompDTO getProductBatchComp(int pbId, int ibId) {
 		try {
