@@ -8,9 +8,8 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 
 public class StorageDAO {
-	private List<?> list;
-	
-	public void save() throws IOException {
+
+	public void save(List<?> list) throws IOException {
 		//Get Path
 		String path = "data/";
 		String className = this.getClass().toString();
@@ -25,7 +24,7 @@ public class StorageDAO {
 		oos.close();
 	}
 	
-	public void load() throws IOException, ClassNotFoundException {
+	public List<?> load() throws IOException, ClassNotFoundException {
 		//Get Path
 		String path = "data/";
 		String className = this.getClass().toString();
@@ -34,10 +33,12 @@ public class StorageDAO {
 		//Start stream to file(path)
 		FileInputStream fis = new FileInputStream(path);
 		ObjectInputStream ois = new ObjectInputStream(fis);
-		list = (List<?>) ois.readObject();
+		List<?> list = (List<?>) ois.readObject();
 		
 		//Close stream
 		ois.close();
+		
+		return list;
 	}
 	
 }
