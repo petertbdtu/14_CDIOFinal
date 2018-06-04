@@ -5,8 +5,16 @@ public class RecipeCompDTO {
 	int amount;
 	double tolerance; //0-20% tolerance
 	
+	
+	
+	public RecipeCompDTO(String ingredient, int amount, double tolerance) {
+		this.ingredient = ingredient;
+		this.amount = amount;
+		this.tolerance = tolerance;
+	}
 
 	public RecipeCompDTO() {
+		
 	}
 
 	public String getIngredient() {
