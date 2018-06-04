@@ -46,7 +46,7 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	public List<ProductBatchCompDTO> getProductBatchCompList(int pbId) {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
-			return new ArrayList<ProductBatchCompDTO>(complist.values());
+			return (List<ProductBatchCompDTO>) complist.values();
 
 		}
 		catch (ClassNotFoundException | IOException e) {
@@ -60,7 +60,7 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	public List<ProductBatchCompDTO> getProductBatchCompList() {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
-			return new ArrayList<ProductBatchCompDTO>(complist.values());
+			return (List<ProductBatchCompDTO>) complist.values();
 		}
 		catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
