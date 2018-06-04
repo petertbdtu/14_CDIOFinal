@@ -1,9 +1,8 @@
-package dto;
+package data.dto;
 import data.dao.*;
 import data.idao.*;
 
-public class ProductBatchCompDTO 
-{
+public class ProductBatchCompDTO{
 	private int pbID;
 	private int ibID;
 	private double tara;
