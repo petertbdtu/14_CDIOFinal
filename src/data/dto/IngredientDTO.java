@@ -34,4 +34,16 @@ public class IngredientDTO {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
+	
+	@Override 
+	public boolean equals (Object other) 
+	{
+		if (other instanceof IngredientDTO) 
+		{
+			if (this.id == ((IngredientDTO)other).id);
+			return true;
+		}
+			
+		return false;
+}
 }
