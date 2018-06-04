@@ -1,6 +1,12 @@
 package data.dto;
 
-public class IngredientBatchDTO {
+import java.io.Serializable;
+
+public class IngredientBatchDTO implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9055060400210373872L;
 	private int ibID;
 	private int ingbatchID;
 	private double amount;
