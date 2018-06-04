@@ -1,28 +1,40 @@
 package data.dto;
 
+import data.dao.*;
+import data.idao.*;
+
 public class RecipeCompDTO {
-	String ingredient;
-	int amount;
-	double tolerance; //0-20% tolerance
-	
-	
-	
-	public RecipeCompDTO(String ingredient, int amount, double tolerance) {
-		this.ingredient = ingredient;
+	private int ingredientId;
+	private int amount;
+	private double tolerance; //0-20% tolerance
+	private int recipeId;
+
+
+	public RecipeCompDTO(int ingredientId, int amount, double tolerance, int recipeId) {
+		this.ingredientId = ingredientId;
 		this.amount = amount;
 		this.tolerance = tolerance;
+		this.recipeId = recipeId;
 	}
 
 	public RecipeCompDTO() {
-		
+
 	}
 
-	public String getIngredient() {
-		return ingredient;
+	public int getRecipeId() {
+		return recipeId;
 	}
 
-	public void setIngredient(String ingredient) {
-		this.ingredient = ingredient;
+	public void setRecipeId(int recipeId) {
+		this.recipeId = recipeId;
+	}
+
+	public int getIngredientId() {
+		return ingredientId;
+	}
+
+	public void setIngredient(int ingredientId) {
+		this.ingredientId = ingredientId;
 	}
 
 	public int getAmount() {
@@ -40,6 +52,4 @@ public class RecipeCompDTO {
 	public void setTolerance(int tolerance) {
 		this.tolerance = tolerance;
 	}
-	
-	
 }
