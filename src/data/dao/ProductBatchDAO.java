@@ -1,42 +1,51 @@
 package data.dao;
-
-import data.idao.IProductBatchDAO;
-
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import data.dto.ProductBatchDTO;
+import data.idao.IProductBatchDAO;
 
-public class ProductBatchDAO implements IProductBatchDAO {
-	public ProductBatchDAO instance = new ProductBatchDAO();
-	public List<ProductBatchDTO> productBatches;
+public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
+	
+	private static ProductBatchDAO instance = new ProductBatchDAO();
 	
 	
-	public ProductBatchDAO() {
-		productBatches= new ArrayList<ProductBatchDTO>();
+	private ProductBatchDAO() {
+		try {
+			Map<Integer,ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
+		} catch (ClassNotFoundException | IOException e) {
+			super.save(new HashMap<Integer, ProductBatchDTO>());
+		}
 	}
 	
 	
-	public productBatchDAO getInstance() {
+	public static ProductBatchDAO getInstance() {
 		return instance;
 	}
 	
 	
 	@Override
 	public ProductBatchDTO getProductBatch(int pbId) {
-		ProductBatchDTO productBatch = productBatches.get(pbId);
+		Map<Integer,ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
+		return productBatches.get(pbId);
 	}
 
 	
 	@Override
 	public List<ProductBatchDTO> getProductBatchList() {
-		return productBatches;
+		Map<Integer,ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
+		return (List<ProductBatchDTO>) productBatches.values();
 	}
 
 	
 	@Override
 	public void createProductBatch(ProductBatchDTO productBatch) {
-		if(productBatches.contains(productBatch) != true) {
-			productBatches.add(productBatch.getPbNr(), productBatch);
+		Map<Integer,ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
+		if(!productBatches.containsKey(productBatch.getPbNr())) {
+			productBatches.put(productBatch.getPbNr(), productBatch);
+			super.save(productBatches);
 		}
 		
 	}
@@ -44,10 +53,9 @@ public class ProductBatchDAO implements IProductBatchDAO {
 	
 	@Override
 	public void updateProductBatch(ProductBatchDTO productBatch) {
-		if (productBatches.contains(productBatch) != true) {
-			productBatches.add(productBatch.getPbNr(), productBatch);
-		}
-		
+		Map<Integer,ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
+		productBatches.replace(productBatch.getPbNr(), productBatch);
+		super.save(productBatches);
 	}
 
 }
