@@ -11,7 +11,7 @@ public class ProductBatchCompDTO
 	private int usrID;
 	public ProductBatchCompDTO() 
 	{
-
+// getters and setters below
 	}
 	public int getpbID() {
 		return pbID;
