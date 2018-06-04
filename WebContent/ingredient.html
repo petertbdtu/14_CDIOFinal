@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Råvareadministration</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
     <script src="jquery-3.3.1.js"></script>
     <script src="Agent.js"></script>
     <script>
@@ -13,28 +12,20 @@
                 opretIngredient();
             });
 
-            var curID;
-
             $("#ingredientTable").on('click', '.editbutton', function() {
                 var self = $(this).closest("tr");
-                var col1_value = self.find(".inId").text();
                 var col2_value = self.find(".inName").text();
-                self.find(".inId").html("<input type = text class = inIdEdit>");
                 self.find(".inName").html("<input type = text class = inNameEdit>");
-                self.find(".inIdEdit").val(col1_value);
                 self.find(".inNameEdit").val(col2_value);
                 self.find(".editbutton").text("Ok");
                 self.find(".editbutton").toggleClass('editbutton okbutton');
-                curID = col1_value;
             });
 
             $("#ingredientTable").on('click', '.okbutton', function() {
                 var self = $(this).closest("tr");
-                var col1_value = self.find(".inIdEdit").val();
+                var col1_value = self.find(".inId").text();
                 var col2_value = self.find(".inNameEdit").val();
-                self.find(".inId").html("");
                 self.find(".inName").html("");
-                self.find(".inId").text(col1_value);
                 self.find(".inName").text(col2_value);
                 self.find(".okbutton").text("Ret");
                 self.find(".okbutton").toggleClass('okbutton editbutton');
@@ -91,41 +82,36 @@
     </script>
 </head>
 <body>
-	<div id="menu">
-		<b>Menu</b><br>
-		<a href="index.html">Log ud</a>
-	</div>
-	
-    <h2>Råvareadministration</h2>
-    </br>
-    <div>
-        <table border = "1" id = "ingredientTable">
-            <thead>
-            <tr>
-                <th>Nr.</th>
-                <th>Navn</th>
-                <th>Rette?</th>
-            </tr>
-            </thead>
-            <tbody id = "ingredientTableBody">
+<h2>Råvareadministration</h2>
+</br>
+<div>
+    <table border = "1" id = "ingredientTable">
+        <thead>
+        <tr>
+            <th>Nr.</th>
+            <th>Navn</th>
+            <th>Rette?</th>
+        </tr>
+        </thead>
+        <tbody id = "ingredientTableBody">
 
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
+</div>
 
-    <div>
-        <h2>Råvareopretning</h2>
-        <table>
-            <tr>
-               <th>Nr.</th>
-               <th>Navn</th>
-            </tr>
-            <tr>
-                <td><input type = text id = "id"></td>
-                <td><input type = text id = "name"></td>
-            </tr>
-        </table>
-        <button id = "ingredientOpret">Opret</button>
-    </div>
+<div>
+    <h2>Råvareopretning</h2>
+    <table>
+        <tr>
+            <th>Nr.</th>
+            <th>Navn</th>
+        </tr>
+        <tr>
+            <td><input type = text id = "id"></td>
+            <td><input type = text id = "name"></td>
+        </tr>
+    </table>
+    <button id = "ingredientOpret">Opret</button>
+</div>
 </body>
 </html>
