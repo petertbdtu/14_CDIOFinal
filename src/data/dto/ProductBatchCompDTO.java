@@ -1,5 +1,6 @@
 package dto;
-
+import data.dao.*;
+import data.idao.*;
 
 public class ProductBatchCompDTO 
 {
