@@ -8,18 +8,20 @@ public class ProductBatchDTO {
 	private String date;
 	private String status;
 	private ArrayList<Integer> ingID = new ArrayList<Integer>();
+	private ArrayList<Integer> ingbID = new ArrayList<Integer>();
 	private ArrayList<Double> amount = new ArrayList<Double>();
 	
 	public ProductBatchDTO() {
 		
 	}
 	
-	public ProductBatchDTO(int pbNr, int recept, String date, String status, int ingID, double amount) {
+	public ProductBatchDTO(int pbNr, int recept, String date, String status, int ingID, int ingbID, double amount) {
 		this.pbNr = pbNr;
 		this.recept = recept;
 		this.dato = dato;
 		this.status = status;
 		this.ingID = ingID;
+		this.ingbID = ingbID;
 		this.amount = amount;
 	}
 	
