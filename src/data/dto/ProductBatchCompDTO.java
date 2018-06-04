@@ -11,7 +11,7 @@ public class ProductBatchCompDTO
 	private int usrID;
 	public ProductBatchCompDTO() 
 	{
-		
+
 	}
 	// getters and setters below
 	public int getpbID() {
@@ -44,6 +44,8 @@ public class ProductBatchCompDTO
 	public void setUsrID(int usrID) {
 		this.usrID = usrID;
 	}
-
+	public String generateKey() {
+		return getpbID() + "," + getibID();
+	}
 
 }
