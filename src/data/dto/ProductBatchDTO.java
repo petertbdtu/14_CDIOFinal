@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ProductBatchDTO {
 	private int pbNr;//product batch Nr.
-	private int recept;//product 
+	private int recept;//product recept
 	private String date;
 	private String status;
 	private ArrayList<Integer> ingID = new ArrayList<Integer>();
@@ -15,17 +15,26 @@ public class ProductBatchDTO {
 		
 	}
 	
-	public ProductBatchDTO(int pbNr, int recept, String date, String status, int ingID, int ingbID, double amount) {
-		this.pbNr = pbNr;
-		this.recept = recept;
-		this.dato = dato;
-		this.status = status;
-		this.ingID = ingID;
+
+	public ArrayList<Integer> getIngbID() {
+		return ingbID;
+	}
+
+
+	public void setIngbID(ArrayList<Integer> ingbID) {
 		this.ingbID = ingbID;
+	}
+
+
+	public void setIngID(ArrayList<Integer> ingID) {
+		this.ingID = ingID;
+	}
+
+
+	public void setAmount(ArrayList<Double> amount) {
 		this.amount = amount;
 	}
-	
-	
+
 
 	public int getPbNr() {
 		return pbNr;
