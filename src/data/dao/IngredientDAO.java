@@ -1,10 +1,12 @@
 package data.dao;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import data.DALException;
 import data.dto.IngredientDTO;
 import data.idao.IIngredientDAO;
 
@@ -28,32 +30,43 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 
 	@Override
 	public IngredientDTO getIngredient(int ingredientId)  {
-		Map<Integer,IngredientDTO> ingredients = (Map<Integer, IngredientDTO>) super.load();
-		return ingredients.get(ingredientId);
-
+		try {
+			Map<Integer, IngredientDTO> ingredients = (Map<Integer, IngredientDTO>) super.load();
+			return ingredients.get(ingredientId);
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	//behøvcer ikke cashe en fejl, da den returner null. 
+	//behï¿½vcer ikke cashe en fejl, da den returner null. 
 
 
 	@Override
 	public List<IngredientDTO> getIngredientList() {
-		Map<Integer,IngredientDTO> ingredients = (Map<Integer, IngredientDTO>) super.load();
-		return ingredients.values(); //values indholder alle elementer i hashmapen
+		try {
+			Map<Integer, IngredientDTO> ingredients = (Map<Integer, IngredientDTO>) super.load();
+			return (List<IngredientDTO>) ingredients.values(); //values indholder alle elementer i hashmapen
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
 	public void createIngredient(IngredientDTO ingredient) throws DALException { 
 		try {
 			Map<Integer, IngredientDTO> ingredients = (HashMap<Integer, IngredientDTO>) super.load(); //hentet en ny ingredients liste fra filen
-			if (!ingredients.containsKey(ingredient.getIbID())) {  //tjekker om den har en nøgle der er magen til den man er igang med at oprette.
-				ingredients.put(ingredients.getIbID(),ingredient); //hvis ikke , put i listen. 
+			if (!ingredients.containsKey(ingredient.getId())) {  //tjekker om den har en nï¿½gle der er magen til den man er igang med at oprette.
+				ingredients.put(ingredient.getId(),ingredient); //hvis ikke , put i listen. 
 				super.save(ingredients); //gemmer til filen 
 			} else
 				throw new DALException("Ingredient with this ID already exists.");
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();   //ber om at vise fejl (rød i console)
+			e.printStackTrace();   //ber om at vise fejl (rï¿½d i console)
 		}
 	}
 
@@ -61,7 +74,7 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 	public void updateIngredient(IngredientDTO ingredient) throws DALException {
 		try {
 			Map<Integer, IngredientDTO> ingredients = (HashMap<Integer, IngredientDTO>) super.load();
-			ingredients.replace(ingredients.getIbID(), ingredients); //ersattter hele rækken, hvis den findes. 
+			ingredients.replace(ingredient.getId(), ingredient); //ersattter hele rï¿½kken, hvis den findes. 
 			super.save(ingredients);
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
