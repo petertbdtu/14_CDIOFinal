@@ -43,8 +43,5 @@ public class ProductBatchCompDTO{
 	public void setUsrID(int usrID) {
 		this.usrID = usrID;
 	}
-	public String generateKey() {
-		return getpbID() + "," + getibID();
-	}
 
 }

@@ -24,27 +24,22 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	public static ProductBatchCompDAO getInstance() {
 		return instance;
 	}
-	
+
 	@Override
 	public ProductBatchCompDTO getProductBatchComp(int pbId, int ibId) {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
-			ProductBatchCompDTO comp = new ProductBatchCompDTO();
-			for(int i=0; i<complist.size(); i++) {
-				if (comp.getpbID() == pbId && comp.getibID() == ibId) {
-					return comp;
-				}
-				else {
-					throw new DALException("No product batch with this ID exists.");
-				}
-			}
+			String compKey = generateKey(pbId, ibId);
+			if(complist.containsKey(compKey))
+			return complist.get(compKey);
+			else
+				throw new DALException("No product batch with these IDs exists.")
 		}
 		catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
 
 	@Override
 	public List<ProductBatchCompDTO> getProductBatchCompList(int pbId) {
@@ -75,7 +70,7 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	public void createProductBatchComp(ProductBatchCompDTO productBatchComp) {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
-			String compString = productBatchComp.generateKey();
+			String compString = generateKey(productBatchComp);
 			if(!complist.containsKey(compString)) {
 				complist.replace(compString, productBatchComp);
 				super.save(complist);
@@ -95,7 +90,7 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	public void updateProductBatchComp(ProductBatchCompDTO productBatchComp) {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
-			String compString = productBatchComp.generateKey();
+			String compString = generateKey(productBatchComp);
 			if(!complist.containsKey(compString)) {
 				complist.replace(compString, productBatchComp);
 				super.save(complist);
@@ -108,5 +103,11 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	private String generateKey(int pbID, int ibID) {
+		return pbID + "," + ibID;
+	}
+	private String generateKey(ProductBatchCompDTO pbc) {
+		return pbc.getpbID() + "," + pbc.getibID();
 	}
 }
