@@ -3,8 +3,8 @@ package dto;
 
 public class ProductBatchCompDTO 
 {
-	private int prodBatchID;
-	private int ingbatchID;
+	private int pbID;
+	private int ibID;
 	private double tara;
 	private double netto;
 	private int usrID;
@@ -12,17 +12,17 @@ public class ProductBatchCompDTO
 	{
 
 	}
-	public int getProdBatchID() {
-		return prodBatchID;
+	public int getpbID() {
+		return pbID;
 	}
-	public void setProdBatchID(int prodBatchID) {
-		this.prodBatchID = prodBatchID;
+	public void setpbID(int pbID) {
+		this.pbID = pbID;
 	}
-	public int getIngbatchID() {
-		return ingbatchID;
+	public int getibID() {
+		return ibID;
 	}
-	public void setIngbatchID(int ingbatchID) {
-		this.ingbatchID = ingbatchID;
+	public void setibID(int ibID) {
+		this.ibID = ibID;
 	}
 	public double getTara() {
 		return tara;
