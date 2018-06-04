@@ -12,28 +12,20 @@
                 opretIngredient();
             });
 
-            var curID;
-
             $("#ingredientTable").on('click', '.editbutton', function() {
                 var self = $(this).closest("tr");
-                var col1_value = self.find(".inId").text();
                 var col2_value = self.find(".inName").text();
-                self.find(".inId").html("<input type = text class = inIdEdit>");
                 self.find(".inName").html("<input type = text class = inNameEdit>");
-                self.find(".inIdEdit").val(col1_value);
                 self.find(".inNameEdit").val(col2_value);
                 self.find(".editbutton").text("Ok");
                 self.find(".editbutton").toggleClass('editbutton okbutton');
-                curID = col1_value;
             });
 
             $("#ingredientTable").on('click', '.okbutton', function() {
                 var self = $(this).closest("tr");
-                var col1_value = self.find(".inIdEdit").val();
+                var col1_value = self.find(".inId").text();
                 var col2_value = self.find(".inNameEdit").val();
-                self.find(".inId").html("");
                 self.find(".inName").html("");
-                self.find(".inId").text(col1_value);
                 self.find(".inName").text(col2_value);
                 self.find(".okbutton").text("Ret");
                 self.find(".okbutton").toggleClass('okbutton editbutton');
