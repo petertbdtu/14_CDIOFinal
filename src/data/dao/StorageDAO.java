@@ -11,20 +11,32 @@ public class StorageDAO {
 	private List<?> list;
 	
 	public void save() throws IOException {
+		//Get Path
+		String path = "data/";
 		String className = this.getClass().toString();
-		className = className.substring(0, className.length()-4);
-		FileOutputStream fos = new FileOutputStream("data/" + className);
+		path += className.substring(0, className.length()-4) + ".data";
+		
+		//Start stream to file(path)
+		FileOutputStream fos = new FileOutputStream(path);
 		ObjectOutputStream oos = new ObjectOutputStream(fos);
 		oos.writeObject(list);
+		
+		//Close stream
 		oos.close();
 	}
 	
 	public void load() throws IOException, ClassNotFoundException {
+		//Get Path
+		String path = "data/";
 		String className = this.getClass().toString();
-		className = className.substring(0, className.length()-4);
-		FileInputStream fis = new FileInputStream("data/" + className);
+		path += className.substring(0, className.length()-4) + ".data";
+		
+		//Start stream to file(path)
+		FileInputStream fis = new FileInputStream(path);
 		ObjectInputStream ois = new ObjectInputStream(fis);
 		list = (List<?>) ois.readObject();
+		
+		//Close stream
 		ois.close();
 	}
 	
