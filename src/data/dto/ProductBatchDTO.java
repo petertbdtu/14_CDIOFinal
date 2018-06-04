@@ -1,24 +1,29 @@
-package dto;
+package data.dto;
+
+import java.util.ArrayList;
 
 public class ProductBatchDTO {
 	private int pbNr;//product batch Nr.
 	private int recept;//product 
 	private String date;
 	private String status;
-	private double amount;
-	private String ingID;
+	private ArrayList<Integer> ingID = new ArrayList<Integer>();
+	private ArrayList<Double> amount = new ArrayList<Double>();
 	
-	public productBatchDTO(int pbNr, int recept, String date, String status) {
+	public ProductBatchDTO() {
+		
+	}
+	
+	public ProductBatchDTO(int pbNr, int recept, String date, String status, int ingID, double amount) {
 		this.pbNr = pbNr;
 		this.recept = recept;
 		this.dato = dato;
 		this.status = status;
-	}
-	
-	public ingredients(String ingID, double amount) {
 		this.ingID = ingID;
 		this.amount = amount;
 	}
+	
+	
 
 	public int getPbNr() {
 		return pbNr;
