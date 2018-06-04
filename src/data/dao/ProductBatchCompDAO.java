@@ -1,5 +1,6 @@
 package data.dao;
 
+import data.DALException;
 import data.dto.ProductBatchCompDTO;
 import data.idao.IProductBatchCompDAO;
 import java.io.IOException;
@@ -26,19 +27,20 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	}
 
 	@Override
-	public ProductBatchCompDTO getProductBatchComp(int pbId, int ibId) {
+	public ProductBatchCompDTO getProductBatchComp(int pbId, int ibId) throws DALException {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
 			String compKey = generateKey(pbId, ibId);
 			if(complist.containsKey(compKey))
-			return complist.get(compKey);
+				return complist.get(compKey);
 			else
-				throw new DALException("No product batch with these IDs exists.")
+				throw new DALException("No product batch with these IDs exists.");
 		}
 		catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	@Override
@@ -46,12 +48,12 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
 			return (List<ProductBatchCompDTO>) complist.values();
-
 		}
 		catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 
 	}
 
@@ -65,9 +67,10 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 	}
 	@Override
-	public void createProductBatchComp(ProductBatchCompDTO productBatchComp) {
+	public void createProductBatchComp(ProductBatchCompDTO productBatchComp) throws DALException {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
 			String compString = generateKey(productBatchComp);
@@ -87,7 +90,7 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 
 
 	@Override
-	public void updateProductBatchComp(ProductBatchCompDTO productBatchComp) {
+	public void updateProductBatchComp(ProductBatchCompDTO productBatchComp) throws DALException {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
 			String compString = generateKey(productBatchComp);

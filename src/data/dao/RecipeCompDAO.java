@@ -1,6 +1,8 @@
 package data.dao;
 import java.io.IOException;
 import java.util.*;
+
+import data.DALException;
 import data.dto.RecipeCompDTO;
 import data.idao.IRecipeCompDAO;
 
@@ -30,7 +32,7 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 	}
 	
 	@Override
-	public RecipeCompDTO getRecipeComp(int recipeId, int ingredientId) {
+	public RecipeCompDTO getRecipeComp(int recipeId, int ingredientId) throws DALException {
 		try {
 			String keyString = generateKey(recipeId, ingredientId);
 			Map<String, RecipeCompDTO> component = (Map<String, RecipeCompDTO>) super.load();
@@ -41,6 +43,7 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	@Override
@@ -51,6 +54,7 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	@Override
@@ -61,11 +65,12 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
+		return null;
 		
 	}
 
 	@Override
-	public void createRecipeComp(RecipeCompDTO recipeComp) {
+	public void createRecipeComp(RecipeCompDTO recipeComp) throws DALException {
 		try {
 			String keyString = generateKey(recipeComp);
 			Map<String, RecipeCompDTO> component = (Map<String, RecipeCompDTO>) super.load();
@@ -80,7 +85,7 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 	}
 
 	@Override
-	public void updateRecipeComp(RecipeCompDTO recipeComp) {
+	public void updateRecipeComp(RecipeCompDTO recipeComp) throws DALException {
 		try {
 			String keyString = generateKey(recipeComp);
 			Map<String, RecipeCompDTO> component = (Map<String, RecipeCompDTO>) super.load();
