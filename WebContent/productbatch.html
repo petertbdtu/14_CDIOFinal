@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Produktbatch Administration</title></head>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="jquery-3.3.1.js"></script>
+<script src="Agent.js"></script>
+<script>
+
+$(function(){
+    loadProductBatches();
+    $( "#createproductbatch" ).click(function() {
+    	createProductBatch();
+	});
+})
+
+function loadProductBatches() {
+	$("#productbatchtablebody").empty();
+	//Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data). 
+	// $('').append('html'), appends html to an html element.
+	Agent.getJson("rest/productbatch",
+		function(data) {
+			$.each(data, function (i, element) {
+				$("#productbatchtable").append(generateProductBatchHTML(element));
+			});
+		}
+	);
+}
+
+//Convenience function for generating html
+function generateProductBatchHTML(productbatch) {
+	return 	'<tr><td>' + productbatch.id + '</td>' +
+			'<td>' + productbatch.recept + '</td>' +
+			'<td>' + productbatch.status + '</td>' +
+			'</tr>';
+}
+
+function createProductBatch() {
+   	var productbatchData = {}
+   	productbatchData.id = $("#id").val();
+   	productbatchData.recept = $("#recept").val();
+   	productbatchData.status = 0; // Initial status is 'not active'. Maybe don't do this client-side?
+   	Agent.postJson('rest/productbatch', productbatchData, function(data){
+			$("#productbatchtablebody").append(generateProductBatchHTML(productbatchData));
+		}, function(xhr, statusmsg, errormsg) {
+			alert(xhr);
+			alert(statusmsg);
+			alert(errormsg);
+		});
+}
+
+</script>
+<body>
+	 <div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+	</div>
+	
+	<br>
+	
+	ID: <input type="text" id="id"> <br>
+	Recept: <input type="text" id="recept"> <br>
+	<button id="createproductbatch">Opret Produktbatch</button>
+	
+	<div class="container" id="productbatches">
+	<h1>Produktbatches</h1>
+		<table>
+			<thead>
+				<tr>
+					<td>ID</td>
+					<td>Recept</td>
+					<td>Status</td>
+				</tr>
+			</thead>
+			<tbody id="productbatchtablebody"></tbody>
+		</table>
+	</div>
+</body>
+</html>
