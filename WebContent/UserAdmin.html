@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Brugeradministration</title>
+<script src="jquery-3.1.1.js"></script>
+<script src="jquery.serialize-object.js"></script>
+<script src="Useredit.js"></script>
+<script src="Agent.js"></script>
+
+<script >
+
+$(function(){
+    loadUser();
+    $( "#UserCreate" ).click(function() {
+        CreateUser();
+    });
+
+function loadUser() {
+            $("#UserTableBody").empty();
+            //Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data).
+            // $('').append('html'), appends html to an html element.
+            Agent.getJson("rest/user",
+                function(data) {
+                    $.each(data, function (i, element) {
+                        $("#userTable").append(generateUserHTML(element));
+                    });
+                }
+            );
+            
+</script>
+            
+            
+            
+</head>
+<body>
+ <div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+	</div>
+	
+<h1>Brugeradministration</h1>	
+
+<div id= "maincontainer">
+<DIV class="usercontainer">
+	<h2>Opret bruger</h2>
+	<form method="post">
+		Bruger ID<br>
+		<input type="var" name ="userid"><br>	
+		Fornavn<br>
+		<input type="text" name="firstname"><br>
+		Efternavn<br>
+		<input type="text" name="lastname"><br>
+		Initialer<br>
+		<input type="text" name="ini"><br>
+		Rolle<br>
+		<input type="radio" name="aktiv"> Administrator
+		<input type="radio" name="aktiv"> Farmaceut
+		<input type="radio" name="Aktiv"> Produktionsleder<br>
+		<input type="radio" name="Aktiv"> Labroriant <br>
+		
+		Aktiv<br>
+		<input type="radio" name="aktiv"> Ja
+		<input type="radio" name="aktiv"> Nej
+		<br>
+		
+		<input type="submit">
+		</form>
+
+<div class="usercontainer" id="Users">
+	<h1>Brugere</h1>
+	<table>
+	<thead>
+	<tr>
+	<td>ID</td>
+	<td>Fornavn</td>
+	<td>Efternavn</td>
+	<td>Initialer</td>
+	<td>Rolle</td>
+	<td>Aktiv</td>
+	</tr>
+	</thead>
+	</table>
+</div>
+
+
+</DIV>	
+</body>
+</html>

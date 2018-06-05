@@ -87,4 +87,3 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
     }
 
 }
-

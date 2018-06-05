@@ -12,7 +12,7 @@ public class StorageDAO {
 
 	public void save(Map<?, ?> map) {
 		//Check Dir Path
-		String path = "data\\";
+		String path = "data/";
 		File file = new File(path);
 		if(!file.exists())
 			file.mkdir();
@@ -35,7 +35,7 @@ public class StorageDAO {
 	
 	public Map<?, ?> load() throws ClassNotFoundException, IOException {
 		//Check Dir Path
-		String path = "data\\";
+		String path = "data/";
 		File file = new File(path);
 		if(!file.exists())
 			file.mkdir();

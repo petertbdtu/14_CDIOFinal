@@ -1,34 +1,116 @@
 package data.dao;
-
+import data.DALException;
 import data.dto.ProductBatchCompDTO;
 import data.idao.IProductBatchCompDAO;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import java.util.List;
 
-public class ProductBatchCompDAO implements IProductBatchCompDAO {
+public class ProductBatchCompDAO extends StorageDAO implements IProductBatchCompDAO {
 
-    @Override
-    public ProductBatchCompDTO getProductBatchComp(int pbId, int ibId) {
-        return null;
-    }
+	private static ProductBatchCompDAO instance = new ProductBatchCompDAO();
 
-    @Override
-    public List<ProductBatchCompDTO> getProductBatchCompList(int pbId) {
-        return null;
-    }
+	private ProductBatchCompDAO() {
+		try {
+			Map<String,ProductBatchCompDTO> complist = (Map<String, ProductBatchCompDTO>) super.load();
+		} catch (ClassNotFoundException | IOException e) {
+			super.save(new HashMap<String, ProductBatchCompDTO>());
+		}
+	}
 
-    @Override
-    public List<ProductBatchCompDTO> getProductBatchCompList() {
-        return null;
-    }
+	public static ProductBatchCompDAO getInstance() {
+		return instance;
+	}
 
-    @Override
-    public void createProduktBatchKomp(ProductBatchCompDTO productBatchComp) {
+	@Override
+	public ProductBatchCompDTO getProductBatchComp(int pbId, int ibId) throws DALException {
+		try {
+			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
+			String compKey = generateKey(pbId, ibId);
+			if(complist.containsKey(compKey))
+				return complist.get(compKey);
+			else
+				throw new DALException("No product batch with these IDs exists.");
+		}
+		catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-    }
+	@Override
+	public List<ProductBatchCompDTO> getProductBatchCompList(int pbId) {
+		try {
+			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
+			return (List<ProductBatchCompDTO>) complist.values();
+		}
+		catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 
-    @Override
-    public void updateProduktBatchKomp(ProductBatchCompDTO productBatchComp) {
+	}
 
-    }
+	@Override
+	public List<ProductBatchCompDTO> getProductBatchCompList() {
+		try {
+			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
+			return (List<ProductBatchCompDTO>) complist.values();
+		}
+		catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	@Override
+	public void createProductBatchComp(ProductBatchCompDTO productBatchComp) throws DALException {
+		try {
+			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
+			String compString = generateKey(productBatchComp);
+			if(!complist.containsKey(compString)) {
+				complist.replace(compString, productBatchComp);
+				super.save(complist);
+			}
+			else {
+				throw new DALException("A product batch with this ID already exists.");
+			} 
+		}
+		catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+	@Override
+	public void updateProductBatchComp(ProductBatchCompDTO productBatchComp) throws DALException {
+		try {
+			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
+			String compString = generateKey(productBatchComp);
+			if(!complist.containsKey(compString)) {
+				complist.replace(compString, productBatchComp);
+				super.save(complist);
+			}
+			else {
+				throw new DALException("No product batch with this ID exists.");
+			} 
+		}
+		catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	private String generateKey(int pbID, int ibID) {
+		return pbID + "," + ibID;
+	}
+	private String generateKey(ProductBatchCompDTO pbc) {
+		return pbc.getpbID() + "," + pbc.getibID();
+  }
 }
