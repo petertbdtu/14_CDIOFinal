@@ -17,7 +17,7 @@ import data.DALException;
 import data.dao.ProductBatchDAO;
 import data.dto.ProductBatchDTO;
 
-@Path("Productbatch")
+@Path("productbatch")
 public class ProductBatchService {
 
     @POST

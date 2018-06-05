@@ -1,7 +1,7 @@
 package data.dto;
 
 public class ProductBatchDTO {
-	private int pbNr;//product batch Nr.
+	private int pbId;//product batch Nr.
 	private int receptId;//product recept
 	private String status;
 	
@@ -9,20 +9,20 @@ public class ProductBatchDTO {
 		
 	}
 
-	public int getPbNr() {
-		return pbNr;
+	public int getPbId() {
+		return pbId;
 	}
 
-	public void setPbNr(int pbNr) {
-		this.pbNr = pbNr;
+	public void setPbId(int pbId) {
+		this.pbId = pbId;
 	}
 
-	public int getRecept() {
+	public int getReceptId() {
 		return receptId;
 	}
 
-	public void setRecept(int recept) {
-		this.receptId = recept;
+	public void setReceptId(int receptId) {
+		this.receptId = receptId;
 	}
 
 	public String getStatus() {

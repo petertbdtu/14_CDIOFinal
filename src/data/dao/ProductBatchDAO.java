@@ -53,8 +53,8 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	public void createProductBatch(ProductBatchDTO productBatch) throws DALException {
 		try {
 			Map<Integer, ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
-			if(!productBatches.containsKey(productBatch.getPbNr())) {
-				productBatches.put(productBatch.getPbNr(), productBatch);
+			if(!productBatches.containsKey(productBatch.getPbId())) {
+				productBatches.put(productBatch.getPbId(), productBatch);
 				super.save(productBatches);
 			}
 			else
@@ -71,7 +71,7 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	public void updateProductBatch(ProductBatchDTO productBatch) {
 		try {
 			Map<Integer, ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
-			productBatches.replace(productBatch.getPbNr(), productBatch);
+			productBatches.replace(productBatch.getPbId(), productBatch);
 			super.save(productBatches);
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
