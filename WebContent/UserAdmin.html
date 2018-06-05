@@ -5,7 +5,33 @@
 <title>Brugeradministration</title>
 <script src="jquery-3.1.1.js"></script>
 <script src="jquery.serialize-object.js"></script>
-<script src="ingredientedit.js"></script>
+<script src="Useredit.js"></script>
+<script src="Agent.js"></script>
+
+<script >
+
+$(function(){
+    loadUser();
+    $( "#UserCreate" ).click(function() {
+        CreateUser();
+    });
+
+function loadUser() {
+            $("#UserTableBody").empty();
+            //Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data).
+            // $('').append('html'), appends html to an html element.
+            Agent.getJson("rest/user",
+                function(data) {
+                    $.each(data, function (i, element) {
+                        $("#userTable").append(generateUserHTML(element));
+                    });
+                }
+            );
+            
+</script>
+            
+            
+            
 </head>
 <body>
  <div id="menu">
@@ -31,6 +57,7 @@
 		<input type="radio" name="aktiv"> Administrator
 		<input type="radio" name="aktiv"> Farmaceut
 		<input type="radio" name="Aktiv"> Produktionsleder<br>
+		<input type="radio" name="Aktiv"> Labroriant <br>
 		
 		Aktiv<br>
 		<input type="radio" name="aktiv"> Ja
@@ -56,18 +83,7 @@
 	</table>
 </div>
 
-<div>
-	</tr>
-	</thead>
-	<tbody id="Usertablebody"></tbody>
-	</table>
-	<hr>
-	<form>
-		Deaktiver bruger med ID:
-		<input type="number" id="deactivateid">
-		<button onclick="deactivateUser();">Deaktiver</button>
-		</form>
-	</div>
+
 </DIV>	
 </body>
 </html>
