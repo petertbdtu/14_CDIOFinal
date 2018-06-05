@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import data.DALException;
 import data.dto.ProductBatchDTO;
 import data.idao.IProductBatchDAO;
-
-import java.util.List;
 
 public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	
@@ -51,16 +50,20 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	}
 
 	@Override
-	public void createProductBatch(ProductBatchDTO productBatch) {
+	public void createProductBatch(ProductBatchDTO productBatch) throws DALException {
 		try {
 			Map<Integer, ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
 			if(!productBatches.containsKey(productBatch.getPbNr())) {
 				productBatches.put(productBatch.getPbNr(), productBatch);
 				super.save(productBatches);
 			}
+			else
+			{
+				throw new DALException("ProductBatch with this ID already exists.");
+			}
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new DALException("Mystery server exception that Joachim knows about");
 		}
 	}
 
