@@ -7,6 +7,8 @@ import java.util.Map;
 import data.dto.ProductBatchDTO;
 import data.idao.IProductBatchDAO;
 
+import java.util.List;
+
 public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	
 	private static ProductBatchDAO instance = new ProductBatchDAO();
@@ -73,5 +75,4 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 			e.printStackTrace();
 		}
 	}
-
 }

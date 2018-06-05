@@ -27,8 +27,7 @@ public class UserDAO extends StorageDAO implements IUserDAO {
     {
         return instance;
     }
-
-
+  
     @Override
     public UserDTO getUser(int oprId) throws DALException {
         try {
@@ -45,7 +44,7 @@ public class UserDAO extends StorageDAO implements IUserDAO {
     }
 
     @Override
-    public List getUserList() {
+    public List<UserDTO> getUserList() {
         try {
             Map<Integer, UserDTO> users = (HashMap<Integer, UserDTO>) super.load();
             return new ArrayList<UserDTO>(users.values());

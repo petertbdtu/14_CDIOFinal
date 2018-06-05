@@ -1,7 +1,6 @@
 package data.dao;
 import java.io.IOException;
 import java.util.*;
-
 import data.DALException;
 import data.dto.RecipeCompDTO;
 import data.idao.IRecipeCompDAO;
@@ -97,6 +96,4 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
-	}
-
 }

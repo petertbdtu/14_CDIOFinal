@@ -1,5 +1,4 @@
 package data.dao;
-
 import data.DALException;
 import data.dto.ProductBatchCompDTO;
 import data.idao.IProductBatchCompDAO;
@@ -9,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.util.List;
 
 public class ProductBatchCompDAO extends StorageDAO implements IProductBatchCompDAO {
 
@@ -112,5 +112,5 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	}
 	private String generateKey(ProductBatchCompDTO pbc) {
 		return pbc.getpbID() + "," + pbc.getibID();
-	}
+  }
 }
