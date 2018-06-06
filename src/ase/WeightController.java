@@ -39,7 +39,7 @@ public class WeightController {
 		state = State.LAB_ID;
 	}
 
-	public void run() throws Exception {
+	public void run() {
 		boolean isRunning = true;
 		
 		ws.clearText();
@@ -54,6 +54,8 @@ public class WeightController {
 				case PB_ID:
 					if(PbId())
 						state = State.RB_ID;
+					else
+					    state = State.LAB_ID;
 					break;
 				case RB_ID:
 					RbId();
@@ -199,7 +201,7 @@ public class WeightController {
         
         //Get weight and check inside tolerance
         ws.haltProgress("Placer "+ curRc.getAmount()+"g");
-        curPbc.setNetto(ws.getWeight() - curPbc.getTara());
+        curPbc.setNetto(ws.getWeight());
         
         ws.tare();
         ws.haltProgress("Fjern alt");
@@ -210,14 +212,15 @@ public class WeightController {
         	return;
         } else {
         	ws.showText("Godkendt, Afvejning gemt");
+            try {
+                pbcd.createProductBatchComp(curPbc);
+            } catch (DALException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         	ws.sleep(3);
         	ws.clearText();
-            try {
-				pbcd.createProductBatchComp(curPbc);
-			} catch (DALException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
         }
 	}
   

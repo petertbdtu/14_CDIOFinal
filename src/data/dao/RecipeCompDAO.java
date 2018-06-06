@@ -50,7 +50,12 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 	public List<RecipeCompDTO> getRecipeCompList(int recipeId) {
 		try {
 			Map<String, RecipeCompDTO> component = (Map<String, RecipeCompDTO>) super.load();
-			return (List<RecipeCompDTO>) component.values();
+			List<RecipeCompDTO> recipeComps = new ArrayList<>();
+			for (RecipeCompDTO recipeComp : component.values())
+				if (recipeComp.getRecipeId() == recipeId)
+					recipeComps.add(recipeComp);
+			return recipeComps;
+
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}

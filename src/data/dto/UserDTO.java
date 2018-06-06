@@ -1,6 +1,8 @@
 package data.dto;
 
-public class UserDTO {
+import java.io.Serializable;
+
+public class UserDTO implements Serializable {
     private int usrID;
     private String usrName;
     private String ini;

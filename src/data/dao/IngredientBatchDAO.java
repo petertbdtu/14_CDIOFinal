@@ -1,7 +1,9 @@
 package data.dao;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import data.DALException;
 import data.dto.IngredientBatchDTO;
@@ -15,7 +17,7 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 		try {
 			Map<Integer,IngredientBatchDTO> ingredientBatches = (Map<Integer, IngredientBatchDTO>) super.load();
 		} catch (ClassNotFoundException | IOException e) {
-			//super.save(new HashMap<Integer, IngredientBatchDTO>());
+			super.save(new HashMap<Integer, IngredientBatchDTO>());
 		}
 	}
 	
@@ -40,10 +42,10 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 	}
 
 	@Override
-	public Map<Integer, IngredientBatchDTO> getIngredientBatchList() {
+	public List<IngredientBatchDTO> getIngredientBatchList() {
 		try {
 			Map<Integer, IngredientBatchDTO> ingredientBatches = (HashMap<Integer, IngredientBatchDTO>) super.load();
-			return ingredientBatches;
+			return new ArrayList<>(ingredientBatches.values());
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
@@ -51,14 +53,14 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 	}
 
 	@Override
-	public Map<Integer, IngredientBatchDTO> getIngredientBatchList(int ingredientId) {
+	public List<IngredientBatchDTO> getIngredientBatchList(int ingredientId) {
 		try {
 			Map<Integer, IngredientBatchDTO> ingredientBatches = (HashMap<Integer, IngredientBatchDTO>) super.load();
 			Map<Integer, IngredientBatchDTO> batchesOfIngredient = new HashMap<Integer, IngredientBatchDTO>();
 			for (IngredientBatchDTO ingbatch : ingredientBatches.values())
 				if (ingbatch.getIbID() == ingredientId)
 					batchesOfIngredient.put(ingbatch.getIbID(), ingbatch);
-			return batchesOfIngredient;
+			return new ArrayList<>(batchesOfIngredient.values());
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

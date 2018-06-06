@@ -56,6 +56,7 @@ public class WeightSocket implements IWeightSocket{
 		String in;
 		try {
 			in = br.readLine();
+			System.out.println(in);
 			String subStr = in.substring(in.length()-7,in.length()-2);
 			String subStr2 = subStr.charAt(0) + subStr.substring(2);
 			in = subStr2;
@@ -69,18 +70,33 @@ public class WeightSocket implements IWeightSocket{
 	public void showError() {
 		pw.println("D \"ERROR\"");
 		pw.flush();
+		try {
+			while(!br.readLine().equals("D A"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void showText(String msg) {
 		pw.println("P111 \"" + msg +"\"");
 		pw.flush();
+		try {
+			while(!br.readLine().equals("P111 A"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void clearText() {
 		pw.println("DW");
 		pw.flush();
+		try {
+			while(!br.readLine().equals("DW A"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -114,20 +130,21 @@ public class WeightSocket implements IWeightSocket{
 		boolean returnValue = false;
 
 		while(!answerRecieved) {
-			if(in.contains("RM20 A")) {
-				pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
-				pw.flush();
-			}
 
 			try {
 				in = br.readLine();
 			} catch (IOException e) {}
 
-			if(in.equals("RM20 A \"y\""))
+			if(in.equals("RM20 A \"y\"")){
 				returnValue = true;
-
-			if(in.equals("RM20 A \"n\""))
+				answerRecieved = true;
+			} else if(in.equals("RM20 A \"n\"")) {
 				returnValue = false;
+				answerRecieved = true;
+			} else if (in.startsWith("RM20 A")) {
+				pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
+				pw.flush();
+			}
 		}
 
 		clearText();

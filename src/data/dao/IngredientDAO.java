@@ -47,7 +47,7 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 	public List<IngredientDTO> getIngredientList() {
 		try {
 			Map<Integer, IngredientDTO> ingredients = (Map<Integer, IngredientDTO>) super.load();
-			return (List<IngredientDTO>) ingredients.values(); //values indholder alle elementer i hashmapen
+			return new ArrayList<>(ingredients.values()); //values indholder alle elementer i hashmapen
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
