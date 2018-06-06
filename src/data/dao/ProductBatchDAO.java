@@ -64,18 +64,23 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
-			throw new DALException("Mystery server exception that Joachim knows about");
 		}
 	}
 
 	@Override
-	public void updateProductBatch(ProductBatchDTO productBatch) {
+	public void updateProductBatch(ProductBatchDTO productBatch) throws DALException {
 		try {
 			Map<Integer, ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
-			productBatches.replace(productBatch.getPbId(), productBatch);
-			super.save(productBatches);
+			if (productBatches.containsKey(productBatch.getPbId()))
+			{
+				productBatches.replace(productBatch.getPbId(), productBatch);
+				super.save(productBatches);
+			}
+			else
+			{
+				throw new DALException("No ProductBatch with this ID exists.");
+			}
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
