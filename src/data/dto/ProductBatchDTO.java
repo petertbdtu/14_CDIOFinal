@@ -7,7 +7,7 @@ public class ProductBatchDTO implements Serializable {
 	private static final long serialVersionUID = -6440335065542506197L;
 	private int pbId;//product batch Nr.
 	private int receptId;//product recept
-	private String status;
+	private int status;
 	
 	public ProductBatchDTO() {
 		
@@ -29,11 +29,11 @@ public class ProductBatchDTO implements Serializable {
 		this.receptId = receptId;
 	}
 
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 }
