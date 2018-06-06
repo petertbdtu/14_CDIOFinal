@@ -28,7 +28,6 @@ public class ProductBatchService {
         	ProductBatchDAO.getInstance().createProductBatch(productBatchDTO);
             return Response.ok().build();
         } catch (DALException e) {
-            e.printStackTrace();
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build());
         }
     }
