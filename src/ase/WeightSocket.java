@@ -2,7 +2,6 @@ package ase;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 public class WeightSocket implements IWeightSocket{
@@ -86,12 +85,12 @@ public class WeightSocket implements IWeightSocket{
 
 	@Override
 	public String getInput(String msg) {
-		String in = "         ";
+		String in = "";
 
 		pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
 		pw.flush();
 
-		while(!in.substring(0,6).equals("RM20 A")){
+		while(!in.startsWith("RM20 A")){
 			try {
 				in = br.readLine();
 			} catch (IOException e) {
@@ -106,7 +105,7 @@ public class WeightSocket implements IWeightSocket{
 
 	@Override
 	public boolean getConfirmation(String msg) {
-		String in = null;
+		String in = "";
 
 		pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
 		pw.flush();
@@ -137,7 +136,7 @@ public class WeightSocket implements IWeightSocket{
 
 	@Override
 	public void haltProgress(String msg) {
-		String in = null;
+		String in = "";
 
 		pw.println("P111 \"" + msg + "\"");
 		pw.flush();
@@ -152,10 +151,10 @@ public class WeightSocket implements IWeightSocket{
 		}
 
 		clearText();
-}
+	}
 
 
-/* //K 3 implementation
+	/* //K 3 implementation
     @Override
     public boolean getConfirmation(String msg) {
         try (Socket socket = new Socket( curIP ,8000)) {
@@ -193,51 +192,25 @@ public class WeightSocket implements IWeightSocket{
         }
         return false;
     }
- */
-@Override
-public void overrideWeight(int grams) {
-	try (Socket socket = new Socket(curIP, 8000)) {
-		OutputStream sos = socket.getOutputStream();
-		PrintWriter pw = new PrintWriter(sos);
-
+	 */
+	@Override
+	public void overrideWeight(int grams) {
 		pw.println("B \""+grams+"\"");
 		pw.flush();
-
-		//socket.close();
-	} catch (UnknownHostException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
 	}
-}
 
-@Override
-public void exit() {
-	try (Socket socket = new Socket(curIP, 8000)) {
-		OutputStream sos = socket.getOutputStream();
-		PrintWriter pw = new PrintWriter(sos);
-
+	@Override
+	public void exit() {
 		pw.println("Q");
 		pw.flush();
-
-		//socket.close();
-	} catch (UnknownHostException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
 	}
-}
 
-@Override
-public void sleep(int s) {
-	try {
-		TimeUnit.SECONDS.sleep(3);
-	} catch (InterruptedException e) {
-		e.printStackTrace();
+	@Override
+	public void sleep(int s) {
+		try {
+			TimeUnit.SECONDS.sleep(3);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
-}
 }
