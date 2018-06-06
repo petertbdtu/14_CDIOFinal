@@ -1,6 +1,6 @@
 package rest;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -35,9 +35,9 @@ public class ProductBatchService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<ProductBatchDTO> readProductBatchList()
+    public List<ProductBatchDTO> readProductBatchList()
     {
-        return new ArrayList<>(ProductBatchDAO.getInstance().getProductBatchList());
+        return ProductBatchDAO.getInstance().getProductBatchList();
     }
 
     @GET

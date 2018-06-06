@@ -16,13 +16,10 @@ $(function(){
 })
 
 function loadProductBatches() {
-	$("#productbatchtablebody").empty();
-	//Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data). 
-	// $('').append('html'), appends html to an html element.
 	Agent.getJson("rest/productbatch",
 		function(data) {
 			$.each(data, function (i, element) {
-				$("#productbatchtable").append(generateProductBatchHTML(element));
+				$("#productbatchtablebody").append(generateProductBatchHTML(element));
 			});
 		}
 	);
