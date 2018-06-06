@@ -6,222 +6,156 @@ import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
 public class WeightSocket implements IWeightSocket{
-    String curIP;
-    public WeightSocket(){
-        curIP = "localhost"; //TODO make ip dynamic
-    }
+	String curIP;
+
+	Socket socket;
+	OutputStream os;
+	PrintWriter pw;
+	InputStream is;
+	BufferedReader br;
+
+	public WeightSocket(){
+		curIP = "localhost"; //TODO make ip dynamic
+		try {
+			socket = new Socket(curIP, 8000);
+			os = socket.getOutputStream();
+			pw = new PrintWriter(os);
+			is = socket.getInputStream();
+			br = new BufferedReader(new InputStreamReader(is));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 
-    @Override
-    public int getWeight() {
-        try (Socket socket = new Socket( curIP ,8000)) {
-            OutputStream sos = socket.getOutputStream();
-            PrintWriter pw = new PrintWriter(sos);
-            InputStream is = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+	@Override
+	public int getWeight() {
+		//Hvad betyder det her?
+		pw.println("S");
+		pw.flush();
 
-            pw.println("S");
-            pw.flush();
-            String in = reader.readLine();
+		//Get input
+		String in;
+		try {
+			in = br.readLine();
+			String subStr = in.substring(in.length()-7,in.length()-2);
+			String subStr2 = subStr.charAt(0) + subStr.substring(2);
+			in = subStr2;
+		} catch (IOException e) {
+			in = "0";
+		}
 
-            String subStr = in.substring(in.length()-7,in.length()-2);
-            String subStr2 = subStr.charAt(0) + subStr.substring(2);
-            return Integer.parseInt(subStr2);
+		//Return input
+		return Integer.parseInt(in);
+	}
 
-            //socket.close();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return 0;
-    }
+	@Override
+	public int tare() {
+		pw.println("T");
+		pw.flush();
+		String in;
+		try {
+			in = br.readLine();
+			String subStr = in.substring(in.length()-7,in.length()-2);
+			String subStr2 = subStr.charAt(0) + subStr.substring(2);
+			in = subStr2;
+		} catch (IOException e) {
+			in = "0";
+		}
+		return Integer.parseInt(in);
+	}
 
-    @Override
-    public int tare() {
-        try (Socket socket = new Socket(curIP, 8000)) {
-            OutputStream sos = socket.getOutputStream();
-            PrintWriter pw = new PrintWriter(sos);
-            InputStream is = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+	@Override
+	public void showError() {
+		pw.println("D \"ERROR\"");
+		pw.flush();
+	}
 
-            pw.println("T");
-            pw.flush();
-            String in = reader.readLine();
+	@Override
+	public void showText(String msg) {
+		pw.println("P111 \"" + msg +"\"");
+		pw.flush();
+	}
 
-            String subStr = in.substring(in.length()-7,in.length()-2);
-            String subStr2 = subStr.charAt(0) + subStr.substring(2);
-            return Integer.parseInt(subStr2);
+	@Override
+	public void clearText() {
+		pw.println("DW");
+		pw.flush();
+	}
 
-            //socket.close();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+	@Override
+	public String getInput(String msg) {
+		String in = "         ";
 
-        return 0;
-    }
+		pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
+		pw.flush();
 
-    @Override
-    public void showError() {
-        try (Socket socket = new Socket(curIP, 8000)) {
-            OutputStream sos = socket.getOutputStream();
-            PrintWriter pw = new PrintWriter(sos);
+		while(!in.substring(0,6).equals("RM20 A")){
+			try {
+				in = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
-            pw.println("D \"ERROR\"");
-            pw.flush();
+		String subStr = in.substring(8,in.length()-1);
+		return subStr;
+	}
 
-            //socket.close();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+	@Override
+	public boolean getConfirmation(String msg) {
+		String in = null;
 
-    @Override
-    public void showText(String msg) {
-        try (Socket socket = new Socket(curIP, 8000)) {
-            OutputStream sos = socket.getOutputStream();
-            PrintWriter pw = new PrintWriter(sos);
+		pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
+		pw.flush();
 
-            pw.println("P111 \"" + msg +"\"");
-            pw.flush();
+		boolean answerRecieved = false;
+		boolean returnValue = false;
 
-            //socket.close();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+		while(!answerRecieved) {
+			if(in.contains("RM20 A")) {
+				pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
+				pw.flush();
+			}
 
-    @Override
-    public void clearText() {
-        try (Socket socket = new Socket(curIP, 8000)) {
-            OutputStream sos = socket.getOutputStream();
-            PrintWriter pw = new PrintWriter(sos);
+			try {
+				in = br.readLine();
+			} catch (IOException e) {}
 
-            pw.println("DW");
-            pw.flush();
+			if(in.equals("RM20 A \"y\""))
+				returnValue = true;
 
-            //socket.close();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+			if(in.equals("RM20 A \"n\""))
+				returnValue = false;
+		}
 
-    @Override
-    public String getInput(String msg) {
-        try (Socket socket = new Socket( curIP ,8000)) {
-            OutputStream sos = socket.getOutputStream();
-            PrintWriter pw = new PrintWriter(sos);
-            InputStream is = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String in = "         ";
+		clearText();
+		return returnValue;
+	}
 
-            pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
-            pw.flush();
+	@Override
+	public void haltProgress(String msg) {
+		String in = null;
 
-            while(!in.substring(0,6).equals("RM20 A")){
-                in = reader.readLine();
-            }
+		pw.println("P111 \"" + msg + "\"");
+		pw.flush();
 
-            String subStr = in.substring(8,in.length()-1);
-            return subStr;
-            //socket.close();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return "";
-    }
+		while (!in.startsWith("K A")) {
+			try {
+				in = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
-    @Override
-    public boolean getConfirmation(String msg) {
-        try (Socket socket = new Socket( curIP ,8000)) {
-            OutputStream sos = socket.getOutputStream();
-            PrintWriter pw = new PrintWriter(sos);
-            InputStream is = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String in = "         ";
-
-            pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
-            pw.flush();
-
-            while(!in.substring(0,6).equals("RM20 A")){
-                in = reader.readLine();
-            }
-
-            String subStr = in.substring(8,in.length()-1);
-
-            while(!subStr.equals("Y")){
-                in = reader.readLine();
-                if(in.equals("N")){
-                    return false;
-                }
-            }
-
-            pw.println("DW");
-            pw.flush();
-
-            return true;
-            //socket.close();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    @Override
-    public void haltProgress(String msg) {
-        try (Socket socket = new Socket( curIP ,8000)) {
-            OutputStream sos = socket.getOutputStream();
-            PrintWriter pw = new PrintWriter(sos);
-            InputStream is = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String in = "         ";
-
-            pw.println("P111 \"" + msg + "\"");
-            pw.flush();
-
-            while (!in.substring(0, 3).equals("K A")) {
-                in = reader.readLine();
-            }
-
-            pw.println("DW");
-            pw.flush();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+		clearText();
+}
 
 
-    /* //K 3 implementation
+/* //K 3 implementation
     @Override
     public boolean getConfirmation(String msg) {
         try (Socket socket = new Socket( curIP ,8000)) {
@@ -259,51 +193,51 @@ public class WeightSocket implements IWeightSocket{
         }
         return false;
     }
-    */
-    @Override
-    public void overrideWeight(int grams) {
-        try (Socket socket = new Socket(curIP, 8000)) {
-            OutputStream sos = socket.getOutputStream();
-            PrintWriter pw = new PrintWriter(sos);
+ */
+@Override
+public void overrideWeight(int grams) {
+	try (Socket socket = new Socket(curIP, 8000)) {
+		OutputStream sos = socket.getOutputStream();
+		PrintWriter pw = new PrintWriter(sos);
 
-            pw.println("B \""+grams+"\"");
-            pw.flush();
+		pw.println("B \""+grams+"\"");
+		pw.flush();
 
-            //socket.close();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+		//socket.close();
+	} catch (UnknownHostException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+}
 
-    @Override
-    public void exit() {
-        try (Socket socket = new Socket(curIP, 8000)) {
-            OutputStream sos = socket.getOutputStream();
-            PrintWriter pw = new PrintWriter(sos);
+@Override
+public void exit() {
+	try (Socket socket = new Socket(curIP, 8000)) {
+		OutputStream sos = socket.getOutputStream();
+		PrintWriter pw = new PrintWriter(sos);
 
-            pw.println("Q");
-            pw.flush();
+		pw.println("Q");
+		pw.flush();
 
-            //socket.close();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+		//socket.close();
+	} catch (UnknownHostException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+}
 
-    @Override
-    public void sleep(int s) {
-        try {
-            TimeUnit.SECONDS.sleep(3);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+@Override
+public void sleep(int s) {
+	try {
+		TimeUnit.SECONDS.sleep(3);
+	} catch (InterruptedException e) {
+		e.printStackTrace();
+	}
+}
 }

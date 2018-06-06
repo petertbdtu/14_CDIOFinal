@@ -15,7 +15,7 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 		try {
 			Map<Integer,IngredientBatchDTO> ingredientBatches = (Map<Integer, IngredientBatchDTO>) super.load();
 		} catch (ClassNotFoundException | IOException e) {
-			super.save(new HashMap<Integer, IngredientBatchDTO>());
+			//super.save(new HashMap<Integer, IngredientBatchDTO>());
 		}
 	}
 	
