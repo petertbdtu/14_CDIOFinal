@@ -7,8 +7,7 @@ public class IngredientBatchDTO implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -9055060400210373872L;
-	private int ibID;
-	private int ingbatchID;
+	private int ibId;
 	private double amount;
 	private String supplier;
 
@@ -17,19 +16,11 @@ public class IngredientBatchDTO implements Serializable {
 	}
 
 	public int getIbID() {
-		return ibID;
+		return ibId;
 	}
 
 	public void setIbID(int ibID) {
-		this.ibID = ibID;
-	}
-
-	public int getIngbatchID() {
-		return ingbatchID;
-	}
-
-	public void setIngbatchID(int ingbatchID) {
-		this.ingbatchID = ingbatchID;
+		this.ibId = ibID;
 	}
 
 	public double getAmount() {
