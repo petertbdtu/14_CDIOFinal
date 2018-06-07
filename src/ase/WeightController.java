@@ -27,222 +27,245 @@ public class WeightController {
 	
 	IWeightSocket ws;
 	State state;
-	UserDTO curLab;
+	
+	//DAOs - Access to datalayer
+	IUserDAO ud;
+	IRecipeDAO rd;
+	IRecipeCompDAO rcd;
+	IProductBatchDAO pbd;
+	IIngredientBatchDAO ibd;
+	IProductBatchCompDAO pbcd;
+		
+	//DTOs used to store values for saving
+	ProductBatchCompDTO curPbc;
+	IngredientBatchDTO curIb;
 	ProductBatchDTO curPb;
-	
+	RecipeCompDTO curRc;
+	UserDTO curLab;
+
 	public enum State {
-	    LAB_ID, PB_ID, RB_ID
+		LAB_ID, PB_ID, RB_ID
 	}
-	
+
 	public WeightController() {
 		ws = new WeightSocket();
 		state = State.LAB_ID;
+		
+		ud = UserDAO.getInstance();
+		rd = RecipeDAO.getInstance();
+		rcd = RecipeCompDAO.getInstance();
+		pbd = ProductBatchDAO.getInstance();
+		ibd = IngredientBatchDAO.getInstance();
+		pbcd = ProductBatchCompDAO.getInstance();
 	}
 
 	public void run() {
 		boolean isRunning = true;
-		
-		ws.clearText();
-		ws.tare();
-		
+
 		while(isRunning) {
 			switch (state) {
-				case LAB_ID:
-					if(LabId())
-						state = State.PB_ID;
-					break;
-				case PB_ID:
-					if(PbId())
-						state = State.RB_ID;
-					else
-					    state = State.LAB_ID;
-					break;
-				case RB_ID:
-					RbId();
-					if(moreIngredients())
-						state = State.RB_ID;
-					else
-						state = State.LAB_ID;
-					break;
-				default:
+			case LAB_ID:
+				if(LabId())
+					state = State.PB_ID;
+				break;
+			case PB_ID:
+				if(PbId())
+					state = State.RB_ID;
+				else
 					state = State.LAB_ID;
-					break;
+				break;
+			case RB_ID:
+				RbId();
+				if(moreIngredients())
+					state = State.RB_ID;
+				else
+					state = State.LAB_ID;
+				break;
+			default:
+				state = State.LAB_ID;
+				break;
 			}
 		}
 	}
-	
-	private void errorInState(String msg) {
-        ws.showError();
-        ws.showText(msg);
-        ws.sleep(3);
-        ws.clearText();
-	}
-	
+
 	private boolean LabId() {
 		curLab = null;
+		
+		ws.clearText();
+		ws.tare();
 		String tmp = ws.getInput("Indtast operatornr:");
-        int labNo = Integer.parseInt(tmp);
-        
-        //check labNo inside domain
-        if(labNo < 1 || labNo > 999){
-        	errorInState("Ugyldigt operatornr.");
-        	return false;
-        }
+		int labNo = Integer.parseInt(tmp);
 
-        try {
-        	IUserDAO ud = UserDAO.getInstance();
-            curLab = ud.getUser(labNo);
-            
-            //Ensure correct userID was entereed
-            ws.showText("Velkommen "+ curLab.getUsrName());
-            ws.sleep(3);
-            ws.clearText();
-            return ws.getConfirmation("Er brugeren korrekt?");     
-        } catch (DALException e) {
-        	errorInState("Ugyldigt operatornr.");
-        }
-        return false;
-    }
-	
+		//check labNo inside domain
+		if(labNo < 1 || labNo > 999){
+			errorInState("Ugyldigt operatornr.");
+			return false;
+		}
+
+		try {
+			//Ensure userId exists
+			curLab = ud.getUser(labNo);
+		} catch (DALException e) {
+			errorInState("Ugyldigt operatornr.");
+			return false;
+		}
+		
+		ws.showText("Velkommen "+ curLab.getUsrName());
+		ws.sleep(3);
+		ws.clearText();
+		
+		//Ensure correct userId was entereed
+		return ws.getConfirmation("Er brugeren korrekt?");     
+	}
+
 	private boolean PbId() {
 		curPb = null;
 		String tmp = ws.getInput("Indtast produktbatch nr.:");
-        int pbId = Integer.parseInt(tmp);
-        
-        //check pbNo inside domain
-        if(pbId < 1 || pbId > 99999999){
-        	errorInState("Ugyldigt produktbatch nr.");
-            return false;
-        }
+		int pbId = Integer.parseInt(tmp);
 
-        try {
-        	IProductBatchDAO pbd = ProductBatchDAO.getInstance();
-        	IRecipeDAO rd = RecipeDAO.getInstance();
-            curPb = pbd.getProductBatch(pbId);
-            tmp = rd.getRecipe(curPb.getRecept()).getRecipeName();
-            
-            //Ensure correct userID was entereed
-            ws.showText("Recept: " + tmp);
-            ws.sleep(3);
-            ws.clearText();
-            if(ws.getConfirmation("Korrekt produktbatch?")) {
-            	if(curPb.getStatus().equals("2")) { //TODO CHANGE TO INTEGER
-            		errorInState("Produktbatch er afsluttet");
-                    return false;
-            	} else {
-            		curPb.setStatus("1"); //TODO CHANGE TO INTEGER
-            		pbd.updateProductBatch(curPb);
-            		return true;
-            	}
-        	} else {
-            	return false;
-            }
-        } catch (DALException e) {
-            errorInState("Ugyldigt produktbatch nr.");
-        }
-        return false;
+		//check pbNo inside domain
+		if(pbId < 1 || pbId > 99999999){
+			errorInState("Ugyldigt produktbatch nr.");
+			return false;
+		}
+
+		try {
+			//Ensure pbId exists
+			curPb = pbd.getProductBatch(pbId);
+			tmp = rd.getRecipe(curPb.getRecept()).getRecipeName();
+		} catch (DALException e) {
+			errorInState("Ugyldigt produktbatch nr.");
+			return false;
+		}
+		
+		//Ensure PB.status = not done
+		if(curPb.getStatus().equals("2")) { //TODO CHANGE TO INTEGER
+			errorInState("Produktbatch er afsluttet");
+			return false;
+		}
+		
+		ws.showText("Recept: " + tmp);
+		ws.sleep(3);
+		ws.clearText();
+		
+		//Ensure correct pbId entered
+		if(!ws.getConfirmation("Korrekt produktbatch?"))
+			return false;
+		
+		//Set PB.status = active
+		curPb.setStatus("1"); //TODO CHANGE TO INTEGER
+		pbd.updateProductBatch(curPb);
+		return true;
 	}
 
 	private void RbId() {
-		IRecipeCompDAO rcd = RecipeCompDAO.getInstance();
-		List<RecipeCompDTO> rcList = rcd.getRecipeCompList(curPb.getRecept());
-		RecipeCompDTO curRc = null;
-		
-		IIngredientBatchDAO ibd = IngredientBatchDAO.getInstance();
-		IngredientBatchDTO curIb;
-		
-		IProductBatchCompDAO pbcd = ProductBatchCompDAO.getInstance();
+		curIb = null;
+		curRc = null;
 		
 		//Create new PBC with known values
-		ProductBatchCompDTO curPbc = new ProductBatchCompDTO();
+		curPbc = new ProductBatchCompDTO();
 		curPbc.setpbID(curPb.getPbNr());
 		curPbc.setUsrID(curLab.getUsrID());
-		
-        //tara registration
+
+		//tara registration
 		if(!ws.getConfirmation("Er vægten ubelastet?"))
 			while(!ws.getConfirmation("Er alt fjernet fra vægten?"));
-        ws.tare();
-        ws.haltProgress("Placer tara");
-        curPbc.setTara(ws.tare());
-       
-        //Check if valid ibId
-        try {
-            curIb = ibd.getIngredientBatch(Integer.parseInt(ws.getInput("Indtast RaavareBatch nr.")));
-        } catch (DALException e) {
-        	errorInState("Ugyldigt raavarebatch nr.");
-        	return;
-        }
-        
-        //Check if ingredientBatch ingredientId match recipe
-        boolean correctRbId = false;
-        for (RecipeCompDTO rcTemp : rcList)
-        	if(rcTemp.getIngredientId() == curIb.getIngbatchID()) {
-        		correctRbId = true;
-        		curRc = rcTemp;
-        	}
-        if(!correctRbId) {
-        	errorInState("Ugyldigt raavarebatch nr.");
-        	return;
-        }
-        curPbc.setibID(curIb.getIbID());
-            
-        //Check if PBC already done
-        boolean alreadyDone = false;
-        try {
+		ws.tare();
+		ws.haltProgress("Placer tara");
+		curPbc.setTara(ws.tare());
+
+		//Check if valid ibId
+		try {
+			curIb = ibd.getIngredientBatch(Integer.parseInt(ws.getInput("Indtast RaavareBatch nr.")));
+		} catch (DALException e) {
+			errorInState("Ugyldigt raavarebatch nr.");
+			return;
+		}
+
+		//Check if ingredientBatch.ingredientId match recipe.ingredientId
+		if(!pbcInRecipe()) {
+			errorInState("Ugyldigt raavarebatch nr.");
+			return;
+		}
+		curPbc.setibID(curIb.getIbID());
+
+		//Check if PBC already done
+		if(pbcAlreadyDone()) {
+			errorInState("Raavare allerede afvejet");
+			return;
+		}
+
+		//Get weight
+		ws.haltProgress("Placer "+ curRc.getAmount()+"g");
+		curPbc.setNetto(ws.getWeight());
+		
+		//Reset
+		ws.tare();
+		ws.haltProgress("Fjern alt");
+
+		//Get diff and check tolerance
+		double diffWeight = Math.abs(curRc.getAmount() - curPbc.getNetto());
+		if(diffWeight / curRc.getAmount() * 100 > curRc.getTolerance()) {
+			errorInState("Udenfor tolerence, Proev igen");
+			return;
+		}
+		
+		try {
+			pbcd.createProductBatchComp(curPbc);
+		} catch (DALException e) {
+			errorInState("Kunne ikke gemme afvejning");
+			return;
+		}
+		
+		ws.showText("Godkendt, Afvejning gemt");
+		ws.sleep(3);
+		ws.clearText();
+	}
+
+	private void errorInState(String msg) {
+		ws.showError();
+		ws.showText(msg);
+		ws.sleep(3);
+		ws.clearText();
+	}
+	
+	private boolean pbcInRecipe() {
+		for (RecipeCompDTO rcTemp : rcd.getRecipeCompList(curPb.getRecept())) {
+			if(rcTemp.getIngredientId() == curIb.getIngbatchID()) {
+				curRc = rcTemp;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean pbcAlreadyDone() {
+		try {
 			for(ProductBatchCompDTO pbcTemp : pbcd.getProductBatchCompList(curPb.getPbNr()))
 				if(pbcTemp.getibID() == curIb.getIbID())
-					alreadyDone = true;
-		} catch (DALException e) {}
-        
-        if(alreadyDone) {
-        	errorInState("Raavare allerede afvejet");
-        	return;
-        }
-        
-        //Get weight and check inside tolerance
-        ws.haltProgress("Placer "+ curRc.getAmount()+"g");
-        curPbc.setNetto(ws.getWeight());
-        
-        ws.tare();
-        ws.haltProgress("Fjern alt");
-        
-        double diffWeight = Math.abs(curRc.getAmount() - curPbc.getNetto());
-        if(diffWeight / curRc.getAmount() * 100 > curRc.getTolerance()) {
-        	errorInState("Udenfor tolerence, Proev igen");
-        	return;
-        } else {
-        	ws.showText("Godkendt, Afvejning gemt");
-            try {
-                pbcd.createProductBatchComp(curPbc);
-            } catch (DALException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        	ws.sleep(3);
-        	ws.clearText();
-
-        }
+					return true;
+		} catch (DALException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
-  
+
 	private boolean moreIngredients() {
-		IRecipeCompDAO rcd = RecipeCompDAO.getInstance();
-		IProductBatchCompDAO pbcd = ProductBatchCompDAO.getInstance();
-		IProductBatchDAO pbd = ProductBatchDAO.getInstance();
 		boolean moreIngredients = false;
-        try {
-    		List<RecipeCompDTO> rcList = rcd.getRecipeCompList(curPb.getRecept());
-    		List<ProductBatchCompDTO> pbcList = pbcd.getProductBatchCompList(curPb.getPbNr());
-    		if(rcList.size() != pbcList.size())
-    			moreIngredients = true;
+		try {
+			List<RecipeCompDTO> rcList = rcd.getRecipeCompList(curPb.getRecept());
+			List<ProductBatchCompDTO> pbcList = pbcd.getProductBatchCompList(curPb.getPbNr());
+			moreIngredients = (rcList.size() != pbcList.size());
 		} catch (DALException e) {}
-        
-        if(moreIngredients) {
-        	moreIngredients = ws.getConfirmation("Vil du afveje mere?");
-        } else {
-        	curPb.setStatus("2"); //TODO CHANGE TO INTEGER
-        	pbd.updateProductBatch(curPb);
-        }
-        
+
+		if(moreIngredients) {
+			moreIngredients = ws.getConfirmation("Vil du afveje mere?");
+		} else {
+			curPb.setStatus("2"); //TODO CHANGE TO INTEGER
+			pbd.updateProductBatch(curPb);
+		}
+
 		return moreIngredients;	
 	}	
 }
