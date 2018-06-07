@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Opret recept</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="jquery-3.3.1.js"></script>
+<script src="Agent.js"></script>
+<script>
+$(function(){
+	loadIngredient();
+})
+
+function generateRow() {
+	
+}
+
+function loadIngredient() {
+     Agent.getJson("rest/raavare",
+        function(data) { 
+            $.each(data, function (i, element) { 
+                $("#ingredientDropdown").append(generateIngredientHTML(element));
+            });
+         }
+    ); 
+}
+
+function generateIngredientHTML(element) {
+	return "<option>" + element.name + "</option>";
+}
+
+</script>
+</head>
+<body>
+<h3>Vælg råvarer</h3>
+	<form id="IngredientForm">
+		<select id="ingredientDropdown">
+			<option> Vælg råvare
+		</select>
+		<label for="amountOfCommodities">Mængde</label>
+		<input id="Amount" type="text" id="amountOfCommodities" placeholder="Mængde">
+		<a href="AddIngredients.html"><button>Tilføj råvare</button></a>
+		<br><br/>
+	</form>
+	<button id="submitComp">Færdig</button>
+</body>
+</html>

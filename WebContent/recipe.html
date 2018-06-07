@@ -24,9 +24,9 @@ function loadRecipes() {
 }
 //Convenience function for generating html
 function generateRecipeHTML(recipe) {
-	return 	'<tr><td>' + recipe.recipeID + '</td>' +
+	return 	'<tr><td>' + recipe.recipeId + '</td>' +
 			'<td>' + recipe.recipeName + '</td>' + 
-			'<td> <button id="showButton' + recipe.recipeID + '">Vis</button></td>'
+			'<td> <button id="showButton' + recipe.recipeId + '">Vis</button></td>'
 			'</tr>';
 }
 function createRecipe() {
@@ -53,7 +53,7 @@ function createRecipe() {
 			<input type="text" id="recipeID" placeholder="Recept ID">
 			<input type="text" id="recipeName" placeholder="Recept navn">
 		<br>
-		<button id="createRecipe">Tilføj råvare</button>
+		<button id="createRecipe">Tilføj råvarer</button>
 	<div class="container" id="recepter">
 		<h2>Recepter</h2>
 		<table>
@@ -61,7 +61,7 @@ function createRecipe() {
 				<tr>
 					<td>ID<td/>
 					<td>Navn<td/>
-					<td>hmm<td/>
+					<td><td/>
 				<tr/>
 			<thead/>
 			<tbody id="shownRecipes">
