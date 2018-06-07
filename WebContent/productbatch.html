@@ -28,15 +28,15 @@ function loadProductBatches() {
 //Convenience function for generating html
 function generateProductBatchHTML(productbatch) {
 	return 	'<tr><td>' + productbatch.pbId + '</td>' +
-			'<td>' + productbatch.receptId + '</td>' +
+			'<td>' + productbatch.recipeId + '</td>' +
 			'<td>' + productbatch.status + '</td>' +
 			'</tr>';
 }
 
 function createProductBatch() {
    	var productbatchData = {}
-   	productbatchData.pbId = $("#id").val();
-   	productbatchData.receptId = $("#recept").val();
+   	productbatchData.pbId = $("#pbId").val();
+   	productbatchData.recipeId = $("#receptId").val();
    	productbatchData.status = 0; // Initial status is 'not active'. Maybe don't do this client-side?
    	Agent.postJson('rest/productbatch', productbatchData, function(data){
 			$("#productbatchtablebody").append(generateProductBatchHTML(productbatchData));
@@ -56,8 +56,8 @@ function createProductBatch() {
 	
 	<br>
 	
-	ID: <input type="text" id="id"> <br>
-	Recept: <input type="text" id="recept"> <br>
+	ID: <input type="text" id="pbId"> <br>
+	Recept: <input type="text" id="recipeId"> <br>
 	<button id="createproductbatch">Opret Produktbatch</button>
 	
 	<div class="container" id="productbatches">
