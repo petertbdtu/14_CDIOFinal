@@ -54,13 +54,17 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	public void createProductBatch(ProductBatchDTO productBatch) throws DALException {
 		try {
 			Map<Integer, ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
-			if(!productBatches.containsKey(productBatch.getPbId())) {
-				productBatches.put(productBatch.getPbId(), productBatch);
-				super.save(productBatches);
+			if(productBatches.containsKey(productBatch.getPbId())) {
+				throw new DALException("ProductBatch with this ID already exists.");
+			}
+			else if (RecipeDAO.getInstance().getRecipe(productBatch.getPbId()) == null)
+			{
+				throw new DALException("Recipe for this ProductBatch does not exist.");
 			}
 			else
 			{
-				throw new DALException("ProductBatch with this ID already exists.");
+				productBatches.put(productBatch.getPbId(), productBatch);
+				super.save(productBatches);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
