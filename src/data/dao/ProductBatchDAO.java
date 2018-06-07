@@ -57,7 +57,7 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 			if(productBatches.containsKey(productBatch.getPbId())) {
 				throw new DALException("ProductBatch with this ID already exists.");
 			}
-			else if (RecipeDAO.getInstance().getRecipe(productBatch.getPbId()) == null)
+			else if (RecipeDAO.getInstance().getRecipe(productBatch.getReceptId()) == null)
 			{
 				throw new DALException("Recipe for this ProductBatch does not exist.");
 			}
