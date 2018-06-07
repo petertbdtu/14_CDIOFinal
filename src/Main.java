@@ -6,7 +6,6 @@ import data.dto.*;
 public class Main {
 
     public static void main(String[] args) throws DALException {
-        WeightController wc = new WeightController();
     /*
         UserDTO usr = new UserDTO(); //USR
         usr.setUsrID(1);
