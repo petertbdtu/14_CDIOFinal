@@ -31,8 +31,8 @@ function generateRecipeHTML(recipe) {
 }
 function createRecipe() {
    	var recipeData = {}
-   	recipeData.recipeID = $("#recipeID").val();
-   	recipeData.recipeNavn = $("#recipeName").val();
+   	recipeData.recipeId = $("#recipeID").val();
+   	recipeData.recipeName = $("#recipeName").val();
    	Agent.postJson('rest/recipe', recipeData, function(data){
 			$("#shownRecipes").append(generateRecipeHTML(recipeData));
 		}, function(xhr, statusmsg, errormsg) {
