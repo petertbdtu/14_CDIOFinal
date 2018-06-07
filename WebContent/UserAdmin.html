@@ -3,31 +3,111 @@
 <head>
 <meta charset="UTF-8">
 <title>Brugeradministration</title>
-<script src="jquery-3.1.1.js"></script>
-<script src="jquery.serialize-object.js"></script>
-<script src="Useredit.js"></script>
+<script src="jquery-3.3.1.js"></script>
 <script src="Agent.js"></script>
 
 <script >
 
 $(function(){
-    loadUser();
-    $( "#UserCreate" ).click(function() {
-        CreateUser();
+   loadUsers();
+   $( "#userCreate" ).click(function() {
+        createUser();
     });
 
-function loadUser() {
-            $("#UserTableBody").empty();
-            //Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data).
-            // $('').append('html'), appends html to an html element.
-            Agent.getJson("rest/user",
-                function(data) {
-                    $.each(data, function (i, element) {
-                        $("#userTable").append(generateUserHTML(element));
-                    });
-                }
-            );
-            
+    $("#userTable").on('click', '.editbutton', function() {
+        var self = $(this).closest("tr");
+        var col6_value = self.find(".aktiv").text();
+        self.find(".aktiv").html("<input type = text class = aktiv>");
+        self.find(".aktiv").val(col6_value);
+        self.find(".editbutton").text("Ok");
+        self.find(".editbutton").toggleClass('editbutton okbutton');
+    });
+
+
+//self = selve rækken 
+//fuctionen kaldes fra knappen, derfor vi kan lave et kald for this(er knappen)
+    $("#userTable").on('click', '.okbutton', function() {
+        var row = $(this).closest("tr");
+        var col1_value = row.find(".Id").text();
+        var col2_value = row.find(".Name").val();
+        var col3_value = row.find(".ini").val();
+        var col4_value = row.find(".cpr").val();
+        var col5_value = row.find(".role").val();
+        var col6_value = row.find(".active").val();
+        row.find(".active").html("");
+        row.find(".active").text(col6_value);
+        row.find(".okbutton").text("Redigere");
+        row.find(".okbutton").toggleClass('okbutton editbutton');
+        //her skal der så postes ændringer til datalaget
+        
+       //når der er rettet i bruger, skal den hente fra servern  
+        var userData = {}
+        userData.usrId = col1_value;
+        userData.usrName = col2_value;
+        userData.ini = col3_value;
+        userData.cpr = col4_value;
+        userData.role = col5_value;
+        userData.active = col6_value;
+        Agent.putJson('rest/useradmin', userData, function(data){
+
+        }, function(xhr, statusmsg, errormsg) {
+            alert(xhr);
+            alert(statusmsg);
+            alert(errormsg);
+        });
+    });
+})
+
+function loadUsers() {
+    $("#userTableBody").empty();
+    //Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data).
+    // $('').append('html'), appends html to an html element.
+    Agent.getJson("rest/useradmin",
+        function(data) {
+            $.each(data, function (i, element) {
+                $("#userTable").append(generateUserHTML(element));
+            });
+        }
+    );
+}
+//Convenience function for generating html
+function generateUserHTML(user) {
+    return 	'<tr><td class = userId>' + user.usrId + '</td>' +
+        '<td class = name>' + user.usrName+ '</td>' +
+        '<td class = ini>' + user.ini + '</td>' +
+        '<td class = cpr>' + user.cpr + '</td>' +
+        '<td class = roles>' + "roles" + '</td>' +
+        '<td class = active>' + user.active + '</td>' +
+        '<td><button class = "editbutton">Ret</button></td>' +
+        '</tr>';
+        
+}
+
+
+//opretter objekt som userdata og poster det 
+//Agent = forenkle ajax med Json
+
+function createUser() {
+    var userData = {}
+    userData.usrId = $("#userid").val();
+    userData.usrName = $("#name").val();
+    userData.ini = $("#ini").val();
+    userData.cpr = $("#cpr").val();
+    userData.isAdmin= $("#roleadmin").checked;
+    userData.isPharma= $("#rolefarma").checked;
+    userData.isProdLead= $("#roleprod").checked;
+    userData.isLabTech= $("#rolelab").checked;
+    userData.active = $('input[name=active]:checked').val();
+    $("#userTableBody").append(generateUserHTML(userData));
+    Agent.postJson('rest/useradmin', userData, function(data){
+        $("#userTableBody").append(generateUserHTML(userData));
+    }, function(xhr, statusmsg, errormsg) {
+        alert(xhr);
+        alert(statusmsg);
+        alert(errormsg);
+    });
+}
+
 </script>
             
             
@@ -41,47 +121,53 @@ function loadUser() {
 	
 <h1>Brugeradministration</h1>	
 
-<div id= "maincontainer">
-<DIV class="usercontainer">
-	<h2>Opret bruger</h2>
-	<form method="post">
+<div>
+	<h2>Opret ny bruger</h2>
+
 		Bruger ID<br>
-		<input type="var" name ="userid"><br>	
-		Fornavn<br>
-		<input type="text" name="firstname"><br>
-		Efternavn<br>
-		<input type="text" name="lastname"><br>
+		<input type="var" id ="userid"><br>	
+		Navn<br>
+		<input type="text" id="name"><br>
 		Initialer<br>
-		<input type="text" name="ini"><br>
+		<input type="text" id="ini"><br>
+		Cpr<br>
+		<input type="text" id="cpr"><br>
+		
+		
 		Rolle<br>
-		<input type="radio" name="aktiv"> Administrator
-		<input type="radio" name="aktiv"> Farmaceut
-		<input type="radio" name="Aktiv"> Produktionsleder<br>
-		<input type="radio" name="Aktiv"> Labroriant <br>
+		<input type="checkbox" id="roleadmin" value="Administrator"> Administrator
+		<input type="checkbox" id="rolefarma" value="Farmaceut"> Farmaceut
+		<input type="checkbox" id="roleprod" value="Produktionsleder"> Produktionsleder<br>
+		<input type="checkbox" id="rolelab" value="Laborant"> Laborant <br>
 		
 		Aktiv<br>
-		<input type="radio" name="aktiv"> Ja
-		<input type="radio" name="aktiv"> Nej
+		<input type="radio" name="active" value="True"> Ja
+		<input type="radio" name="active"value="False"> Nej
 		<br>
 		
-		<input type="submit">
-		</form>
+		<button type="button" id= "userCreate">Opret ny bruger</button>
+		
 
-<div class="usercontainer" id="Users">
-	<h1>Brugere</h1>
-	<table>
-	<thead>
-	<tr>
-	<td>ID</td>
-	<td>Fornavn</td>
-	<td>Efternavn</td>
-	<td>Initialer</td>
-	<td>Rolle</td>
-	<td>Aktiv</td>
-	</tr>
-	</thead>
-	</table>
-</div>
+
+
+<div>
+        <table border= "3" id = "userTable">
+            <thead>
+            <tr>
+                <th>Bruger ID</th>
+                <th>Navn</th>
+                <th>Ini</th>
+                <th>cpr</th>
+                <th>roles</th>
+                <th>aktiv</th>
+                 <th>Redigere bruger</th>
+            </tr>
+            </thead>
+            <tbody id = "userTableBody">
+
+            </tbody>
+        </table>
+    </div>
 
 
 </DIV>	

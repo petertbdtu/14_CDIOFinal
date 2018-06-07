@@ -5,13 +5,59 @@ public class UserDTO {
     private String usrName;
     private String ini;
     private String cpr;
+    private boolean isAdmin;
+    private boolean isProdLead;
+    private boolean isPharma;
+    private boolean isLabTech;
+    private boolean active;
 
-    byte roles; //(byte)0b00000000 - 0b00001111;
+    
+   
 
     public UserDTO() {
 
     }
 
+    public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	public boolean isProdLead() {
+		return isProdLead;
+	}
+
+	public void setProdLead(boolean isProdLead) {
+		this.isProdLead = isProdLead;
+	}
+
+	public boolean isPharma() {
+		return isPharma;
+	}
+
+	public void setPharma(boolean isPharma) {
+		this.isPharma = isPharma;
+	}
+
+	public boolean isLabTech() {
+		return isLabTech;
+	}
+
+	public void setLabTech(boolean isLabTech) {
+		this.isLabTech = isLabTech;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
     public int getUsrID() {
         return usrID;
     }
@@ -44,11 +90,4 @@ public class UserDTO {
         this.cpr = cpr;
     }
 
-    public byte getRoles() {
-        return roles;
-    }
-
-    public void setRoles(byte roles) {
-        this.roles = roles;
-    }
 }
