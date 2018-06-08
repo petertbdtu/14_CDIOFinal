@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Laborant</title>
+<script src="jquery-3.3.1.js"></script>
+<script src="Agent.js"></script>
+<script>
+$(function(){
+	checkStatus();
+}
+function runWeight() {
+	Agent.getJson("rest/WeightService",
+	}
+	
+function checkStatus() {
+	Agent.getJson("rest/WeightService",
+		function(Response) {
+			if(Response == true) {
+				$("#status").append('<p style="color:green font-size:11px">Weight is running</p>');
+			}
+			else {
+				$("#status").append('<p style="color:red font-size:11px">Weight is not running</p>');
+			}
+		}
+}
+</script>
+</head>
+<body>
+<div id="status">
+
+</div>
+<button onclick="runWeight()">Start afvejning</button>
+</body>
+</html>
