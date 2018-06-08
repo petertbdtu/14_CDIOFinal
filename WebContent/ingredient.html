@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Råvareadministration</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
     <script src="jquery-3.3.1.js"></script>
     <script src="Agent.js"></script>
     <script>
@@ -70,15 +71,17 @@
             Agent.postJson('rest/ingredient', ingredientData, function(data){
                 $("#ingredientTableBody").append(generateIngredientHTML(ingredientData));
             }, function(xhr, statusmsg, errormsg) {
-                alert(xhr);
-                alert(statusmsg);
-                alert(errormsg);
+                alert(xhr.responseJSON.message);
             });
         }
 
     </script>
 </head>
 <body>
+ <div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+	</div>
     <h2>Råvareadministration</h2>
     </br>
     <div>

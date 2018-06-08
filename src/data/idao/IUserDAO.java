@@ -10,5 +10,5 @@ public interface IUserDAO {
 	UserDTO getUser(int oprId) throws DALException;
 	List getUserList();
 	void createUser(UserDTO opr) throws DALException;
-	void updateUser(UserDTO opr);
+	void updateUser(UserDTO opr) throws DALException;
 }
