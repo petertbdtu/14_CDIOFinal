@@ -29,11 +29,11 @@ public class UserDAO extends StorageDAO implements IUserDAO {
     }
   
     @Override
-    public UserDTO getUser(int oprId) throws DALException {
+    public UserDTO getUser(int id) throws DALException {
         try {
             Map<Integer,UserDTO> users = (HashMap<Integer, UserDTO>) super.load();
-            if (users.containsKey(oprId))
-                return users.get(oprId);
+            if (users.containsKey(id))
+                return users.get(id);
             else
                 throw new DALException("User with this ID does not exist.");
         } catch (ClassNotFoundException | IOException e) {
@@ -55,14 +55,14 @@ public class UserDAO extends StorageDAO implements IUserDAO {
     }
 
     @Override
-    public void createUser(UserDTO opr) throws DALException {
+    public void createUser(UserDTO userDTO) throws DALException {
         try {
             Map<Integer, UserDTO> users = (HashMap<Integer, UserDTO>) super.load();
-            if (!users.containsKey(opr.getUsrID())) {
-                users.put(opr.getUsrID(), opr);
+            if (!users.containsKey(userDTO.getUsrId())) {
+                users.put(userDTO.getUsrId(), userDTO);
                 super.save(users);
             } else
-                throw new DALException("Ingredient with this ID already exists.");
+                throw new DALException("User with this ID already exists.");
         } catch (ClassNotFoundException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -70,13 +70,15 @@ public class UserDAO extends StorageDAO implements IUserDAO {
     }
 
     @Override
-    public void updateUser(UserDTO opr) {
+    public void updateUser(UserDTO userDTO) throws DALException {
         try {
             Map<Integer, UserDTO> users = (HashMap<Integer, UserDTO>) super.load();
-            users.replace(opr.getUsrID(), opr);
-            super.save(users);
+            if (users.containsKey(userDTO.getUsrId())) {
+                users.replace(userDTO.getUsrId(), userDTO);
+                super.save(users);
+            } else
+                throw new DALException("User with this ID does not exist.");     
         } catch (ClassNotFoundException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
