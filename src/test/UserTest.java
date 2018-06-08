@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
+
 public class UserTest {
 
 	@Before
@@ -14,6 +16,10 @@ public class UserTest {
 
 	@After
 	public void tearDown() throws Exception {
+		//File file = new File([DAO].getPath());
+        //if(!file.delete) {
+        //      System.out.println("Failed to delete the file");
+        //  }
 	}
 
 	@Test

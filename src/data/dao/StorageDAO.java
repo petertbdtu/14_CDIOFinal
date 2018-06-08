@@ -52,4 +52,11 @@ public class StorageDAO {
 
         return map;
     }
+
+    public String getPath(){
+        String newpath = path + "/.weightData/";
+        String className = this.getClass().getSimpleName();
+        newpath += className.substring(0, className.length()-3) + ".data";
+        return newpath;
+    }
 }

@@ -14,6 +14,10 @@ public class RecipeCompTest {
 
 	@After
 	public void tearDown() throws Exception {
+		//File file = new File([DAO].getPath());
+		//if(!file.delete) {
+		//      System.out.println("Failed to delete the file");
+		//  }
 	}
 
 	@Test
