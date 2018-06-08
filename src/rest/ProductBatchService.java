@@ -8,10 +8,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import data.DALException;
 import data.dao.ProductBatchDAO;
@@ -22,13 +20,13 @@ public class ProductBatchService {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createIngredient(ProductBatchDTO productBatchDTO)
+    public Response createProductBatch(ProductBatchDTO productBatchDTO) throws WebDAOException
     {
         try {
         	ProductBatchDAO.getInstance().createProductBatch(productBatchDTO);
             return Response.ok().build();
         } catch (DALException e) {
-            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build());
+            throw new WebDAOException(e.getMessage());
         }
     }
 
@@ -42,7 +40,7 @@ public class ProductBatchService {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ProductBatchDTO readIngredient(@PathParam("id") int id)
+    public ProductBatchDTO readProductBatch(@PathParam("id") int id)
     {
         return ProductBatchDAO.getInstance().getProductBatch(id);
     }

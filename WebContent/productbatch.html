@@ -41,9 +41,7 @@ function createProductBatch() {
    	Agent.postJson('rest/productbatch', productbatchData, function(data){
 			$("#productbatchtablebody").append(generateProductBatchHTML(productbatchData));
 		}, function(xhr, statusmsg, errormsg) {
-			alert(xhr);
-			alert(statusmsg);
-			alert(errormsg);
+			alert(xhr.responseJSON.message);
 		});
 }
 
