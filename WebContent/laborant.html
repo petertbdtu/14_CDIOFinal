@@ -8,28 +8,38 @@
 <script>
 $(function(){
 	checkStatus();
-}
+})
+
 function runWeight() {
-	Agent.getJson("rest/WeightService",
-	}
+	Agent.postJson("rest/WeightService", null,
+		function() {
+			alert("Successfully started weight.");
+		},
+		function() {
+			alert("Failed to start weight.");
+		}
+	);
+}
 	
 function checkStatus() {
-	Agent.getJson("rest/WeightService",
+	Agent.getJson("rest/WeightService", null,
 		function(Response) {
 			if(Response == true) {
 				$("#status").append('<p style="color:green font-size:11px">Weight is running</p>');
 			}
 			else {
 				$("#status").append('<p style="color:red font-size:11px">Weight is not running</p>');
-			}
+			};
+		},
+		function() {
+				alert("Couldn't get weight status for some reason.");
 		}
+	);
 }
 </script>
 </head>
 <body>
-<div id="status">
-
-</div>
-<button onclick="runWeight()">Start afvejning</button>
+	<div id="status"></div>
+	<button onclick="runWeight()">Start afvejning</button>
 </body>
 </html>
