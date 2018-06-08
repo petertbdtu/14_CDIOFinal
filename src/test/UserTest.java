@@ -44,7 +44,6 @@ public class UserTest {
 		
     	//FORKERT
 		assertEquals(ud1, uds.getUser(1));
-		fail("Not yet implemented");
 	}
 
 	@Test
