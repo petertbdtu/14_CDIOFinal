@@ -60,7 +60,7 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 			Map<Integer, IngredientBatchDTO> ingredientBatches = (HashMap<Integer, IngredientBatchDTO>) super.load();
 			Map<Integer, IngredientBatchDTO> batchesOfIngredient = new HashMap<Integer, IngredientBatchDTO>();
 			for (IngredientBatchDTO ingbatch : ingredientBatches.values())
-				if (ingbatch.getIbID() == ibId)
+				if (ingbatch.getIngredientId() == ingredientId)
 					batchesOfIngredient.put(ingbatch.getIbID(), ingbatch);
 			return new ArrayList<>(batchesOfIngredient.values());
 		} catch (ClassNotFoundException | IOException e) {

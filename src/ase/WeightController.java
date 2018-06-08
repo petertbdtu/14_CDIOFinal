@@ -130,14 +130,14 @@ public class WeightController {
 		try {
 			//Ensure pbId exists
 			curPb = pbd.getProductBatch(pbId);
-			tmpRecipeName = rd.getRecipe(curPb.getRecept()).getRecipeName();
+			tmpRecipeName = rd.getRecipe(curPb.getRecipeId()).getRecipeName();
 		} catch (DALException e) {
 			errorInState("Ugyldigt produktbatch nr.");
 			return false;
 		}
 		
 		//Ensure PB.status = not done
-		if(curPb.getStatus().equals("2")) { //TODO CHANGE TO INTEGER
+		if(curPb.getStatus() == 2) {
 			errorInState("Produktbatch er afsluttet");
 			return false;
 		}
@@ -151,8 +151,13 @@ public class WeightController {
 			return false;
 		
 		//Set PB.status = active
-		curPb.setStatus("1"); //TODO CHANGE TO INTEGER
-		pbd.updateProductBatch(curPb);
+		curPb.setStatus(1);
+		try {
+			pbd.updateProductBatch(curPb);
+		} catch (DALException e) {
+			errorInState("P.batch ikke opdateret");
+			return false;
+		}
 		return true;
 	}
 
@@ -162,8 +167,8 @@ public class WeightController {
 		
 		//Create new PBC with known values
 		curPbc = new ProductBatchCompDTO();
-		curPbc.setpbID(curPb.getPbNr());
-		curPbc.setUsrID(curLab.getUsrID());
+		curPbc.setpbID(curPb.getPbId());
+		curPbc.setUsrID(curLab.getUsrId());
 
 		//tara registration
 		if(!ws.getConfirmation("Er vægten ubelastet?"))
@@ -235,8 +240,8 @@ public class WeightController {
 	}
 	
 	private boolean pbcInRecipe() {
-		for (RecipeCompDTO rcTemp : rcd.getRecipeCompList(curPb.getRecept())) {
-			if(rcTemp.getIngredientId() == curIb.getIngbatchID()) {
+		for (RecipeCompDTO rcTemp : rcd.getRecipeCompList(curPb.getRecipeId())) {
+			if(rcTemp.getIngredientId() == curIb.getIngredientId()) {
 				curRc = rcTemp;
 				return true;
 			}
@@ -246,7 +251,7 @@ public class WeightController {
 
 	private boolean pbcAlreadyDone() {
 		try {
-			for(ProductBatchCompDTO pbcTemp : pbcd.getProductBatchCompList(curPb.getPbNr()))
+			for(ProductBatchCompDTO pbcTemp : pbcd.getProductBatchCompList(curPb.getPbId()))
 				if(pbcTemp.getibID() == curIb.getIbID())
 					return true;
 		} catch (DALException e) {
@@ -259,16 +264,20 @@ public class WeightController {
 	private boolean moreIngredients() {
 		boolean moreIngredients = false;
 		try {
-			List<RecipeCompDTO> rcList = rcd.getRecipeCompList(curPb.getRecept());
-			List<ProductBatchCompDTO> pbcList = pbcd.getProductBatchCompList(curPb.getPbNr());
+			List<RecipeCompDTO> rcList = rcd.getRecipeCompList(curPb.getRecipeId());
+			List<ProductBatchCompDTO> pbcList = pbcd.getProductBatchCompList(curPb.getPbId());
 			moreIngredients = (rcList.size() != pbcList.size());
 		} catch (DALException e) {}
 
 		if(moreIngredients) {
 			moreIngredients = ws.getConfirmation("Vil du afveje mere?");
 		} else {
-			curPb.setStatus("2"); //TODO CHANGE TO INTEGER
-			pbd.updateProductBatch(curPb);
+			curPb.setStatus(2);
+			try {
+				pbd.updateProductBatch(curPb);
+			} catch (DALException e) {
+				errorInState("P.batch ikke opdateret");
+			}
 		}
 
 		return moreIngredients;	

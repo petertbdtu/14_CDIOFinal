@@ -8,7 +8,7 @@ public class IngredientBatchDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = -9055060400210373872L; //Hvad er det her?, og hvad skal vi bruge det til?
 	private int ibId;
-	private int id;
+	private int ingredientId;
 	private double amount;
 
 	public IngredientBatchDTO() {
@@ -31,12 +31,12 @@ public class IngredientBatchDTO implements Serializable {
 		this.amount = amount;
 	}
 
-	public int getId() {
-		return id;
+	public int getIngredientId() {
+		return ingredientId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setIngredientId(int ingredientId) {
+		this.ingredientId = ingredientId;
 	}
 
 }
