@@ -4,7 +4,7 @@ h1{
 	text-align: center;
 }
 
-a:link, a:visited {
+a:link, a:visited, #addComp {
     background-color: #267ec1;
     color: white;
     padding: 14px 25px;

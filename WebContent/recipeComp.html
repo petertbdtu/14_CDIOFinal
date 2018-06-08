@@ -9,30 +9,60 @@
 <script>
 $(function(){
 	loadIngredient();
+	$("#add").click(function() {
+		element = {};
+		element.name = $("select#ingredientDropdown option:selected").text();
+		element.id = $("#ingredientDropdown").val();
+		$("#rows").append(generateRow(element));
+	})
+	
+	$("#rows").on('click', '.delete', function() {
+		var self = $(this).closest("tr");
+		self.remove();
+	});
 })
 
-function generateRow() {
-	
+function generateRow(element) {
+ 	return '<tr><td class="ingId">' + element.id + '</td>' +
+	'<td class="recName">' + element.name + '</td>' + 
+	'<td> <input class="amount" type="text" placeholder="gram"> </td>' +
+	'<td> <input class="tolerance" type="text" placeholder="0.1-20%"> </td>' + 
+	'<td> <button class="delete"> Slet </button> </td>)'
+	'</tr>';
 }
 
+
 function createRecipeComp() {
-   	var recipeCompData = {}
-   	recipeCompData.recipeId = $("#recipeId").val();
-   	recipeCompData.ingredientId = $("#ingredientId").val();
-   	recipeCompData.amount = $("#amount").val();
-   	recipeCompData.tolerance = $("#tolerance").val();
-   	Agent.postJson('rest/recipecomp', recipeCompData, function(data){
-			$("#submitComp").append(generateIngredientHTML(recipeCompData));
-		}, function(xhr, statusmsg, errormsg) {
+	var urlid = $.urlParam('id');
+	$("#rows").find('tr').each(function(i, element) {
+		var recipeCompData = {};
+		recipeCompData.recipeId = urlid;
+		recipeCompData.ingredientId = $(this).find(".ingId").text();
+		recipeCompData.amount = $(this).find(".amount").val();
+		recipeCompData.tolerance = $(this).find(".tolerance").val();
+		
+		Agent.postJson('rest/recipeComp', recipeCompData, function() {}
+			, function(xhr, statusmsg, errormsg) {
 			alert(xhr);
 			alert(statusmsg);
 			alert(errormsg);
-		});
+		});	
+	})
+}
+
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return decodeURI(results[1]) || 0;
+    }
 }
 
 
 function loadIngredient() {
-     Agent.getJson("rest/raavare",
+     Agent.getJson("rest/ingredient",
         function(data) { 
             $.each(data, function (i, element) { 
                 $("#ingredientDropdown").append(generateIngredientHTML(element));
@@ -41,25 +71,38 @@ function loadIngredient() {
     ); 
 }
 
-function generateIngredientHTML(recipeComp) {
-	return '<tr><td>' + recipeComp.recipeId + '</tr>'
-	'<tr>' + recipeComp.ingredientId + '</tr>'
-	'<tr>' + recipeComp.amount + '</tr>'
-	'<tr>' + recipeComp.tolerance + '</tr></td>';
+function generateIngredientHTML(element) {
+	return "<option value=" + element.id + ">" + element.name + "</option>";
 }
 
 </script>
 </head>
 <body>
-	<h3>Vælg råvarer</h3>
-	<form id="IngredientForm">
-		<select id="ingredientDropdown">
-			<option>Vælg råvare
-		</select> <label for="amountOfCommodities">Mængde</label> <input id="Amount"
-			type="text" id="amountOfCommodities" placeholder="Mængde"> <a
-			href="AddIngredients.html"><button>Tilføj råvare</button></a> 
-			<br></br>
-	</form>
-	<button id="submitComp">Færdig</button>
+	<div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+	</div>
+	<br><br>
+	<div>
+	Vælg råvarer   
+	  <select id="ingredientDropdown"> <option>Vælg råvare </select>
+	<button id="add">Tilføj</button>
+	</div>
+	<br>
+	<table id = recCompTable>
+		<thead>
+			<tr>
+				<td>ID</td>
+				<td>Navn</td>
+				<td>Mængde</td>
+				<td>Tolerance</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody id=rows>
+		
+		</tbody>
+	</table>
+	<a onclick="createRecipeComp()" id="submitComp">Færdig</a>
 </body>
 </html>

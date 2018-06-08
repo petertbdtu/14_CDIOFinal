@@ -11,8 +11,35 @@ $(function(){
     loadRecipes();
     $( "#createRecipe" ).click(function() {
     	createRecipe();
+    	redirect();
 	});
 })
+
+function loadRecipeCompList () {
+	var urlid = $.urlParam('id');
+	Agent.getJson("rest/recipecomp/" + urlid, 
+		function(data) { 
+        	$.each(data, function (i, element) { 
+            	$("#rows").append(generateRow(element));
+       		 });
+    	 }
+	);
+}
+
+function generateRow(element) {
+ 	return '<tr><td class="ingId">' + element.id + '</td>' +
+	'<td class="recName">' + element.name + '</td>' + 
+	'<td> <input class="amount" type="text" placeholder="gram"> </td>' +
+	'<td> <input class="tolerance" type="text" placeholder="0.1-20%"> </td>' + 
+	'<td> <button class="delete"> Slet </button> </td>)'
+	'</tr>';
+}
+
+function redirect() {
+	var id = $("#recipeID").val();
+	window.location.href = "recipeComp.html?id=" + id;
+}
+
 function loadRecipes() {
 	Agent.getJson("rest/recipe",
 		function(data) {
@@ -26,7 +53,7 @@ function loadRecipes() {
 function generateRecipeHTML(recipe) {
 	return 	'<tr><td>' + recipe.recipeId + '</td>' +
 			'<td>' + recipe.recipeName + '</td>' + 
-			'<td> <button id="showButton' + recipe.recipeId + '">Vis</button></td>'
+			'<td> <button class="recShow">Vis</button></td>'
 			'</tr>';
 }
 function createRecipe() {
@@ -53,7 +80,7 @@ function createRecipe() {
 			<input type="text" id="recipeID" placeholder="Recept ID">
 			<input type="text" id="recipeName" placeholder="Recept navn">
 		<br>
-		<button id="createRecipe">Tilføj råvarer</button>
+		<a onclick="redirect()" id="createRecipe">Tilføj råvarer</a>
 	<div class="container" id="recepter">
 		<h2>Recepter</h2>
 		<table>

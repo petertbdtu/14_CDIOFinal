@@ -14,12 +14,8 @@ import javax.ws.rs.core.Response.Status;
 
 import data.DALException;
 import data.dao.RecipeCompDAO;
-import data.dao.RecipeDAO;
 import data.dto.RecipeCompDTO;
-import data.dto.RecipeDTO;
 
-
-//IDK about updateRecipeComp, I don't think it needs to be implemented, but if it does, then it needs to be implemented in the first place.
 @Path("recipeComp")
 public class RecipeCompService {
 
@@ -45,7 +41,7 @@ public class RecipeCompService {
 	@GET
 	  @Path("{recipeid}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ArrayList<RecipeCompDTO> readRecipeCompList(int recipeid)
+    public ArrayList<RecipeCompDTO> readRecipeCompList(@PathParam("recipeid") int recipeid)
     {
         return new ArrayList<>(RecipeCompDAO.getInstance().getRecipeCompList(recipeid));
     }
