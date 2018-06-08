@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Råvareadministration</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
     <script src="jquery-3.3.1.js"></script>
     <script src="Agent.js"></script>
     <script>
@@ -30,18 +31,16 @@
                 self.find(".okbutton").text("Ret");
                 self.find(".okbutton").toggleClass('okbutton editbutton');
                 //her skal der så postes ændringer til datalaget
-                //var ingredientData = {}
-                //ingredientData.id = col1_value;
-                //ingredientData.name = col2_value;
-                //ingredientData.changeId = curID
-                //curID = 0;
-                //Agent.postJson('rest/ingredient/edit', ingredientData, function(data){
-                //    $("#ingredientTableBody").append(generateIngredientHTML(ingredientData));
-                //}, function(xhr, statusmsg, errormsg) {
-                //    alert(xhr);
-                //    alert(statusmsg);
-                //    alert(errormsg);
-                //});
+                var ingredientData = {}
+                ingredientData.id = col1_value;
+                ingredientData.name = col2_value;
+                Agent.putJson('rest/ingredient', ingredientData, function(data){
+
+                }, function(xhr, statusmsg, errormsg) {
+                    alert(xhr);
+                    alert(statusmsg);
+                    alert(errormsg);
+                });
             });
         })
 
@@ -68,50 +67,51 @@
             var ingredientData = {}
             ingredientData.id = $("#id").val();
             ingredientData.name = $("#name").val();
-            ingredientData.curID = 0; //ID we want to override, 0 means no overwriting
-            $("#ingredientTableBody").append(generateIngredientHTML(ingredientData)); //for testing
+            //$("#ingredientTableBody").append(generateIngredientHTML(ingredientData)); //for testing
             Agent.postJson('rest/ingredient', ingredientData, function(data){
                 $("#ingredientTableBody").append(generateIngredientHTML(ingredientData));
             }, function(xhr, statusmsg, errormsg) {
-                alert(xhr);
-                alert(statusmsg);
-                alert(errormsg);
+                alert(xhr.responseJSON.message);
             });
         }
 
     </script>
 </head>
 <body>
-<h2>Råvareadministration</h2>
-</br>
-<div>
-    <table border = "1" id = "ingredientTable">
-        <thead>
-        <tr>
-            <th>Nr.</th>
-            <th>Navn</th>
-            <th>Rette?</th>
-        </tr>
-        </thead>
-        <tbody id = "ingredientTableBody">
+ <div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+	</div>
+    <h2>Råvareadministration</h2>
+    </br>
+    <div>
+        <table border = "1" id = "ingredientTable">
+            <thead>
+            <tr>
+                <th>Nr.</th>
+                <th>Navn</th>
+                <th>Rette?</th>
+            </tr>
+            </thead>
+            <tbody id = "ingredientTableBody">
 
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 
-<div>
-    <h2>Råvareopretning</h2>
-    <table>
-        <tr>
-            <th>Nr.</th>
-            <th>Navn</th>
-        </tr>
-        <tr>
-            <td><input type = text id = "id"></td>
-            <td><input type = text id = "name"></td>
-        </tr>
-    </table>
-    <button id = "ingredientOpret">Opret</button>
-</div>
+    <div>
+        <h2>Råvareopretning</h2>
+        <table>
+            <tr>
+               <th>Nr.</th>
+               <th>Navn</th>
+            </tr>
+            <tr>
+                <td><input type = text id = "id"></td>
+                <td><input type = text id = "name"></td>
+            </tr>
+        </table>
+        <button id = "ingredientOpret">Opret</button>
+    </div>
 </body>
 </html>

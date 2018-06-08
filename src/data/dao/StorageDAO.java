@@ -26,7 +26,6 @@ public class StorageDAO {
             oos.writeObject(map);
             oos.close();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -53,5 +52,4 @@ public class StorageDAO {
 
         return map;
     }
-
 }

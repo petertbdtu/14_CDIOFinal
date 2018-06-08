@@ -6,30 +6,21 @@ public class IngredientBatchDTO implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -9055060400210373872L;
-	private int ibID;
-	private int ingbatchID;
+	private static final long serialVersionUID = -9055060400210373872L; //Hvad er det her?, og hvad skal vi bruge det til?
+	private int ibId;
+	private int id;
 	private double amount;
-	private String supplier;
 
 	public IngredientBatchDTO() {
 
 	}
 
 	public int getIbID() {
-		return ibID;
+		return ibId;
 	}
 
 	public void setIbID(int ibID) {
-		this.ibID = ibID;
-	}
-
-	public int getIngbatchID() {
-		return ingbatchID;
-	}
-
-	public void setIngbatchID(int ingbatchID) {
-		this.ingbatchID = ingbatchID;
+		this.ibId = ibID;
 	}
 
 	public double getAmount() {
@@ -40,11 +31,12 @@ public class IngredientBatchDTO implements Serializable {
 		this.amount = amount;
 	}
 
-	public String getSupplier() {
-		return supplier;
+	public int getId() {
+		return id;
 	}
 
-	public void setSupplier(String supplier) {
-		this.supplier = supplier;
+	public void setId(int id) {
+		this.id = id;
 	}
+
 }

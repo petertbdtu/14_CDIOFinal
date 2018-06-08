@@ -22,6 +22,16 @@ Agent.postJson = function(url, data, success, error){
 		error: error
 	})
 }
+Agent.putJson = function(url, data, success, error){
+    $.ajax({
+        url:url,
+        method: 'PUT',
+        data: JSON.stringify(data),
+        success: success,
+        contentType: 'application/json',
+        error: error
+    })
+}
 Agent.delete = function(url, success, error){
 	$.ajax({
 		url:url,

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Recept administration</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="jquery-3.3.1.js"></script>
+<script src="Agent.js"></script>
+<script>
+$(function(){
+    loadRecipes();
+    $( "#createRecipe" ).click(function() {
+    	createRecipe();
+    	redirect();
+	});
+})
+
+function loadRecipeCompList () {
+	var urlid = $.urlParam('id');
+	Agent.getJson("rest/recipecomp/" + urlid, 
+		function(data) { 
+        	$.each(data, function (i, element) { 
+            	$("#rows").append(generateRow(element));
+       		 });
+    	 }
+	);
+}
+
+function generateRow(element) {
+ 	return '<tr><td class="ingId">' + element.id + '</td>' +
+	'<td class="recName">' + element.name + '</td>' + 
+	'<td> <input class="amount" type="text" placeholder="gram"> </td>' +
+	'<td> <input class="tolerance" type="text" placeholder="0.1-20%"> </td>' + 
+	'<td> <button class="delete"> Slet </button> </td>)'
+	'</tr>';
+}
+
+function redirect() {
+	var id = $("#recipeID").val();
+	window.location.href = "recipeComp.html?id=" + id;
+}
+
+function loadRecipes() {
+	Agent.getJson("rest/recipe",
+		function(data) {
+			$.each(data, function (i, element) {
+				$("#shownRecipe").append(generateRecipeHTML(element));
+			});
+		}
+	);
+}
+//Convenience function for generating html
+function generateRecipeHTML(recipe) {
+	return 	'<tr><td>' + recipe.recipeId + '</td>' +
+			'<td>' + recipe.recipeName + '</td>' + 
+			'<td> <button class="recShow">Vis</button></td>'
+			'</tr>';
+}
+function createRecipe() {
+   	var recipeData = {}
+   	recipeData.recipeId = $("#recipeID").val();
+   	recipeData.recipeName = $("#recipeName").val();
+   	Agent.postJson('rest/recipe', recipeData, function(data){
+			$("#shownRecipes").append(generateRecipeHTML(recipeData));
+		}, function(xhr, statusmsg, errormsg) {
+			alert(xhr);
+			alert(statusmsg);
+			alert(errormsg);
+		});
+   	loadRecipes();
+}
+</script>
+<body>
+	<div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+	</div>
+
+		<h2>Recept administration</h2>
+			<input type="text" id="recipeID" placeholder="Recept ID">
+			<input type="text" id="recipeName" placeholder="Recept navn">
+		<br>
+		<a onclick="redirect()" id="createRecipe">Tilføj råvarer</a>
+	<div class="container" id="recepter">
+		<h2>Recepter</h2>
+		<table>
+			<thead>
+				<tr>
+					<td>ID<td/>
+					<td>Navn<td/>
+					<td><td/>
+				<tr/>
+			<thead/>
+			<tbody id="shownRecipes">
+			
+			</tbody>
+		</table>
+		</div>
+</body>
+</html>
