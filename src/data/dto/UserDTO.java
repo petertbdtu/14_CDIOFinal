@@ -3,9 +3,6 @@ package data.dto;
 import java.io.Serializable;
 
 public class UserDTO implements Serializable {
-    /**
-	 * vælg serialVersionId, den kan repræsentere klassen unikt 
-	 */
 	private static final long serialVersionUID = -5747381832427375050L;
 	private int usrId;
     private String usrName;

@@ -3,7 +3,9 @@ package data.dto;
 import data.dao.*;
 import data.idao.*;
 
-public class ProductBatchCompDTO{
+import java.io.Serializable;
+
+public class ProductBatchCompDTO implements Serializable{
 	private int pbID;
 	private int ibID;
 	private double tara;

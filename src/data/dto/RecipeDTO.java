@@ -1,6 +1,8 @@
 package data.dto;
 
-public class RecipeDTO {
+import java.io.Serializable;
+
+public class RecipeDTO implements Serializable {
     int recipeId;
     String recipeName;
 

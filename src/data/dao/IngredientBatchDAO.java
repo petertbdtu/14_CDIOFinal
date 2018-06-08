@@ -1,9 +1,9 @@
 package data.dao;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import data.DALException;
 import data.dto.IngredientBatchDTO;
@@ -44,9 +44,9 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 	}
 
 	@Override
-	public ArrayList<IngredientBatchDTO> getIngredientBatchList() {
+	public List<IngredientBatchDTO> getIngredientBatchList() {
 		try {
-			Map<Integer, IngredientBatchDTO> ingredientBatches = (Map<Integer, IngredientBatchDTO>) super.load();
+			Map<Integer, IngredientBatchDTO> ingredientBatches = (HashMap<Integer, IngredientBatchDTO>) super.load();
 			return new ArrayList<>(ingredientBatches.values());
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
@@ -55,14 +55,14 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 	}
 
 	@Override
-	public Map<Integer, IngredientBatchDTO> getIngredientBatchList(int ibId) throws DALException {
+	public List<IngredientBatchDTO> getIngredientBatchList(int ingredientId)  throws DALException{
 		try {
 			Map<Integer, IngredientBatchDTO> ingredientBatches = (HashMap<Integer, IngredientBatchDTO>) super.load();
 			Map<Integer, IngredientBatchDTO> batchesOfIngredient = new HashMap<Integer, IngredientBatchDTO>();
 			for (IngredientBatchDTO ingbatch : ingredientBatches.values())
 				if (ingbatch.getIbID() == ibId)
 					batchesOfIngredient.put(ingbatch.getIbID(), ingbatch);
-			return batchesOfIngredient;
+			return new ArrayList<>(batchesOfIngredient.values());
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

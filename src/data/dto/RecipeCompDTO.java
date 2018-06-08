@@ -1,9 +1,8 @@
 package data.dto;
 
-import data.dao.*;
-import data.idao.*;
+import java.io.Serializable;
 
-public class RecipeCompDTO {
+public class RecipeCompDTO implements Serializable{
 	private int ingredientId;
 	private int amount;
 	private double tolerance; //0-20% tolerance

@@ -47,7 +47,11 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	public List<ProductBatchCompDTO> getProductBatchCompList(int pbId) {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
-			return (List<ProductBatchCompDTO>) complist.values();
+            List<ProductBatchCompDTO> batchesOfProduct = new ArrayList<>();
+            for (ProductBatchCompDTO prodBatch : complist.values())
+                if (prodBatch.getpbID() == pbId)
+                    batchesOfProduct.add(prodBatch);
+			return batchesOfProduct;
 		}
 		catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
@@ -61,7 +65,7 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	public List<ProductBatchCompDTO> getProductBatchCompList() {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
-			return (List<ProductBatchCompDTO>) complist.values();
+			return new ArrayList<>(complist.values());
 		}
 		catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
@@ -75,7 +79,7 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
 			String compString = generateKey(productBatchComp);
 			if(!complist.containsKey(compString)) {
-				complist.replace(compString, productBatchComp);
+				complist.put(compString, productBatchComp);
 				super.save(complist);
 			}
 			else {
