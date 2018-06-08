@@ -6,12 +6,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import data.DALException;
+import data.dao.UserDAO;
+import data.dto.UserDTO;
+import data.idao.IUserDAO;
+
 import java.io.File;
 
 public class UserTest {
+	
+	IUserDAO uds;
 
 	@Before
 	public void setUp() throws Exception {
+		uds = UserDAO.getInstance();
 	}
 
 	@After
@@ -23,8 +31,19 @@ public class UserTest {
 	}
 
 	@Test
-	public void testGetUser() {
-		fail("Not yet implemented");
+	public void testGetUser() throws DALException {
+		//1. Oprettes nogle UserDTOer
+		//2. Tilføje dem til userDAO
+		//3. GetUser(UserDTO)
+		
+    	UserDTO ud1 = new UserDTO();
+    	ud1.setUsrId(1);
+		
+    	//KORREKT
+		assertEquals(ud1.getUsrId(), uds.getUser(1).getUsrId());
+		
+    	//FORKERT
+		assertEquals(ud1, uds.getUser(1));
 	}
 
 	@Test
