@@ -2,13 +2,27 @@ import ase.WeightController;
 import data.DALException;
 import data.dao.*;
 import data.dto.*;
+import data.idao.IUserDAO;
 
 public class Main {
 
     public static void main(String[] args) throws DALException {
-    	WeightController wc = new WeightController();
+    	IUserDAO uds = UserDAO.getInstance();
+
+    	UserDTO ud1 = new UserDTO();
+    	ud1.setUsrId(1);
     	
-        /*UserDTO usr = new UserDTO(); //USR
+    	uds.createUser(ud1);
+    	
+    	System.out.println(ud1);
+    	System.out.println(ud1.getUsrId());
+    	
+    	System.out.println(uds.getUser(1));
+    	System.out.println(uds.getUser(1).getUsrId());
+    	
+    	/*WeightController wc = new WeightController();
+    	
+        UserDTO usr = new UserDTO(); //USR
         usr.setUsrID(1);
         usr.setUsrName("Joachim");
         usr.setIni("j");
@@ -57,7 +71,7 @@ public class Main {
         pb.setStatus("1");
         pb.setPbNr(1001);
         pb.setRecept(2);
-        ProductBatchDAO.getInstance().createProductBatch(pb);*/
+        ProductBatchDAO.getInstance().createProductBatch(pb);
 
 		wc.run();
 
@@ -65,7 +79,7 @@ public class Main {
             System.out.println(asd.getpbID());
         }
         for(ProductBatchCompDTO asd : ProductBatchCompDAO.getInstance().getProductBatchCompList(1001)){
-            System.out.println(asd.getpbID());
-        }
+            System.out.println(asd.getpbID());*/
+        //}
     }
 }
