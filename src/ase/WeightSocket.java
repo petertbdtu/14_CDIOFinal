@@ -110,6 +110,7 @@ public class WeightSocket implements IWeightSocket{
 	public int getInput(String msg) {
 		String in = "";
 		int tmp = -1;
+
 		pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
 		pw.flush();
 
@@ -123,6 +124,8 @@ public class WeightSocket implements IWeightSocket{
 					showText("Fejl - Kun tal tilladt");
 					sleep(3);
 					clearText();
+                    pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
+                    pw.flush();
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
