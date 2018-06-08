@@ -27,7 +27,6 @@ public class WeightSocket implements IWeightSocket{
 		}
 	}
 
-
 	@Override
 	public int getWeight() {
 		//Hvad betyder det her?
@@ -56,7 +55,6 @@ public class WeightSocket implements IWeightSocket{
 		String in;
 		try {
 			in = br.readLine();
-			System.out.println(in);
 			String subStr = in.substring(in.length()-7,in.length()-2);
 			String subStr2 = subStr.charAt(0) + subStr.substring(2);
 			in = subStr2;
@@ -98,25 +96,41 @@ public class WeightSocket implements IWeightSocket{
 			e.printStackTrace();
 		}
 	}
+	
+	boolean tryParseInt(String value) {  
+	     try {  
+	         Integer.parseInt(value);  
+	         return true;  
+	      } catch (NumberFormatException e) {  
+	         return false;  
+	      }  
+	}
 
 	@Override
-	public String getInput(String msg) {
+	public int getInput(String msg) {
 		String in = "";
-
+		int tmp = -1;
 		pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
 		pw.flush();
 
 		while(!in.startsWith("RM20 A")){
 			try {
 				in = br.readLine();
+				in = in.substring(8,in.length()-1);
+				if(tryParseInt(in)) {
+					tmp = Integer.parseInt(in);
+				} else {
+					showText("Fejl - Kun tal tilladt");
+					sleep(3);
+					clearText();
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-		String subStr = in.substring(8,in.length()-1);
-		return subStr;
+		return tmp;
 	}
 
 	@Override
@@ -170,46 +184,6 @@ public class WeightSocket implements IWeightSocket{
 		clearText();
 	}
 
-
-	/* //K 3 implementation
-    @Override
-    public boolean getConfirmation(String msg) {
-        try (Socket socket = new Socket( curIP ,8000)) {
-            OutputStream sos = socket.getOutputStream();
-            PrintWriter pw = new PrintWriter(sos);
-            InputStream is = socket.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String in = "         ";
-
-            pw.println(msg);
-            pw.flush();
-            pw.println("K 3 ");
-            pw.flush();
-
-            while(!in.substring(0,5).equals("K C 4")){
-                in = reader.readLine();
-                //System.out.println(in);
-                if(in.equals("CANCEL CASE GOES HERE")){
-                    return false;
-                }
-            }
-
-            pw.println("K 1 ");
-            pw.flush();
-            pw.println("DW");
-            pw.flush();
-            return true;
-            //socket.close();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return false;
-    }
-	 */
 	@Override
 	public void overrideWeight(int grams) {
 		pw.println("B \""+grams+"\"");

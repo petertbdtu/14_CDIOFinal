@@ -6,8 +6,9 @@ import data.dto.*;
 public class Main {
 
     public static void main(String[] args) throws DALException {
-    /*
-        UserDTO usr = new UserDTO(); //USR
+    	WeightController wc = new WeightController();
+    	
+        /*UserDTO usr = new UserDTO(); //USR
         usr.setUsrID(1);
         usr.setUsrName("Joachim");
         usr.setIni("j");
@@ -56,10 +57,9 @@ public class Main {
         pb.setStatus("1");
         pb.setPbNr(1001);
         pb.setRecept(2);
-        ProductBatchDAO.getInstance().createProductBatch(pb);
-    */
+        ProductBatchDAO.getInstance().createProductBatch(pb);*/
 
-        wc.run();
+		wc.run();
 
         for(ProductBatchCompDTO asd : ProductBatchCompDAO.getInstance().getProductBatchCompList(1000)){
             System.out.println(asd.getpbID());

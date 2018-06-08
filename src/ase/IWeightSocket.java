@@ -6,7 +6,7 @@ public interface IWeightSocket {
     void showError();
     void showText(String msg);
     void clearText();
-    String getInput(String msg);
+    int getInput(String msg);
     boolean getConfirmation(String msg);
     void haltProgress(String msg);
 

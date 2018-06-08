@@ -93,8 +93,7 @@ public class WeightController {
 		
 		ws.clearText();
 		ws.tare();
-		String tmp = ws.getInput("Indtast operatornr:");
-		int labNo = Integer.parseInt(tmp);
+		int labNo = ws.getInput("Indtast operatornr:");
 
 		//check labNo inside domain
 		if(labNo < 1 || labNo > 999){
@@ -120,19 +119,18 @@ public class WeightController {
 
 	private boolean PbId() {
 		curPb = null;
-		String tmp = ws.getInput("Indtast produktbatch nr.:");
-		int pbId = Integer.parseInt(tmp);
+		int pbId = ws.getInput("Indtast produktbatch nr.:");
 
 		//check pbNo inside domain
 		if(pbId < 1 || pbId > 99999999){
 			errorInState("Ugyldigt produktbatch nr.");
 			return false;
 		}
-
+		String tmpRecipeName = null;
 		try {
 			//Ensure pbId exists
 			curPb = pbd.getProductBatch(pbId);
-			tmp = rd.getRecipe(curPb.getRecept()).getRecipeName();
+			tmpRecipeName = rd.getRecipe(curPb.getRecept()).getRecipeName();
 		} catch (DALException e) {
 			errorInState("Ugyldigt produktbatch nr.");
 			return false;
@@ -144,7 +142,7 @@ public class WeightController {
 			return false;
 		}
 		
-		ws.showText("Recept: " + tmp);
+		ws.showText("Recept: " + tmpRecipeName);
 		ws.sleep(3);
 		ws.clearText();
 		
@@ -176,7 +174,7 @@ public class WeightController {
 
 		//Check if valid ibId
 		try {
-			curIb = ibd.getIngredientBatch(Integer.parseInt(ws.getInput("Indtast RaavareBatch nr.")));
+			curIb = ibd.getIngredientBatch(ws.getInput("Indtast RaavareBatch nr."));
 		} catch (DALException e) {
 			errorInState("Ugyldigt raavarebatch nr.");
 			return;
