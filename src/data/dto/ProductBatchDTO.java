@@ -1,6 +1,8 @@
 package data.dto;
 
-public class ProductBatchDTO {
+import java.io.Serializable;
+
+public class ProductBatchDTO implements Serializable{
 	private int pbNr;//product batch Nr.
 	private int receptId;//product recept
 	private String status;

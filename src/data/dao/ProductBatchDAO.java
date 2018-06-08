@@ -1,5 +1,6 @@
 package data.dao;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	public List<ProductBatchDTO> getProductBatchList() {
 		try {
 			Map<Integer, ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
-			return (List<ProductBatchDTO>) productBatches.values();
+			return new ArrayList<>(productBatches.values());
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
