@@ -1,7 +1,13 @@
 package data.dto;
 
-public class UserDTO {
-    private int usrID;
+import java.io.Serializable;
+
+public class UserDTO implements Serializable {
+    /**
+	 * vælg serialVersionId, den kan repræsentere klassen unikt 
+	 */
+	private static final long serialVersionUID = -5747381832427375050L;
+	private int usrId;
     private String usrName;
     private String ini;
     private String cpr;
@@ -58,12 +64,12 @@ public class UserDTO {
 		this.active = active;
 	}
 	
-    public int getUsrID() {
-        return usrID;
+    public int getUsrId() {
+        return usrId;
     }
 
-    public void setUsrID(int usrID) {
-        this.usrID = usrID;
+    public void setUsrId(int usrId) {
+        this.usrId = usrId;
     }
 
     public String getUsrName() {

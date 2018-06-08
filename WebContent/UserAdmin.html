@@ -88,7 +88,7 @@ function generateUserHTML(user) {
 //Agent = forenkle ajax med Json
 
 function createUser() {
-    var userData = {}
+    var userData = {} //userData er det objekt der bliver sent og dens attributter der skal matche med dtoén (usrid, name)
     userData.usrId = $("#userid").val();
     userData.usrName = $("#name").val();
     userData.ini = $("#ini").val();
@@ -98,11 +98,10 @@ function createUser() {
     userData.isProdLead= $("#roleprod").checked;
     userData.isLabTech= $("#rolelab").checked;
     userData.active = $('input[name=active]:checked').val();
-    $("#userTableBody").append(generateUserHTML(userData));
     Agent.postJson('rest/useradmin', userData, function(data){
-        $("#userTableBody").append(generateUserHTML(userData));
+        $("#userTableBody").append(generateUserHTML(userData)); //hvis der er succes tilføjer den hvis ikke viser den fejl 
     }, function(xhr, statusmsg, errormsg) {
-        alert(xhr);
+        alert(xhr); //obejekt objekt, sker kun fejl. 
         alert(statusmsg);
         alert(errormsg);
     });
@@ -141,8 +140,8 @@ function createUser() {
 		<input type="checkbox" id="rolelab" value="Laborant"> Laborant <br>
 		
 		Aktiv<br>
-		<input type="radio" name="active" value="True"> Ja
-		<input type="radio" name="active"value="False"> Nej
+		<input type="radio" name="active" value=true> Ja
+		<input type="radio" name="active"value=false> Nej
 		<br>
 		
 		<button type="button" id= "userCreate">Opret ny bruger</button>

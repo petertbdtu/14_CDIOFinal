@@ -58,8 +58,8 @@ public class UserDAO extends StorageDAO implements IUserDAO {
     public void createUser(UserDTO userDTO) throws DALException {
         try {
             Map<Integer, UserDTO> users = (HashMap<Integer, UserDTO>) super.load();
-            if (!users.containsKey(userDTO.getUsrID())) {
-                users.put(userDTO.getUsrID(), userDTO);
+            if (!users.containsKey(userDTO.getUsrId())) {
+                users.put(userDTO.getUsrId(), userDTO);
                 super.save(users);
             } else
                 throw new DALException("User with this ID already exists.");
@@ -73,8 +73,8 @@ public class UserDAO extends StorageDAO implements IUserDAO {
     public void updateUser(UserDTO userDTO) throws DALException {
         try {
             Map<Integer, UserDTO> users = (HashMap<Integer, UserDTO>) super.load();
-            if (users.containsKey(userDTO.getUsrID())) {
-                users.replace(userDTO.getUsrID(), userDTO);
+            if (users.containsKey(userDTO.getUsrId())) {
+                users.replace(userDTO.getUsrId(), userDTO);
                 super.save(users);
             } else
                 throw new DALException("User with this ID does not exist.");     
