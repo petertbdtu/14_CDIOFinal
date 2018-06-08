@@ -15,6 +15,22 @@ function generateRow() {
 	
 }
 
+function createRecipeComp() {
+   	var recipeCompData = {}
+   	recipeCompData.recipeId = $("#recipeId").val();
+   	recipeCompData.ingredientId = $("#ingredientId").val();
+   	recipeCompData.amount = $("#amount").val();
+   	recipeCompData.tolerance = $("#tolerance").val();
+   	Agent.postJson('rest/recipecomp', recipeCompData, function(data){
+			$("#submitComp").append(generateIngredientHTML(recipeCompData));
+		}, function(xhr, statusmsg, errormsg) {
+			alert(xhr);
+			alert(statusmsg);
+			alert(errormsg);
+		});
+}
+
+
 function loadIngredient() {
      Agent.getJson("rest/raavare",
         function(data) { 
@@ -25,22 +41,24 @@ function loadIngredient() {
     ); 
 }
 
-function generateIngredientHTML(element) {
-	return "<option>" + element.name + "</option>";
+function generateIngredientHTML(recipeComp) {
+	return '<tr><td>' + recipeComp.recipeId + '</tr>'
+	'<tr>' + recipeComp.ingredientId + '</tr>'
+	'<tr>' + recipeComp.amount + '</tr>'
+	'<tr>' + recipeComp.tolerance + '</tr></td>';
 }
 
 </script>
 </head>
 <body>
-<h3>Vælg råvarer</h3>
+	<h3>Vælg råvarer</h3>
 	<form id="IngredientForm">
 		<select id="ingredientDropdown">
-			<option> Vælg råvare
-		</select>
-		<label for="amountOfCommodities">Mængde</label>
-		<input id="Amount" type="text" id="amountOfCommodities" placeholder="Mængde">
-		<a href="AddIngredients.html"><button>Tilføj råvare</button></a>
-		<br><br/>
+			<option>Vælg råvare
+		</select> <label for="amountOfCommodities">Mængde</label> <input id="Amount"
+			type="text" id="amountOfCommodities" placeholder="Mængde"> <a
+			href="AddIngredients.html"><button>Tilføj råvare</button></a> <br>
+		<br />
 	</form>
 	<button id="submitComp">Færdig</button>
 </body>
