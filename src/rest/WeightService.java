@@ -10,25 +10,24 @@ import ase.runnableThread;
 
 @Path("WeightService")
 public class WeightService {
-	
-		@GET
+
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response startWeight() {
-			if(Thread.currentThread().isInterrupted() == true) {
+		if(Thread.currentThread().isInterrupted() == true) {
 			Thread thread = new Thread(new runnableThread());
 			thread.start();
 			return Response.status(200).build();
-			}
-			else {
-				return Response.status(500).build();
-			}
+		} else {
+			return Response.status(500).build();
 		}
-		
-		@GET
+	}
+
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean checkStatus() {
-			return Thread.currentThread().isAlive();
-		}
-	
-	
+		return Thread.currentThread().isAlive();
+	}
+
+
 }
