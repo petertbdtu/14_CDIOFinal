@@ -70,9 +70,7 @@
             Agent.postJson('rest/ingredient', ingredientData, function(data){
                 $("#ingredientTableBody").append(generateIngredientHTML(ingredientData));
             }, function(xhr, statusmsg, errormsg) {
-                alert(xhr);
-                alert(statusmsg);
-                alert(errormsg);
+                alert(xhr.responseJSON.message);
             });
         }
 
