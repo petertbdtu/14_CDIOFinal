@@ -201,6 +201,13 @@ public class WeightController {
 		ws.tare();
 		ws.haltProgress("Fjern alt");
 
+		//Get brut and check
+		int brut = ws.tare();
+		if(Math.abs(brut - (curPbc.getNetto() + curPbc.getTara())) > 10) {
+			errorInState("Bruttocheck fejlet, Proev igen");
+			return;
+		}
+
 		//Get diff and check tolerance
 		double diffWeight = Math.abs(curRc.getAmount() - curPbc.getNetto());
 		if(diffWeight / curRc.getAmount() * 100 > curRc.getTolerance()) {
