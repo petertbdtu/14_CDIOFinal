@@ -53,6 +53,16 @@
 		Agent.postJson("rest/ingredientbatch", ingredientBatchData)
 	}
 	
+	$(function(){
+		$('#ingredientbatches').hide(1);
+		});
+	
+	
+	$(function(){
+		$('#showIngredients').on('click', function(){
+			$('#ingredientbatches').slideToggle(1000);
+		});
+	});
 	
 	</script>
 </head>
@@ -84,9 +94,9 @@
 		<table>
 			<thead>
 				<tr>
-					<td>ibId</td>
-					<td>ID</td>
-					<td>Amount</td>
+					<td>IngredientBatchID</td>
+					<td>råvareID</td>
+					<td>Mængde</td>
 				</tr>
 			</thead>
 			<tbody id="ingredientbatchtablebody"></tbody>
