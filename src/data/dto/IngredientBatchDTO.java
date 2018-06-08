@@ -6,10 +6,10 @@ public class IngredientBatchDTO implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -9055060400210373872L;
+	private static final long serialVersionUID = -9055060400210373872L; //Hvad er det her?, og hvad skal vi bruge det til?
 	private int ibId;
+	private int id;
 	private double amount;
-	private String supplier;
 
 	public IngredientBatchDTO() {
 
@@ -31,11 +31,12 @@ public class IngredientBatchDTO implements Serializable {
 		this.amount = amount;
 	}
 
-	public String getSupplier() {
-		return supplier;
+	public int getId() {
+		return id;
 	}
 
-	public void setSupplier(String supplier) {
-		this.supplier = supplier;
+	public void setId(int id) {
+		this.id = id;
 	}
+
 }

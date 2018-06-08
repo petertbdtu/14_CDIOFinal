@@ -2,10 +2,69 @@
 <html>
 <head>
 
-<meta charset="UTF-8">
-<title>Råvarebatch</title>
-<link rel="stylesheet" href="ingredientbatch.css">
-<script src="JavaScript.js"></script>
+	<meta charset="UTF-8">
+	<title>Råvarebatch</title>
+	<link rel="stylesheet" href="ingredientbatch.css">
+	<script src="JavaScript.js"></script>
+	<script src="jquery-3.3.1.js"></script>
+	<script src="Agent.js"></script>
+	<script>
+	$(function() {
+		loadIngredient();
+	})
+	
+	function loadIngredientBatches() {
+	Agent.getJson("rest/ingredientbatch",
+		function(data) {
+			$.each(data, function (i, element) {
+				$("#ingredientbatchtablebody").append(generateProductBatchHTML2(element));
+			});
+		}
+	);
+}
+	
+	function loadIngredient() {
+	     Agent.getJson("rest/ingredient", function(data) { 
+	            $.each(data, function (i, element) { 
+	                $("#ingredientDropdown").append(generateIngredientHTML(element));
+	            });
+	         }
+	    ); 
+	}
+
+	function generateIngredientHTML(element) {
+		return "<option>" + element.name + "</option>";
+	}
+	
+	function generateIngredientBatchHTML2(ingredientbatch) {
+		return 	'<tr><td>' + ingredientbatch.ibId + '</td>' +
+				'<td>' + ingredientbatch.Id + '</td>' +
+				'<td>' + ingredientbatch.amount + '</td>' +
+				'</tr>';
+	}
+	
+	
+	
+	function createIngredientBatch() {
+		var ingredientBatchData = {};
+		ingredientBatchData.ibId = $("#inputBatchNumber").val();
+		ingredientBatchData.id = $("#ingredientDropdown").element.id();
+		ingredientBatchData.Amount = $("#inputAmount").val();
+		Agent.postJson("rest/ingredientbatch", ingredientBatchData)
+	}
+	
+	$(function(){
+		$('#ingredientbatches').hide(0);
+		});
+	
+	
+	$(function(){
+		$('#showIngredients').on('click', function(){
+			$('#ingredientbatches').slideToggle(1000);
+		});
+	});
+	
+	</script>
 </head>
 
 <body>
@@ -16,25 +75,34 @@
 
 <h2 class="header">Vælg råvare.</h2>
 
-<div class="dropdown">
-	<button onclick="myFunction()" class="dropbtn">Vælg råvare</button>
-	<div id="myDropdown" class="dropdownContent">
-		<a href="#">material1</a>
-		<a href="#">material2</a>
-		<a href="#">material3</a>	
-	</div>
-</div>
-
-
 <div class="container" id="batchamount-container">
-	<form class="form-batchamount" id="form-batchamount">
+	<form class="form-batchamount" id="form-batchamount" onsubmit="createIngredientBatch(); return false;">
+		<select id="IngredientDropdown">
+			<option> Vælg Råvare
+		</select>
 		<label for="inputAmount" class="sr-only">Mængde</label>
-        <input type="number" id="inputAmount" class="form-control" placeholder="Mængde" autofocus>
+        <input type="number" id="inputAmount" class="form-control" min="1" max="99999999" placeholder="Mængde" autofocus>
         <label for="inputBatchNumber" class="sr-only">Batch nummer</label>
-        <input type="number" id="inputBatchNumber" class="form-control" placeholder="Batch nummer">
-        <button class="btn"  type="button" id="addButton" onclick="alert()">Tilføj batch</button>
+        <input type="number" id="inputBatchNumber" class="form-control" min="1" max="99999999" placeholder="Batch nummer">
+        <input type="submit" value="Opret">
 	</form>
+</div><br>
+
+<button id="showIngredients">Show Ingredient Batches</button>
+<div class="container" id="ingredientbatches">
+	<h1>Ingredientbatches</h1>
+		<table>
+			<thead>
+				<tr>
+					<td>IngredientBatchID</td>
+					<td>råvareID</td>
+					<td>Mængde</td>
+				</tr>
+			</thead>
+			<tbody id="ingredientbatchtablebody"></tbody>
+		</table>
 </div>
+
 
 </body>
 

@@ -22,7 +22,7 @@ public class IngredientBatchService {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createIngredient(IngredientBatchDTO IngredientBatchDTO)
+    public Response createIngredientBatch(IngredientBatchDTO IngredientBatchDTO)
     {
         try {
         	IngredientBatchDAO.getInstance().createIngredientBatch(IngredientBatchDTO);
