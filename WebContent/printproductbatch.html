@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Produktbatch Visning</title></head>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="jquery-3.3.1.js"></script>
+<script src="Agent.js"></script>
+<script>
+
+$(function(){
+	var pbId = 1;
+	$("#pbcomponents").append(generateComponentHTML());
+	$("#pbcomponents").append(generateComponentHTML());
+	$("#pbcomponents").append(generateComponentHTML());
+	$("#pbcomponents").append(generateComponentHTML());
+	$("#pbcomponents").append(generateComponentHTML());
+	var productbatch = Agent.getJson("rest/productbatch" + pbId,
+    	function(data) {
+			return data;
+		}
+	);
+    setPrintInfo(1,1);
+    var recipe = Agent.getJson("rest/recipe" + productbatch.recipeId,
+    	function(data) {
+    		return data;
+    	}
+    );
+    var productbatchcomponents = Agent.getJson("rest/productbatch" + pbId,
+    	function(data) {
+    		return data;
+    	}
+    );
+    var recipecomponents = Agent.getJson("rest/recipe" + productbatch.recipeId,
+        	function(data) {
+		return data;
+		}
+	);
+    })
+
+//Convenience function for generating html
+function generateComponentHTML() {
+	var html = '<div class="pbcomponent">' +
+			'Råvare nr.: ' + '00000001' + '<br>' +
+			'Råvare navn: ' + 'Vand' + '<br>' +
+			'<hr>' +
+			'<table><thead><tr><td>Del</td>' +
+			'<td>Mængde</td>' +
+			'<td>Tolerance</td>' +
+			'<td>Tara </td>' +
+			'<td>Netto (kg)</td>' +
+			'<td>Batch</td>' +
+			'<td>Opr.</td>' +
+			'<td>Terminal</td>' +
+			'</tr></thead>' +
+			'<tbody><tr><td>' + '1' + '</td>' +
+			'<td>' + '5,500' + '</td>' +
+			'<td>' + '±0.3 %' + '</td>' +
+			'<td>' + '0,100' + '</td>' +
+			'<td>' + '5,534' + '</td>' +
+			'<td>' + '00000101' + '</td>' +
+			'<td>' + 'SH' + '</td>' +
+			'<td>' + '1' + '</td>' +
+			'</tr></tbody></table></div><br>';
+	return html;
+}
+
+function setPrintInfo(pbId, recipeId) {
+	
+	$("#date").html(getTodayFormatted());
+	$("#pbnum").html(pad(pbId, 8));
+	$("#recipenum").html(pad(recipeId, 8));
+}
+
+// https://stackoverflow.com/a/12409344
+function getTodayFormatted()
+{
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+	if(dd<10){
+	    dd='0'+dd;
+	} 
+	if(mm<10){
+	    mm='0'+mm;
+	} 
+	var today = dd+'-'+mm+'-'+yyyy;
+	return today;
+}
+
+// https://stackoverflow.com/a/2998822
+function pad(num, size) {
+	// Only works up to nine leading zeroes, but our IDs should at most be 8 digits.
+    var s = "000000000" + num;
+    return s.substr(s.length-size);
+}
+
+</script>
+<body>
+	 <div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+	</div>
+	<br>
+
+	<!-- DATE, PB INFO, RECIPE INFO
+	Udskrevet			02-06-05
+	Produkt Batch nr.	00000111
+	Recept nr.			00002222 -->
+	
+	<div id="printinfo">
+		Udskrevet <span id="date"></span><br>
+		Produkt Batch nr. <span id="pbnum"></span><br>
+		Recept nr. <span id="recipenum"></span>
+	</div>
+	<br>
+	
+	<!--
+	LIST OF COMPONENTS
+	LIST IS BASED ON RECIPE; ALL POSSIBLE COMPONENTS ARE SHOWN
+	EVEN THOSE NOT YET ADDED -->
+	<div class="container" id="pbcomponents">
+	</div>
+	<br>
+	
+	<!-- SUM TARE AND NET WEIGHT ARE ONLY KNOWN AFTER FINISHING
+	Sum Tara:
+	Sum Netto: 
+	
+	Sum Tara:	0,130
+	Sum Netto:	5,958 -->
+	<div id="weightinfo">
+		Sum Tara: <span id="taresum"></span><br>
+		Sum Netto: <span id="netsum"></span>
+	</div>
+	
+	<!-- DO WE ACTUALLY WRITE DOWN THE DATES ANYWHERE?
+	Produktion Status:	Startet
+	Produktion Startet:	2005-06-01 15:33:10
+	Produktion Slut:
+	
+	Produktion Status:	Underproduktion
+	Produktion Startet:	2005-06-01 15:33:10
+	Produktion Slut:
+	
+	Produktion Status:	Afsluttet
+	Produktion Startet:	2005-06-01 15:33:10
+	Produktion Slut:	2005-06-02 07:42:34 -->
+	
+	<div id="pbinfo">
+		Produktion Status: <span id="pbstatus"></span><br>
+		Produktion Startet: <span id="pbstarttime"></span><br>
+		Produktion Slut: <span id="pbfinishtime"></span>
+	</div>
+	
+</body>
+</html>
