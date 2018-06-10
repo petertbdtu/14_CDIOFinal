@@ -4,10 +4,12 @@ import static org.junit.Assert.*;
 
 import data.DALException;
 import data.dao.RecipeCompDAO;
+import data.dao.StorageDAO;
 import data.dto.RecipeCompDTO;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
@@ -48,6 +50,18 @@ public class RecipeCompTest {
         } catch (DALException e) {
             //nothing wrong here
         }
+	}
+	
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		StorageDAO sd = new StorageDAO();
+		sd.deleteFile(RecipeCompDAO.class.getSimpleName());
+	}
+	
+	@AfterClass
+	public static void tearDown() throws Exception {
+		StorageDAO sd = new StorageDAO();
+		sd.deleteFile(RecipeCompDAO.class.getSimpleName());
 	}
 
 	@Test
@@ -125,14 +139,4 @@ public class RecipeCompTest {
 
 		assertTrue(rc2.getAmount() == 600);
 	}
-
-	@AfterClass
-	public static void tearDownClass(){
-		RecipeCompDAO rcd = RecipeCompDAO.getInstance();
-		File file = new File(rcd.getPath());
-		if(!file.delete()) {
-			System.out.println("Failed to delete the file");
-		}
-	}
-
 }
