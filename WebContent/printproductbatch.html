@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Produktbatch Visning</title></head>
+<title>Produktbatch Visning</title>
 <link rel="stylesheet" type="text/css" href="style.css">
 <script src="jquery-3.3.1.js"></script>
 <script src="Agent.js"></script>
@@ -10,39 +10,34 @@
 
 $(function(){
 	var pbId = 1;
-	$("#pbcomponents").append(generateComponentHTML());
-	$("#pbcomponents").append(generateComponentHTML());
-	$("#pbcomponents").append(generateComponentHTML());
-	$("#pbcomponents").append(generateComponentHTML());
-	$("#pbcomponents").append(generateComponentHTML());
-	var productbatch = Agent.getJson("rest/productbatch" + pbId,
-    	function(data) {
-			return data;
+	loadProductBatchInfo(pbId)
+	loadAndPrintList(pbId);
+	//$("#pbcomponents").append(generateComponentHTML());
+})
+
+function loadProductBatchInfo (pbId) {
+	Agent.getJson("rest/productbatch/" + pbId,
+		function(data) {
+			printInfo(data);
 		}
 	);
-    setPrintInfo(1,1);
-    var recipe = Agent.getJson("rest/recipe" + productbatch.recipeId,
-    	function(data) {
-    		return data;
-    	}
-    );
-    var productbatchcomponents = Agent.getJson("rest/productbatch" + pbId,
-    	function(data) {
-    		return data;
-    	}
-    );
-    var recipecomponents = Agent.getJson("rest/recipe" + productbatch.recipeId,
-        	function(data) {
-		return data;
+}
+
+function loadAndPrintList(pbId) {
+	Agent.getJson("rest/printproductbatch/" + pbId,
+		function(data) {
+			$.each(data, function (i, element) {
+				$("#pbcomponents").append(generateComponentHTML(element));
+			});
 		}
 	);
-    })
+}
 
 //Convenience function for generating html
-function generateComponentHTML() {
+function generateComponentHTML(printcomponent) {
 	var html = '<div class="pbcomponent">' +
-			'Råvare nr.: ' + '00000001' + '<br>' +
-			'Råvare navn: ' + 'Vand' + '<br>' +
+			'Råvare nr.: ' + printcomponent.ingredientId + '<br>' +
+			'Råvare navn: ' + printcomponent.name + '<br>' +
 			'<hr>' +
 			'<table><thead><tr><td>Del</td>' +
 			'<td>Mængde</td>' +
@@ -53,23 +48,25 @@ function generateComponentHTML() {
 			'<td>Opr.</td>' +
 			'<td>Terminal</td>' +
 			'</tr></thead>' +
-			'<tbody><tr><td>' + '1' + '</td>' +
-			'<td>' + '5,500' + '</td>' +
-			'<td>' + '±0.3 %' + '</td>' +
-			'<td>' + '0,100' + '</td>' +
-			'<td>' + '5,534' + '</td>' +
-			'<td>' + '00000101' + '</td>' +
-			'<td>' + 'SH' + '</td>' +
-			'<td>' + '1' + '</td>' +
+			'<tbody><tr><td>' + printcomponent.part + '</td>' +
+			'<td>' + printcomponent.amount + '</td>' +
+			'<td>' + printcomponent.tolerance + '</td>' +
+			'<td>' + (printcomponent.tara > 0 ? printcomponent.tara : '') + '</td>' +
+			'<td>' + (printcomponent.netto > 0 ? printcomponent.netto : '') + '</td>' +
+			'<td>' + (printcomponent.ibId ? printcomponent.ibId : '') + '</td>' +
+			'<td>' + (printcomponent.ini ? printcomponent.ini : '') + '</td>' +
+			'<td>' + 'wait what' + '</td>' +
 			'</tr></tbody></table></div><br>';
 	return html;
 }
 
-function setPrintInfo(pbId, recipeId) {
+function printInfo(pb) {
 	
 	$("#date").html(getTodayFormatted());
-	$("#pbnum").html(pad(pbId, 8));
-	$("#recipenum").html(pad(recipeId, 8));
+	$("#pbnum").html(pad(pb.pbId, 8));
+	$("#recipenum").html(pad(pb.recipeId, 8));
+	$("#pbstatus").html("TEST");
+	// Also print start + end dates. (NOT IMPLEMENTED SERVERSIDE)
 }
 
 // https://stackoverflow.com/a/12409344
@@ -97,10 +94,10 @@ function pad(num, size) {
 }
 
 </script>
+</head>
 <body>
-	 <div id="menu">
-		<b>Menu</b><br>
-		<a href="index.html">Log ud</a>
+	<div id="menu">
+		<b>Menu</b><br> <a href="index.html">Log ud</a>
 	</div>
 	<br>
 
@@ -108,22 +105,21 @@ function pad(num, size) {
 	Udskrevet			02-06-05
 	Produkt Batch nr.	00000111
 	Recept nr.			00002222 -->
-	
+
 	<div id="printinfo">
 		Udskrevet <span id="date"></span><br>
 		Produkt Batch nr. <span id="pbnum"></span><br>
 		Recept nr. <span id="recipenum"></span>
 	</div>
 	<br>
-	
+
 	<!--
 	LIST OF COMPONENTS
 	LIST IS BASED ON RECIPE; ALL POSSIBLE COMPONENTS ARE SHOWN
 	EVEN THOSE NOT YET ADDED -->
-	<div class="container" id="pbcomponents">
-	</div>
+	<div class="container" id="pbcomponents"></div>
 	<br>
-	
+
 	<!-- SUM TARE AND NET WEIGHT ARE ONLY KNOWN AFTER FINISHING
 	Sum Tara:
 	Sum Netto: 
@@ -134,7 +130,8 @@ function pad(num, size) {
 		Sum Tara: <span id="taresum"></span><br>
 		Sum Netto: <span id="netsum"></span>
 	</div>
-	
+	<br>
+
 	<!-- DO WE ACTUALLY WRITE DOWN THE DATES ANYWHERE?
 	Produktion Status:	Startet
 	Produktion Startet:	2005-06-01 15:33:10
@@ -147,12 +144,12 @@ function pad(num, size) {
 	Produktion Status:	Afsluttet
 	Produktion Startet:	2005-06-01 15:33:10
 	Produktion Slut:	2005-06-02 07:42:34 -->
-	
+
 	<div id="pbinfo">
 		Produktion Status: <span id="pbstatus"></span><br>
 		Produktion Startet: <span id="pbstarttime"></span><br>
 		Produktion Slut: <span id="pbfinishtime"></span>
 	</div>
-	
+
 </body>
 </html>
