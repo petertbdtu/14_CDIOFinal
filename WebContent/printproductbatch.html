@@ -79,7 +79,18 @@ function printInfo(pb) {
 	$("#date").html(getTodayFormatted());
 	$("#pbnum").html(pad(pb.pbId, 8));
 	$("#recipenum").html(pad(pb.recipeId, 8));
-	$("#pbstatus").html(pb.status);
+	var pbstatus = '';
+	switch (pb.status) {
+	case 0: pbstatus = 'Startet';
+		break;
+	case 1: pbstatus = 'Under produktion';
+		break;
+	case 2: pbstatus = 'Afsluttet';
+		break;
+	default: pbstatus = 'UKENDT';
+		break;
+	}
+	$("#pbstatus").html(pbstatus);
 	// Also print start + end dates. (NOT IMPLEMENTED SERVERSIDE)
 }
 
