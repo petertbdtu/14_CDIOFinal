@@ -69,9 +69,19 @@ public class ProductBatchPrintService {
 				pbinfoList.add(newComp);
 			}
 			return pbinfoList;
-		} catch (DALException e) {
+		} 
+		catch (NullPointerException e) {
+			/* Can theoretically occur if any of the following are nonexistent:
+			 * ProductBatch for the inputted ID.
+			 * Recipe for the ProductBatch (ProductBatch should not exist if this is the case)
+			 * 
+			 */
+			
+			throw new WebDAOException("No product batch with this ID exists");
+		}
+		catch (DALException e) {
 			e.printStackTrace();
-			throw new WebDAOException("rest in pieces");
+			throw new WebDAOException(e.getMessage());
 		}
 	}
 }

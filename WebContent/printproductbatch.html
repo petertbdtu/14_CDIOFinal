@@ -25,6 +25,8 @@ function loadProductBatchInfo (pbId) {
 	Agent.getJson("rest/productbatch/" + pbId,
 		function(data) {
 			printInfo(data);
+		}, function(xhr, statusmsg, errormsg) {
+			alert("Ugyldigt produktbatch");
 		}
 	);
 }
@@ -77,7 +79,7 @@ function printInfo(pb) {
 	$("#date").html(getTodayFormatted());
 	$("#pbnum").html(pad(pb.pbId, 8));
 	$("#recipenum").html(pad(pb.recipeId, 8));
-	$("#pbstatus").html("TEST");
+	$("#pbstatus").html(pb.status);
 	// Also print start + end dates. (NOT IMPLEMENTED SERVERSIDE)
 }
 
