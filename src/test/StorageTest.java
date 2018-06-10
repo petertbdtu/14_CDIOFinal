@@ -2,9 +2,11 @@ package test;
 
 import static org.junit.Assert.*;
 
+import data.dao.IngredientDAO;
 import data.dao.StorageDAO;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
@@ -23,18 +25,22 @@ public class StorageTest {
 		sd.save(testMap);
 	}
 
-	@AfterClass
-	public static void tearDownClass() throws Exception {
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
 		StorageDAO sd = new StorageDAO();
-		File file = new File(sd.getPath());
-		if(!file.delete()) {
-			System.out.println("Failed to delete the file");
-		}
+		sd.deleteFile(StorageDAO.class.getSimpleName());
+	}
+	
+	@AfterClass
+	public static void tearDown() throws Exception {
+		StorageDAO sd = new StorageDAO();
+		sd.deleteFile(StorageDAO.class.getSimpleName());
 	}
 
 	@Test
 	public void testSave() {
-		File file = new File(sd.getPath());
+		String filePath = sd.getPath(StorageDAO.class.getSimpleName());
+		File file = new File(filePath);
 		if(!file.exists()){
 			fail("File not found");
 		}
@@ -68,7 +74,7 @@ public class StorageTest {
 	public void testGetPath(){
 		String tmp = System.getProperty("user.home");
 		tmp = tmp + "/.weightData/Storage.data";
-		assertTrue(sd.getPath().equals(tmp));
+		assertTrue(sd.getPath(StorageDAO.class.getSimpleName()).equals(tmp));
 	}
 
 }

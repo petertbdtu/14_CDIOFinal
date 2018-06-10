@@ -52,11 +52,20 @@ public class StorageDAO {
 
         return map;
     }
-
-    public String getPath(){
-        String newpath = path + "/.weightData/";
-        String className = this.getClass().getSimpleName();
-        newpath += className.substring(0, className.length()-3) + ".data";
-        return newpath;
+    
+    public String getPath(String simpleName) {
+		String filePath = path + "/.weightData/";
+		filePath += simpleName.substring(0, simpleName.length()-3) + ".data";
+		return filePath;
     }
+
+	public boolean deleteFile(String simpleName) {
+		String filePath = path + "/.weightData/";
+		filePath += simpleName.substring(0, simpleName.length()-3) + ".data";
+		File file = new File(filePath);
+		if(file.delete())
+			return true;
+		else
+			return false;
+	}
 }
