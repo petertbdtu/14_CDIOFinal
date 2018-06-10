@@ -8,16 +8,7 @@ public class StorageDAO {
     String path = System.getProperty("user.home");
 
     public void save(Map<?, ?> map) {
-        //Check Dir Path
-        String newpath = path + "/.weightData/";
-
-        File file = new File(newpath);
-        if(!file.exists())
-            file.mkdir();
-
-        //Get File Path
-        String className = this.getClass().getSimpleName();
-        newpath += className.substring(0, className.length()-3) + ".data";
+        String newpath = getFilePath();
 
         //Start stream to file(path)
         try {
@@ -31,16 +22,7 @@ public class StorageDAO {
     }
 
     public Map<?, ?> load() throws ClassNotFoundException, IOException {
-        //Check Dir Path
-        String newpath = path + "/.weightData/";
-
-        File file = new File(newpath);
-        if(!file.exists())
-            file.mkdir();
-
-        //Get File Path
-        String className = this.getClass().getSimpleName();
-        newpath += className.substring(0, className.length()-3) + ".data";
+        String newpath = getFilePath();
 
         //Start stream to file(path)
         FileInputStream fis = new FileInputStream(newpath);
@@ -52,11 +34,25 @@ public class StorageDAO {
 
         return map;
     }
-    
+
     public String getPath(String simpleName) {
 		String filePath = path + "/.weightData/";
 		filePath += simpleName.substring(0, simpleName.length()-3) + ".data";
 		return filePath;
+    }
+
+    private String getFilePath(){
+        //Check Dir Path
+        String newpath = path + "/.weightData/";
+
+        File file = new File(newpath);
+        if(!file.exists())
+            file.mkdir();
+
+        //Get File Path
+        String className = this.getClass().getSimpleName();
+        newpath += className.substring(0, className.length()-3) + ".data";
+        return newpath;
     }
 
 	public boolean deleteFile(String simpleName) {
