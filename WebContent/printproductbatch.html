@@ -9,10 +9,16 @@
 <script>
 
 $(function(){
-	var pbId = 1;
-	loadProductBatchInfo(pbId)
-	loadAndPrintList(pbId);
-	//$("#pbcomponents").append(generateComponentHTML());
+	var pbId = $.urlParam('id');
+	if (pbId)
+	{
+		loadProductBatchInfo(pbId)
+		loadAndPrintList(pbId);
+	}
+	else
+	{
+		alert("Intet produktbatch valgt.");
+	}
 })
 
 function loadProductBatchInfo (pbId) {
@@ -91,6 +97,17 @@ function pad(num, size) {
 	// Only works up to nine leading zeroes, but our IDs should at most be 8 digits.
     var s = "000000000" + num;
     return s.substr(s.length-size);
+}
+
+// https://stackoverflow.com/a/25359264
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return decodeURI(results[1]) || 0;
+    }
 }
 
 </script>
