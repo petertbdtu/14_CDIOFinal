@@ -32,9 +32,15 @@ function loadProductBatchInfo (pbId) {
 function loadAndPrintList(pbId) {
 	Agent.getJson("rest/printproductbatch/" + pbId,
 		function(data) {
+			var sumnet = 0;
+			var sumtare = 0;
 			$.each(data, function (i, element) {
 				$("#pbcomponents").append(generateComponentHTML(element));
+				sumnet += element.netto;
+				sumtare += element.tara;
 			});
+			$("#netsum").html(sumnet);
+			$("#taresum").html(sumtare);
 		}
 	);
 }
