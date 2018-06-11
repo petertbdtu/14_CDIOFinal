@@ -23,7 +23,7 @@ import data.dao.ProductBatchDAO;
 import data.dao.IngredientBatchDAO;
 import data.dao.ProductBatchCompDAO;
 
-public class WeightController {
+public class WeightController implements Runnable {
 	
 	IWeightSocket ws;
 	State state;
@@ -59,6 +59,7 @@ public class WeightController {
 		pbcd = ProductBatchCompDAO.getInstance();
 	}
 
+	@Override
 	public void run() {
 		boolean isRunning = true;
 
