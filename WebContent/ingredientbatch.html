@@ -14,8 +14,7 @@
 	})
 	
 	function loadIngredientBatches() {
-	Agent.getJson("rest/ingredientbatch",
-		function(data) {
+	Agent.getJson("rest/ingredientbatch", function(data) {
 			$.each(data, function (i, element) {
 				$("#ingredientbatchtablebody").append(generateProductBatchHTML2(element));
 			});
