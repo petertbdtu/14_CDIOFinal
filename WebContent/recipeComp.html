@@ -29,7 +29,7 @@ function generateRow(element) {
 	'<td class="recName">' + element.name + '</td>' + 
 	'<td> <input class="amount" type="text" placeholder="gram"> </td>' +
 	'<td> <input class="tolerance" type="text" placeholder="0.1-20%"> </td>' + 
-	'<td> <button class="delete"> Slet </button> </td>)' +
+	'<td class = "deleteCol"> <button class="delete"> Slet </button> </td>)' +
 	'</tr>';
 }
 
@@ -43,11 +43,13 @@ function createRecipeComp() {
 		recipeCompData.amount = $(element).find(".amount").val();
 		recipeCompData.tolerance = $(element).find(".tolerance").val();
 		
-		Agent.postJson('rest/recipeComp', recipeCompData, function() {}
+		Agent.postJson('rest/recipeComp', recipeCompData, function() {
+                $(element).find(".amount").attr('disabled', true);
+                $(element).find(".tolerance").attr('disabled', true);
+                $(element).find(".deleteCol").html('<span style = "color:#007a02">✓</span>')
+			}
 			, function(xhr, statusmsg, errormsg) {
-			alert(xhr);
-			alert(statusmsg);
-			alert(errormsg);
+                $(element).find(".deleteCol").html('<span style = "color:#7a0004">✘</span>')
 		});	
 	})
 }
