@@ -18,6 +18,7 @@ import data.DALException;
 import data.dao.IngredientBatchDAO;
 import data.dao.StorageDAO;
 import data.dto.IngredientBatchDTO;
+import data.dto.IngredientDTO;
 
 public class IngredientBatchTest {
 
@@ -72,54 +73,51 @@ public class IngredientBatchTest {
 	}
 
 	@Test
-	public void testGetIngredientBatch() {
-		try {
-			IngredientBatchDTO actual = instance.getIngredientBatch(1);
-			IngredientBatchDTO expected = ibd1;
-			assertEquals(expected, actual);
-		} catch(DALException e) {
-			fail("Ingredient with this ID does not exist.");
-		}
-		try {
-			IngredientBatchDTO object = instance.getIngredientBatch(2);
-			assertNull(object);
-		} catch(DALException e) {
-			assertTrue(true);
-		}
-		
+	public void testGetIngredientBatch() throws DALException {
+		IngredientBatchDTO tempIbd = instance.getIngredientBatch(1);
+		assertEquals(ibd1.getIbID(), tempIbd.getIbID());
 	}
 
 	@Test
 	public void testGetIngredientBatchList() {
-		List<IngredientBatchDTO> actual = instance.getIngredientBatchList();
-		List<IngredientBatchDTO> expected = new ArrayList<>();
-		expected.add(ibd1);
-		expected.add(ibd2);
-		expected.add(ibd3);
-		assertEquals(expected, actual);
+		//Check if .testGetIngredientList returns ingredient10/20
+		boolean test1 = false;
+		boolean test2 = false;
+		boolean test3 = false;
+		
+		for (IngredientBatchDTO tempIbd : instance.getIngredientBatchList()) {
+			if (tempIbd.getIbID() == 1)
+				test1 = true;
+			else if(tempIbd.getIbID() == 104)
+				test2 = true;
+			else if(tempIbd.getIbID() == 99)
+				test3 = true;
+		}
+		
+		assertTrue(test1 && test2 && test3);
 	}
 
 	@Test
-	public void testGetIngredientBatchListInt() {
-		try {
-			List<IngredientBatchDTO> actual = instance.getIngredientBatchList(5);
-			List<IngredientBatchDTO> expected = new ArrayList<>();
-			expected.add(ibd1);
-			expected.add(ibd2);
-			assertEquals(expected, actual);
-		} catch(DALException e) {
-			fail("No Batches with this ID exists");
+	public void testGetIngredientBatchListInt() throws DALException {
+		//Check if .testGetIngredientList returns ingredient10/20
+		boolean test1= false;
+		boolean test2 = false;
+		
+		for (IngredientBatchDTO tempIbd : instance.getIngredientBatchList(5)) {
+			if (tempIbd.getIbID() == 1)
+				test1 = true;
+			else if(tempIbd.getIbID() == 104)
+				test2 = true;
 		}
+		
+		assertTrue(test1 && test2);
 	}
 
 	@Test
-	public void testCreateIngredientBatch() {
-		try {
-			instance.createIngredientBatch(ibd4);
-			assertNotNull(ibd4);
-		} catch(DALException e) {
-			fail("Ingredient with this ID already exists.");
-		}
+	public void testCreateIngredientBatch() throws DALException {
+		instance.createIngredientBatch(ibd4);
+		IngredientBatchDTO tempIbd = instance.getIngredientBatch(66);
+		assertEquals(ibd4.getIbID(), tempIbd.getIbID());
 	}
 
 	@Test
