@@ -23,7 +23,7 @@ public class RecipeTest {
 	}
 	
 	@AfterClass
-	public static void tearDown() throws Exception {
+	public static void tearDownAfterClass() throws Exception {
 		StorageDAO sd = new StorageDAO();
 		sd.deleteFile(RecipeDAO.class.getSimpleName());
 	}
