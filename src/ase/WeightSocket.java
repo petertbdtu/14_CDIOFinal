@@ -110,29 +110,32 @@ public class WeightSocket implements IWeightSocket{
 	public int getInput(String msg) {
 		String in = "";
 		int tmp = -1;
+		boolean inputRecieved = false;
 
 		pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
 		pw.flush();
 
-		while(!in.startsWith("RM20 A")){
+		while(!inputRecieved){
 			try {
 				in = br.readLine();
-				in = in.substring(8,in.length()-1);
-				if(tryParseInt(in)) {
-					tmp = Integer.parseInt(in);
-				} else {
-					showText("Fejl - Kun tal tilladt");
-					sleep(3);
-					clearText();
-                    pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
-                    pw.flush();
-				}
+				if(in.startsWith("RM20 A")) {
+					in = in.substring(8,in.length()-1);
+					if(tryParseInt(in)) {
+						tmp = Integer.parseInt(in);
+						inputRecieved = true;
+					} else {
+						showText("Fejl - Kun tal tilladt");
+						sleep(3);
+						clearText();
+			            pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
+			            pw.flush();
+					}
+				} 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-
 		return tmp;
 	}
 

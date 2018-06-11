@@ -21,6 +21,7 @@ public class RecipeCompTest {
 	RecipeCompDTO rc1;
 	RecipeCompDTO rc2;
 	RecipeCompDTO rc3;
+	RecipeCompDTO rc4;
 
 
 	@Before
@@ -43,6 +44,13 @@ public class RecipeCompTest {
         rc3.setIngredient(8);
         rc3.setTolerance(12);
         rc3.setRecipeId(10);
+
+        rc4 = new RecipeCompDTO();
+        rc4.setAmount(20);
+        rc4.setIngredient(20);
+        rc4.setTolerance(20);
+        rc4.setRecipeId(20);
+        
 
         try {
             rcd.createRecipeComp(rc1);
@@ -138,5 +146,14 @@ public class RecipeCompTest {
 		}
 
 		assertTrue(rc2.getAmount() == 600);
+		
+		
+		//trying to update a recipe comp that isnt created yet.
+		try {
+			rc4.setAmount(500);
+			rcd.updateRecipeComp(rc4);
+		} catch(DALException e) {
+			assertTrue(true);
+		}
 	}
 }

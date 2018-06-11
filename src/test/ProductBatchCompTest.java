@@ -28,6 +28,7 @@ public class ProductBatchCompTest {
 	ProductBatchCompDTO pbc4;
 	ProductBatchCompDTO pbc5;
 	ProductBatchCompDTO pbc6;
+	ProductBatchCompDTO pbc7;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -75,6 +76,13 @@ public class ProductBatchCompTest {
 		pbc6.setTara(6.4);
 		pbc6.setNetto(93);
 		
+		pbc7 = new ProductBatchCompDTO();
+		pbc7.setibID(999);
+		pbc7.setpbID(995);
+		pbc7.setUsrID(994);
+		pbc7.setTara(76.4);
+		pbc7.setNetto(993);
+		
 		try {
 			pbcd.createProductBatchComp(pbc1);
 			pbcd.createProductBatchComp(pbc2);
@@ -107,7 +115,6 @@ public class ProductBatchCompTest {
 
 	@Test
 	public void testGetProductBatchCompListInt() throws DALException {
-		//Check if .testGetIngredientList returns ingredient10/20
 		boolean test1 = false;
 		boolean test2 = false;
 		
@@ -123,7 +130,6 @@ public class ProductBatchCompTest {
 
 	@Test
 	public void testGetProductBatchCompList() throws DALException {
-		//Check if .testGetIngredientList returns ingredient10/20
 		boolean test1 = false;
 		boolean test2 = false;
 		boolean test3 = false;
@@ -160,6 +166,13 @@ public class ProductBatchCompTest {
 		pbcd.updateProductBatchComp(pbc1);
 		ProductBatchCompDTO tempPbc = pbcd.getProductBatchComp(pbc1.getpbID(), pbc1.getibID());
 		assertTrue(66.0 == tempPbc.getNetto());
+	
+		try {
+			pbc7.setNetto(678);
+			pbcd.updateProductBatchComp(pbc7);
+		} catch(DALException e) {
+			assertTrue(true);
+		}
 	}
 
 }

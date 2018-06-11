@@ -107,6 +107,17 @@ public class UserTest {
 		//Tjekker om opdateringen er sket. 
 		UserDTO tempUser5 = uds.getUser(user5.getUsrId());
 		assertTrue(tempUser5.getUsrName().equals("Hans"));
-	
+		
+		//Negative test trying to update user that isnt created
+		UserDTO user404 = new UserDTO();
+		user404.setUsrId(5);
+		user404.setUsrName("Jens");
+		
+		try {
+			user404.setUsrName("Bob");
+			uds.updateUser(user404);
+		} catch(DALException e) {
+			assertTrue(true);
+		}
 			}
 }

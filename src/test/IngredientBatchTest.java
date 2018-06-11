@@ -27,6 +27,7 @@ public class IngredientBatchTest {
 	IngredientBatchDTO ibd2;
 	IngredientBatchDTO ibd3;
 	IngredientBatchDTO ibd4;
+	IngredientBatchDTO ibd5;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -64,6 +65,11 @@ public class IngredientBatchTest {
 		ibd4.setAmount(7.77);
 		ibd4.setIngredientId(32);
 	
+		ibd5 = new IngredientBatchDTO();
+		ibd5.setIbID(999);
+		ibd5.setAmount(8.56);
+		ibd5.setIngredientId(77);
+		
 		try {
 			instance.createIngredientBatch(ibd1);
 			instance.createIngredientBatch(ibd2);
@@ -128,6 +134,14 @@ public class IngredientBatchTest {
 			assertTrue(ibd1.getAmount() == 9.1);
 		} catch(DALException e) {
 		fail("Ingredient batch not found");
+		}
+		
+		//trying to update ingredientbatch that isnt created yet.
+		try {
+			ibd5.setAmount(650);
+			instance.updateIngredientBatch(ibd5);
+		} catch(DALException e) {
+			assertTrue(true);
 		}
 	}
 }

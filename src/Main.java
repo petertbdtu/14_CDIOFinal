@@ -2,32 +2,18 @@ import ase.WeightController;
 import data.DALException;
 import data.dao.*;
 import data.dto.*;
-import data.idao.IUserDAO;
 
 public class Main {
 
     public static void main(String[] args) throws DALException {
-    	IUserDAO uds = UserDAO.getInstance();
-
-    	UserDTO ud1 = new UserDTO();
-    	ud1.setUsrId(1);
+    	WeightController wc = new WeightController();
     	
-    	uds.createUser(ud1);
-    	
-    	System.out.println(ud1);
-    	System.out.println(ud1.getUsrId());
-    	
-    	System.out.println(uds.getUser(1));
-    	System.out.println(uds.getUser(1).getUsrId());
-    	
-    	/*WeightController wc = new WeightController();
-    	
-        UserDTO usr = new UserDTO(); //USR
-        usr.setUsrID(1);
+        /*UserDTO usr = new UserDTO(); //USR
+        usr.setUsrId(1);
         usr.setUsrName("Joachim");
         usr.setIni("j");
         usr.setCpr("sjov meme");
-        usr.setRoles((byte)0b00001111);
+        usr.setLabTech(true);
         UserDAO.getInstance().createUser(usr);
 
         RecipeDTO rec = new RecipeDTO(); //RECIPE
@@ -49,29 +35,25 @@ public class Main {
         IngredientDTO ing = new IngredientDTO(); //INGREDIENT
         ing.setId(10);
         ing.setName("Mountain Dew");
-        ing.setAmount(100);
         IngredientDAO.getInstance().createIngredient(ing);
         ing.setId(11);
         ing.setName("Kaffe");
-        ing.setAmount(100);
         IngredientDAO.getInstance().createIngredient(ing);
 
         IngredientBatchDTO ingBat = new IngredientBatchDTO(); //INGBATCH
         ingBat.setIbID(100);
-        ingBat.setSupplier("peps");
         ingBat.setAmount(1000);
-        ingBat.setIngbatchID(10);
+        ingBat.setIngredientId(10);
         IngredientBatchDAO.getInstance().createIngredientBatch(ingBat);
         ingBat.setIbID(101);
-        ingBat.setSupplier("carls");
-        ingBat.setIngbatchID(11);
+        ingBat.setIngredientId(11);
         IngredientBatchDAO.getInstance().createIngredientBatch(ingBat);
 
         ProductBatchDTO pb = new ProductBatchDTO();
-        pb.setStatus("1");
-        pb.setPbNr(1001);
-        pb.setRecept(2);
-        ProductBatchDAO.getInstance().createProductBatch(pb);
+        pb.setStatus(1);
+        pb.setPbId(1001);
+        pb.setRecipeId(2);
+        ProductBatchDAO.getInstance().createProductBatch(pb);*/
 
 		wc.run();
 
@@ -79,7 +61,7 @@ public class Main {
             System.out.println(asd.getpbID());
         }
         for(ProductBatchCompDTO asd : ProductBatchCompDAO.getInstance().getProductBatchCompList(1001)){
-            System.out.println(asd.getpbID());*/
-        //}
+            System.out.println(asd.getpbID());
+        }
     }
 }
