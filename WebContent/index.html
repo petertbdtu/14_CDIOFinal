@@ -13,26 +13,26 @@
         function runWeight() {
             Agent.postJson("rest/WeightService", null,
                 function() {
-                    alert("Successfully started weight.");
+                    checkStatus();
                 },
                 function() {
-                    alert("Failed to start weight.");
+                    checkStatus();
                 }
             );
         }
 
         function checkStatus() {
-            Agent.getJson("rest/WeightService", null,
+            Agent.getJson("rest/WeightService",
                 function(Response) {
                     if(Response == true) {
-                        $("#status").append('<p style="color:green font-size:11px">Weight is running</p>');
+                        $("#status").html('<span style="color:green font-size:11px">Vægten er forbundet</span>');
                     }
                     else {
-                        $("#status").append('<p style="color:red font-size:11px">Weight is not running</p>');
+                        $("#status").html('<span style="color:red font-size:11px">Vægten er ikke forbundet</span>');
                     };
                 },
                 function() {
-                    alert("Couldn't get weight status for some reason.");
+                    $("#status").html('<span style="color:red font-size:11px">Kunne ikke få vægtstatus</span>');
                 }
             );
         }
@@ -54,18 +54,7 @@
 					<tr><td> <a href="productionleadermenu.html">Produktionsleder</a></td></tr>
 				</table>
 				<div id="status"></div>
-				<button id ="weightStart">Start afvejning</button>
+				<button id ="weightStart">Forbind vægt</button>
 			</center>
 	</body>
-</html>
-
-<!DOCTYPE html>
-
-	<meta charset="UTF-8">
-	<title>Laborant</title>
-
-</head>
-<body>
-
-</body>
 </html>

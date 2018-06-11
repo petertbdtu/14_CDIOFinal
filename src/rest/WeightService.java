@@ -12,13 +12,17 @@ import ase.runnableThread;
 
 @Path("WeightService")
 public class WeightService {
+	Thread thread;
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response startWeight() {
-		if(Thread.currentThread().isAlive() == false) {
-			Thread thread = new Thread(new runnableThread());
+		if(thread == null){
+			thread = new Thread(new runnableThread());
+		}
+
+		if(thread.isAlive() == false) {
 			thread.start();
 			return Response.status(200).build();
 		}
@@ -29,7 +33,8 @@ public class WeightService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean checkStatus() {
-		return Thread.currentThread().isAlive();
+		if(thread == null){return false;}
+		return thread.isAlive();
 	}
 
 
