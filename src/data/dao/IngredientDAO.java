@@ -15,7 +15,7 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 
 	private static IngredientDAO instance = new IngredientDAO();
 
-	public IngredientDAO() {
+	private IngredientDAO() {
 
 		try {
 			Map<Integer,IngredientDTO> ingredients = (HashMap<Integer, IngredientDTO>) super.load();

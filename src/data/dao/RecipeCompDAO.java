@@ -65,7 +65,7 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 	public List<RecipeCompDTO> getRecipeCompList() {
 		try {
 			Map<String, RecipeCompDTO> component = (Map<String, RecipeCompDTO>) super.load();
-			return (List<RecipeCompDTO>) component.values();
+			return new ArrayList<>(component.values());
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
@@ -93,7 +93,7 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 		try {
 			String keyString = generateKey(recipeComp);
 			Map<String, RecipeCompDTO> component = (Map<String, RecipeCompDTO>) super.load();
-			if (!component.containsKey(recipeComp)) {
+			if (!component.containsKey(keyString)) {
 				throw new DALException("Component does not exist");
 			}
 			component.replace(keyString, recipeComp);

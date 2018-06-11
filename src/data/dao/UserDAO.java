@@ -47,7 +47,7 @@ public class UserDAO extends StorageDAO implements IUserDAO {
     public List<UserDTO> getUserList() {
         try {
             Map<Integer, UserDTO> users = (HashMap<Integer, UserDTO>) super.load();
-            return new ArrayList<UserDTO>(users.values());
+            return new ArrayList<>(users.values());
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }

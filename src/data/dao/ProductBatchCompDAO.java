@@ -98,11 +98,10 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
 			String compString = generateKey(productBatchComp);
-			if(!complist.containsKey(compString)) {
+			if(complist.containsKey(compString)) {
 				complist.replace(compString, productBatchComp);
 				super.save(complist);
-			}
-			else {
+			} else {
 				throw new DALException("No product batch with this ID exists.");
 			} 
 		}
