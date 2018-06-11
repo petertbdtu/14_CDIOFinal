@@ -3,8 +3,12 @@ package test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import data.DALException;
@@ -17,33 +21,28 @@ public class UserTest {
 	
 	IUserDAO uds = UserDAO.getInstance();
 
-    @Before
-	public void setUp() throws Exception {
+    @BeforeClass
+	public static void setUpBeforeClass() throws Exception {
 		StorageDAO storageDAO = new StorageDAO();
 		storageDAO.deleteFile(UserDAO.class.getSimpleName());
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
 		StorageDAO sd = new StorageDAO();
 		sd.deleteFile(UserDAO.class.getSimpleName());
-		
-//		File file = new File([DAO].getPath());
-//        if(!file.delete) {
-//              System.out.println("Failed to delete the file");
-//          }
 	}
 	
 	@Test
 	public void testCreateUser() throws DALException {
-		//opret bruger (userDTOér)
+		//opret bruger (userDTOï¿½r)
 		UserDTO user1 = new UserDTO();
 		user1.setUsrId(1);
 				
 		//Add to datalayer
 		uds.createUser(user1);
 				
-		//Check if .getIngredient returns ingredient1
+		//Check if .createUser
 		UserDTO tempUser = uds.getUser(user1.getUsrId());
 		assertEquals(user1.getUsrId(), tempUser.getUsrId());
 	}
@@ -51,53 +50,54 @@ public class UserTest {
 
 	@Test
 	public void testGetUser() throws DALException {
-		//opret bruger (userDTOér)
-		UserDTO user1 = new UserDTO();
-		user1.setUsrId(1);
+		//opret bruger (userDTOï¿½r)
+		UserDTO user2 = new UserDTO();
+		user2.setUsrId(2);
 		
 		
-		//Tilføj dem til userDAO
-		uds.createUser(user1);
+		//Tilfï¿½j dem til userDAO
+		uds.createUser(user2);
 		
 		//GetUser(UserDTO)
-		UserDTO uds1 = uds.getUser(user1.getUsrId());
-		assertEquals(user1.getUsrId(), uds1.getUsrId());
+		UserDTO uds1 = uds.getUser(user2.getUsrId());
+		assertEquals(user2.getUsrId(), uds1.getUsrId());
 	}				
 
 	@Test
 	public void testGetUserList() throws DALException {
-		//opret bruger (userDTOér)
+		//opret bruger (userDTOï¿½r)
 		UserDTO user3 = new UserDTO();
 		user3.setUsrId(3);
 		UserDTO user4 = new UserDTO();
 		user4.setUsrId(4);
 				
-		//tilføj til dem til userdao
+		//tilfï¿½j til dem til userdao
 		uds.createUser(user3);
 		uds.createUser(user4);
 			
 		//tjekker om getUserList returner en listen med brugere. 
-		boolean user30 = false;
-		boolean user40 = false;
+		boolean test3 = false;
+		boolean test4 = false;
 		
 		for (UserDTO tempUser : uds.getUserList()) {
-			if (testUsers.getUsrId()== 30)
-				user30=true;
-			else if (testUsers.getUsrId()==40)
-				user40= true;
+			if (tempUser.getUsrId() == 3)
+				test3=true;
+			else if (tempUser.getUsrId() == 4)
+				test4= true;
 		}
-		assertTrue(user30 && user40);
+		
+		assertTrue(test3 && test4);
 	}
 	
 	
 	@Test
 	public void testUpdateUser() throws DALException {
-		//opret bruger (userDTOér)
+		//opret bruger (userDTOï¿½r)
 		UserDTO user5 = new UserDTO();
 		user5.setUsrId(5);
 		user5.setUsrName("Jens");
 		
-		//Tilføj bruger til userdao m. navn 
+		//Tilfï¿½j bruger til userdao m. navn 
 		uds.createUser(user5);
 		
 		//opdatere brugeren
