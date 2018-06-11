@@ -3,7 +3,9 @@ package data.dto;
 import java.io.Serializable;
 
 public class RecipeDTO implements Serializable {
-    int recipeId;
+    
+	private static final long serialVersionUID = -6440335065542506197L;
+	int recipeId;
     String recipeName;
 
     public RecipeDTO() {
