@@ -18,12 +18,12 @@ public class WeightService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response startWeight() {
-		if(thread == null){
-			thread = new Thread(new runnableThread());
+		if(this.thread == null){
+			this.thread = new Thread(new runnableThread());
 		}
 
-		if(thread.isAlive() == false) {
-			thread.start();
+		if(this.thread.isAlive() == false) {
+			this.thread.start();
 			return Response.status(200).build();
 		}
 		
@@ -33,8 +33,8 @@ public class WeightService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean checkStatus() {
-		if(thread == null){return false;}
-		return thread.isAlive();
+		if(this.thread == null){return false;}
+		return this.thread.isAlive();
 	}
 
 
