@@ -7,7 +7,7 @@ import java.util.Map;
 public class StorageDAO {
     String path = System.getProperty("user.home");
 
-    public void save(Map<?, ?> map) {
+    protected synchronized void save(Map<?, ?> map) {
         String newpath = getFilePath();
 
         //Start stream to file(path)
@@ -21,7 +21,7 @@ public class StorageDAO {
         }
     }
 
-    public Map<?, ?> load() throws ClassNotFoundException, IOException {
+    protected synchronized Map<?, ?> load() throws ClassNotFoundException, IOException {
         String newpath = getFilePath();
 
         //Start stream to file(path)
@@ -59,9 +59,6 @@ public class StorageDAO {
 		String filePath = path + "/.weightData/";
 		filePath += simpleName.substring(0, simpleName.length()-3) + ".data";
 		File file = new File(filePath);
-		if(file.delete())
-			return true;
-		else
-			return false;
+		return file.delete();
 	}
 }
