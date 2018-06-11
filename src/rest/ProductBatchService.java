@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 
 import data.DALException;
 import data.dao.ProductBatchDAO;
+import data.dao.RecipeDAO;
 import data.dto.ProductBatchDTO;
 
 @Path("productbatch")
@@ -23,6 +24,8 @@ public class ProductBatchService {
     public Response createProductBatch(ProductBatchDTO productBatchDTO) throws WebDAOException
     {
         try {
+        	// RecipeDAO getRecipe throws DALException if recipe does not exist.
+        	RecipeDAO.getInstance().getRecipe(productBatchDTO.getRecipeId());
         	ProductBatchDAO.getInstance().createProductBatch(productBatchDTO);
             return Response.ok().build();
         } catch (DALException e) {
