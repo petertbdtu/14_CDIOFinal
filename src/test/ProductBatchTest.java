@@ -84,6 +84,18 @@ public class ProductBatchTest {
 			
 			ProductBatchDTO testProductBatch = pbd.getProductBatch(ProductBatch10.getPbId());
 			assertTrue(testProductBatch.getStatus() == 1);
+		
+		//initiate new product batch, but won't create it.
+		ProductBatchDTO ProductBatch66 = new ProductBatchDTO();
+		ProductBatch66.setPbId(66);
+		ProductBatch66.setStatus(0);	
+		//trying to update the product batch that isnt created.
+			try {
+				ProductBatch66.setStatus(1);
+				pbd.updateProductBatch(ProductBatch66);
+			} catch(DALException e) {
+				assertTrue(true);
+			}
 	}
 
 }

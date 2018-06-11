@@ -94,6 +94,19 @@ public class IngredientTest {
 		//Check if .updateIngredient updated name
 		IngredientDTO testIngredient = iid.getIngredient(ingredient100.getId());
 		assertTrue(testIngredient.getName().equals("Updated"));
+		
+		//Create test ingredient but not creating it
+		IngredientDTO ingredient500 = new IngredientDTO();
+		ingredient500.setId(500);
+		ingredient500.setName("TryToUpdateMe");
+		
+		//trying to .updateIngredient, Ingredient500 that is not created.
+		try {
+			ingredient500.setName("TryingToUpdate");
+			iid.updateIngredient(ingredient500);
+		} catch(DALException e) {
+			assertTrue(true);
+		}
 	}
 
 }

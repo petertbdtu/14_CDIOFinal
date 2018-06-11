@@ -94,6 +94,19 @@ public class RecipeTest {
 		//Check if .updateRecipe updated name
 		RecipeDTO testRecipe = iid.getRecipe(Recipe100.getRecipeId());
 		assertTrue(testRecipe.getRecipeName().equals("Updated"));
+		
+		//Initiating test Recipe but doesnt create it
+		RecipeDTO Recipe500 = new RecipeDTO();
+		Recipe500.setRecipeId(500);
+		Recipe500.setRecipeName("TryToUpdateMe");
+		
+		//trying to update Recipe500 which isnt created
+		try {
+			Recipe500.setRecipeName("TryingToUpdate");
+			iid.updateRecipe(Recipe500);
+		} catch(DALException e) {
+			assertTrue(true);
+		}
 	}
 
 }
