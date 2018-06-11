@@ -2,6 +2,41 @@
 <html>
 <head>
 <meta charset="UTF-8">
+	<script src="jquery-3.3.1.js"></script>
+	<script src="Agent.js"></script>
+	<script>
+        $(function(){
+            checkStatus();
+            $("#weightStart").click(function() {runWeight()});
+        })
+
+        function runWeight() {
+            Agent.postJson("rest/WeightService", null,
+                function() {
+                    alert("Successfully started weight.");
+                },
+                function() {
+                    alert("Failed to start weight.");
+                }
+            );
+        }
+
+        function checkStatus() {
+            Agent.getJson("rest/WeightService", null,
+                function(Response) {
+                    if(Response == true) {
+                        $("#status").append('<p style="color:green font-size:11px">Weight is running</p>');
+                    }
+                    else {
+                        $("#status").append('<p style="color:red font-size:11px">Weight is not running</p>');
+                    };
+                },
+                function() {
+                    alert("Couldn't get weight status for some reason.");
+                }
+            );
+        }
+	</script>
 
 <title>Login</title>
 
@@ -18,6 +53,19 @@
 					<tr><td> <a href="pharmacistmenu.html">Farmaceut</a></td></tr>
 					<tr><td> <a href="productionleadermenu.html">Produktionsleder</a></td></tr>
 				</table>
+				<div id="status"></div>
+				<button id ="weightStart">Start afvejning</button>
 			</center>
 	</body>
+</html>
+
+<!DOCTYPE html>
+
+	<meta charset="UTF-8">
+	<title>Laborant</title>
+
+</head>
+<body>
+
+</body>
 </html>
