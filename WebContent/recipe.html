@@ -11,14 +11,13 @@ $(function(){
     loadRecipes();
     $( "#createRecipe" ).click(function() {
     	createRecipe();
-    	redirect();
 	});
 })
 
 function loadRecipeCompList () {
 	var urlid = $.urlParam('id');
 	Agent.getJson("rest/recipecomp/" + urlid, 
-		function(data) { 
+		function(data) {
         	$.each(data, function (i, element) { 
             	$("#rows").append(generateRow(element));
        		 });
@@ -31,7 +30,7 @@ function generateRow(element) {
 	'<td class="recName">' + element.name + '</td>' + 
 	'<td> <input class="amount" type="text" placeholder="gram"> </td>' +
 	'<td> <input class="tolerance" type="text" placeholder="0.1-20%"> </td>' + 
-	'<td> <button class="delete"> Slet </button> </td>)'
+	'<td> <button class="delete"> Slet </button> </td>)' +
 	'</tr>';
 }
 
@@ -44,7 +43,7 @@ function loadRecipes() {
 	Agent.getJson("rest/recipe",
 		function(data) {
 			$.each(data, function (i, element) {
-				$("#shownRecipe").append(generateRecipeHTML(element));
+				$("#shownRecipes").append(generateRecipeHTML(element));
 			});
 		}
 	);
@@ -53,15 +52,15 @@ function loadRecipes() {
 function generateRecipeHTML(recipe) {
 	return 	'<tr><td>' + recipe.recipeId + '</td>' +
 			'<td>' + recipe.recipeName + '</td>' + 
-			'<td> <button class="recShow">Vis</button></td>'
+			'<td> <button class="recShow">Vis</button></td>' +
 			'</tr>';
 }
 function createRecipe() {
-   	var recipeData = {}
+   	var recipeData = {};
    	recipeData.recipeId = $("#recipeID").val();
    	recipeData.recipeName = $("#recipeName").val();
    	Agent.postJson('rest/recipe', recipeData, function(data){
-			$("#shownRecipes").append(generateRecipeHTML(recipeData));
+    		redirect();
 		}, function(xhr, statusmsg, errormsg) {
 			alert(xhr);
 			alert(statusmsg);
@@ -79,7 +78,7 @@ function createRecipe() {
 			<input type="text" id="recipeID" placeholder="Recept ID">
 			<input type="text" id="recipeName" placeholder="Recept navn">
 		<br>
-		<a onclick="redirect()" id="createRecipe">Tilføj råvarer</a>
+		<a id="createRecipe">Tilføj råvarer</a>
 	<div class="container" id="recepter">
 		<h2>Recepter</h2>
 		<table>
