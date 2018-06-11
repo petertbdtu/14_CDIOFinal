@@ -15,7 +15,7 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	
 	private ProductBatchDAO() {
 		try {
-			Map<Integer,ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
+			Map<Integer,ProductBatchDTO> productBatches = (HashMap<Integer, ProductBatchDTO>) super.load();
 		} catch (ClassNotFoundException | IOException e) {
 			super.save(new HashMap<Integer, ProductBatchDTO>());
 		}
@@ -28,7 +28,7 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	@Override
 	public ProductBatchDTO getProductBatch(int pbId) {
 		try {
-			Map<Integer, ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
+			Map<Integer, ProductBatchDTO> productBatches = (HashMap<Integer, ProductBatchDTO>) super.load();
 			return productBatches.get(pbId);
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
@@ -40,7 +40,7 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	@Override
 	public List<ProductBatchDTO> getProductBatchList() {
 		try {
-			Map<Integer, ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
+			Map<Integer, ProductBatchDTO> productBatches = (HashMap<Integer, ProductBatchDTO>) super.load();
 			return new ArrayList<>(productBatches.values());
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
@@ -51,16 +51,10 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	@Override
 	public void createProductBatch(ProductBatchDTO productBatch) throws DALException {
 		try {
-			Map<Integer, ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
+			Map<Integer, ProductBatchDTO> productBatches = (HashMap<Integer, ProductBatchDTO>) super.load();
 			if(productBatches.containsKey(productBatch.getPbId())) {
 				throw new DALException("ProductBatch with this ID already exists.");
-			}
-			else if (RecipeDAO.getInstance().getRecipe(productBatch.getRecipeId()) == null)
-			{
-				throw new DALException("Recipe for this ProductBatch does not exist.");
-			}
-			else
-			{
+			} else {
 				productBatches.put(productBatch.getPbId(), productBatch);
 				super.save(productBatches);
 			}
@@ -72,7 +66,7 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	@Override
 	public void updateProductBatch(ProductBatchDTO productBatch) throws DALException {
 		try {
-			Map<Integer, ProductBatchDTO> productBatches = (Map<Integer, ProductBatchDTO>) super.load();
+			Map<Integer, ProductBatchDTO> productBatches = (HashMap<Integer, ProductBatchDTO>) super.load();
 			if (productBatches.containsKey(productBatch.getPbId()))
 			{
 				productBatches.replace(productBatch.getPbId(), productBatch);

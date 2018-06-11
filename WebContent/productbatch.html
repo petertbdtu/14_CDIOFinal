@@ -10,9 +10,14 @@
 
 $(function(){
     loadProductBatches();
-    $( "#createproductbatch" ).click(function() {
+    $("#createproductbatch").click(function() {
     	createProductBatch();
 	});
+    
+    $("#productbatchtablebody").on('click', '.printProdBatch', function() {
+    	var id = $(this).closest('tr').find(".pbId").text();
+    	window.location.href = "printproductbatch.html?id=" + id;
+    })
 })
 
 function loadProductBatches() {
@@ -27,9 +32,21 @@ function loadProductBatches() {
 
 //Convenience function for generating html
 function generateProductBatchHTML(productbatch) {
-	return 	'<tr><td>' + productbatch.pbId + '</td>' +
+	var pbstatus = '';
+	switch (productbatch.status) {
+	case 0: pbstatus = 'Startet';
+		break;
+	case 1: pbstatus = 'Under produktion';
+		break;
+	case 2: pbstatus = 'Afsluttet';
+		break;
+	default: pbstatus = 'UKENDT';
+		break;
+	}
+	return 	'<tr><td class="pbId">' + productbatch.pbId + '</td>' +
 			'<td>' + productbatch.recipeId + '</td>' +
-			'<td>' + productbatch.status + '</td>' +
+			'<td>' + pbstatus + '</td>' +
+			'<td><button class="printProdBatch">Vis</button></td>' +
 			'</tr>';
 }
 
@@ -66,6 +83,7 @@ function createProductBatch() {
 					<td>ID</td>
 					<td>Recept</td>
 					<td>Status</td>
+					<td> </td> <!-- This is where the print button goes under. -->
 				</tr>
 			</thead>
 			<tbody id="productbatchtablebody"></tbody>
