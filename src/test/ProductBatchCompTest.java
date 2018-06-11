@@ -158,10 +158,7 @@ public class ProductBatchCompTest {
 	public void testUpdateProductBatchComp() throws DALException {
 		pbc1.setNetto(66);
 		pbcd.updateProductBatchComp(pbc1);
-
 		ProductBatchCompDTO tempPbc = pbcd.getProductBatchComp(pbc1.getpbID(), pbc1.getibID());
-		
-		System.out.println(tempPbc.getNetto());
 		assertTrue(66.0 == tempPbc.getNetto());
 	}
 
