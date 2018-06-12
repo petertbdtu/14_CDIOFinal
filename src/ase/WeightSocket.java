@@ -3,6 +3,8 @@ package ase;
 import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WeightSocket implements IWeightSocket{
 	String curIP;
@@ -32,36 +34,41 @@ public class WeightSocket implements IWeightSocket{
 		//Hvad betyder det her?
 		pw.println("S");
 		pw.flush();
-
+		
 		//Get input
 		String in;
+		String out = "";
 		try {
 			in = br.readLine();
-			String subStr = in.substring(in.length()-7,in.length()-2);
-			String subStr2 = subStr.charAt(0) + subStr.substring(2);
-			in = subStr2;
+	    	Pattern regExr = Pattern.compile("\\d+");
+			Matcher match = regExr.matcher(in);
+			while(match.find())
+				out += match.group();
 		} catch (IOException e) {
-			in = "0";
+			out = "0";
 		}
 
 		//Return input
-		return Integer.parseInt(in);
+		return Integer.parseInt(out);
 	}
 
 	@Override
 	public int tare() {
 		pw.println("T");
 		pw.flush();
+		
 		String in;
+		String out = "";
 		try {
 			in = br.readLine();
-			String subStr = in.substring(in.length()-7,in.length()-2);
-			String subStr2 = subStr.charAt(0) + subStr.substring(2);
-			in = subStr2;
+	    	Pattern regExr = Pattern.compile("\\d+");
+			Matcher match = regExr.matcher(in);
+			while(match.find())
+				out += match.group();
 		} catch (IOException e) {
 			in = "0";
 		}
-		return Integer.parseInt(in);
+		return Integer.parseInt(out);
 	}
 
 	@Override
@@ -119,7 +126,11 @@ public class WeightSocket implements IWeightSocket{
 			try {
 				in = br.readLine();
 				if(in.startsWith("RM20 A")) {
-					in = in.substring(8,in.length()-1);
+					System.out.println(in);
+					System.out.println(in.indexOf("\"") + " " + in.lastIndexOf("\""));
+					in = in.substring(in.indexOf("\"")+1,in.lastIndexOf("\""));
+					System.out.println(in);
+
 					if(tryParseInt(in)) {
 						tmp = Integer.parseInt(in);
 						inputRecieved = true;

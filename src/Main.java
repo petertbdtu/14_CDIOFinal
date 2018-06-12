@@ -1,3 +1,6 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import ase.WeightController;
 import data.DALException;
 import data.dao.*;
@@ -6,41 +9,50 @@ import data.dto.*;
 public class Main {
 
     public static void main(String[] args) throws DALException {
-    	WeightController wc = new WeightController();
-    	
-        /*UserDTO usr = new UserDTO(); //USR
+    	/*WeightController wc = new WeightController();
+    	wc.run();
+    	/*
+    	//Create Test User
+        UserDTO usr = new UserDTO();
         usr.setUsrId(1);
-        usr.setUsrName("Joachim");
-        usr.setIni("j");
-        usr.setCpr("sjov meme");
+        usr.setUsrName("TestBruger");
+        usr.setIni("TB");
+        usr.setCpr("XXXXXX-XXXX");
         usr.setLabTech(true);
+        usr.setAdmin(true);
+        usr.setPharma(true);
+        usr.setProdLead(true);
         UserDAO.getInstance().createUser(usr);
 
-        RecipeDTO rec = new RecipeDTO(); //RECIPE
-        rec.setRecipeId(2);
-        rec.setRecipeName("Urin");
+        //Create recipe
+        RecipeDTO rec = new RecipeDTO();
+        rec.setRecipeId(1);
+        rec.setRecipeName("KanelMadness");
         RecipeDAO.getInstance().createRecipe(rec);
 
-        RecipeCompDTO recComp = new RecipeCompDTO(); //RECIPECOMP
+        //Create recipe comp.
+        RecipeCompDTO recComp = new RecipeCompDTO();
         recComp.setAmount(500);
         recComp.setIngredient(10);
-        recComp.setRecipeId(2);
-        recComp.setTolerance(1); // TODO ÆNDRE TIL DOUBLE
+        recComp.setRecipeId(1);
+        recComp.setTolerance(2);
         RecipeCompDAO.getInstance().createRecipeComp(recComp);
         recComp.setAmount(500);
         recComp.setIngredient(11);
-        recComp.setTolerance(1); // TODO ÆNDRE TIL DOUBLE
+        recComp.setTolerance(1);
         RecipeCompDAO.getInstance().createRecipeComp(recComp);
 
-        IngredientDTO ing = new IngredientDTO(); //INGREDIENT
+        //Create ingredients
+        IngredientDTO ing = new IngredientDTO();
         ing.setId(10);
-        ing.setName("Mountain Dew");
+        ing.setName("Kanel");
         IngredientDAO.getInstance().createIngredient(ing);
         ing.setId(11);
-        ing.setName("Kaffe");
+        ing.setName("Madness");
         IngredientDAO.getInstance().createIngredient(ing);
 
-        IngredientBatchDTO ingBat = new IngredientBatchDTO(); //INGBATCH
+        //Create ingredient batch
+        IngredientBatchDTO ingBat = new IngredientBatchDTO();
         ingBat.setIbID(100);
         ingBat.setAmount(1000);
         ingBat.setIngredientId(10);
@@ -52,16 +64,8 @@ public class Main {
         ProductBatchDTO pb = new ProductBatchDTO();
         pb.setStatus(1);
         pb.setPbId(1001);
-        pb.setRecipeId(2);
-        ProductBatchDAO.getInstance().createProductBatch(pb);*/
-
-		wc.run();
-
-        for(ProductBatchCompDTO asd : ProductBatchCompDAO.getInstance().getProductBatchCompList(1000)){
-            System.out.println(asd.getpbID());
-        }
-        for(ProductBatchCompDTO asd : ProductBatchCompDAO.getInstance().getProductBatchCompList(1001)){
-            System.out.println(asd.getpbID());
-        }
+        pb.setRecipeId(1);
+        ProductBatchDAO.getInstance().createProductBatch(pb);
+        */
     }
 }
