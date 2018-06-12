@@ -191,7 +191,7 @@ public class WeightController implements Runnable {
 			errorInState("Ugyldigt raavarebatch nr.");
 			return;
 		}
-		curPbc.setibID(curIb.getIbID());
+		curPbc.setibID(curIb.getIbId());
 
 		//Check if PBC already done
 		if(pbcAlreadyDone()) {
@@ -209,7 +209,7 @@ public class WeightController implements Runnable {
 
 		//Get brut and check
 		int brut = ws.tare();
-		if(Math.abs(brut - (curPbc.getNetto() + curPbc.getTara())) > 10) {
+		if(Math.abs(brut - (curPbc.getNetto() + curPbc.getTara())) <= 10) {
 			errorInState("Bruttocheck fejlet, Proev igen");
 			return;
 		}
@@ -253,7 +253,7 @@ public class WeightController implements Runnable {
 	private boolean pbcAlreadyDone() {
 		try {
 			for(ProductBatchCompDTO pbcTemp : pbcd.getProductBatchCompList(curPb.getPbId()))
-				if(pbcTemp.getibID() == curIb.getIbID())
+				if(pbcTemp.getibID() == curIb.getIbId())
 					return true;
 		} catch (DALException e) {
 			// TODO Auto-generated catch block

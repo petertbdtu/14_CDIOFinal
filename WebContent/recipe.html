@@ -12,6 +12,12 @@ $(function(){
     $( "#createRecipe" ).click(function() {
     	createRecipe();
 	});
+
+    $("#recepter").on('click', '.recShow', function() {
+        var self = $(this).closest("tr");
+        var recipeId = self.find(".curId").text();
+        redirectId(recipeId);
+    });
 })
 
 function loadRecipeCompList () {
@@ -39,6 +45,10 @@ function redirect() {
 	window.location.href = "recipeComp.html?id=" + id;
 }
 
+function redirectId(id){
+    window.location.href = "recipeComp.html?id=" + id
+}
+
 function loadRecipes() {
 	Agent.getJson("rest/recipe",
 		function(data) {
@@ -50,7 +60,7 @@ function loadRecipes() {
 }
 //Convenience function for generating html
 function generateRecipeHTML(recipe) {
-	return 	'<tr><td>' + recipe.recipeId + '</td>' +
+	return 	'<tr><td class = "curId">' + recipe.recipeId + '</td>' +
 			'<td>' + recipe.recipeName + '</td>' + 
 			'<td> <button class="recShow">Vis</button></td>' +
 			'</tr>';
@@ -79,9 +89,13 @@ function createRecipe() {
 			<input type="text" id="recipeName" placeholder="Recept navn">
 		<br>
 		<a id="createRecipe">Tilføj råvarer</a>
-	<div class="container" id="recepter">
+	<div class="container">
 		<h2>Recepter</h2>
-		<table>
+<<<<<<< HEAD
+		<table id="recepter">
+=======
+		<table class="lefttable">
+>>>>>>> fcd7fd5de2d0593bcc86458e8c2fdf10203f6a34
 			<thead>
 				<tr>
 					<td>ID<td/>
