@@ -15,12 +15,12 @@ public class IngredientBatchDTO implements Serializable {
 
 	}
 
-	public int getIbID() {
+	public int getIbId() {
 		return ibId;
 	}
 
-	public void setIbID(int ibID) {
-		this.ibId = ibID;
+	public void setIbId(int ibId) {
+		this.ibId = ibId;
 	}
 
 	public double getAmount() {

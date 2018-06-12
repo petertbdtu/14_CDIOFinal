@@ -82,10 +82,26 @@
 		<b>Menu</b><br>
 		<a href="index.html">Log ud</a>
 	</div>
-    <h2>Råvareadministration</h2>
-    </br>
+
     <div>
-        <table border = "1" id = "ingredientTable">
+        <h2>Råvareopretning</h2>
+        <table class="lefttable">
+            <tr>
+               <th>Nr.</th>
+               <th>Navn</th>
+            </tr>
+            <tr>
+                <td><input type = number id = "id"></td>
+                <td><input type = text id = "name"></td>
+            </tr>
+        </table>
+        <button id = "ingredientOpret">Opret</button>
+    </div>
+    
+    <h2>Råvareadministration</h2>
+   
+    <div>
+        <table border = "1" class="lefttable" id = "ingredientTable">
             <thead>
             <tr>
                 <th>Nr.</th>
@@ -98,20 +114,6 @@
             </tbody>
         </table>
     </div>
-
-    <div>
-        <h2>Råvareopretning</h2>
-        <table>
-            <tr>
-               <th>Nr.</th>
-               <th>Navn</th>
-            </tr>
-            <tr>
-                <td><input type = text id = "id"></td>
-                <td><input type = text id = "name"></td>
-            </tr>
-        </table>
-        <button id = "ingredientOpret">Opret</button>
-    </div>
+    
 </body>
 </html>
