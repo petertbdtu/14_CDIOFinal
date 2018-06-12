@@ -9,11 +9,26 @@
 <script>
 $(function(){
 	loadIngredient();
+	loadComps();
 	$("#add").click(function() {
-		element = {};
-		element.name = $("select#ingredientDropdown option:selected").text();
-		element.id = $("#ingredientDropdown").val();
-		$("#rows").append(generateRow(element));
+        var recipeCompData = {};
+        recipeCompData.recipeId = $.urlParam('id');;
+        recipeCompData.ingredientId = $("#ingredientDropdown").val();
+		recipeCompData.amount = $("#amount").find(".amount").val();
+        recipeCompData.tolerance = $("#tolerance").find(".tolerance").val();
+
+        element = {};
+        element.name = $("select#ingredientDropdown option:selected").text();
+        element.id = $("#ingredientDropdown").val();
+        Agent.postJson('rest/recipeComp', recipeCompData, function() {
+                $("#rows").append(generateRow(element, true));
+            }
+            , function(xhr, statusmsg, errormsg) {
+                $("#rows").append(generateRow(element, false));
+            });
+
+
+
 	})
 	
 	$("#rows").on('click', '.delete', function() {
@@ -21,37 +36,14 @@ $(function(){
 		self.remove();
 	});
 	
-	$("#submitComp").click(function() {createRecipeComp()});
+	$("#finishComps").click(function() {window.location.href = "recipe.html";});
 })
 
-function generateRow(element) {
+function generateRow(element, success) {
  	return '<tr><td class="ingId">' + element.id + '</td>' +
-	'<td class="recName">' + element.name + '</td>' + 
-	'<td> <input class="amount" type="text" placeholder="gram"> </td>' +
-	'<td> <input class="tolerance" type="text" placeholder="0.1-20%"> </td>' + 
-	'<td class = "deleteCol"> <button class="delete"> Slet </button> </td>)' +
+	'<td class="recName">' + element.name + '</td>' +
+    '<td>' + (success ? '<span style = "color:#007a02">✓</span></td>' : '<span style = "color:#7a0004">✘</span></td>') +
 	'</tr>';
-}
-
-
-function createRecipeComp() {
-	var urlid = $.urlParam('id');
-	$("#rows").find('tr').each(function(i, element) {
-		var recipeCompData = {};
-		recipeCompData.recipeId = urlid;
-		recipeCompData.ingredientId = $(element).find(".ingId").text();
-		recipeCompData.amount = $(element).find(".amount").val();
-		recipeCompData.tolerance = $(element).find(".tolerance").val();
-		
-		Agent.postJson('rest/recipeComp', recipeCompData, function() {
-                $(element).find(".amount").attr('disabled', true);
-                $(element).find(".tolerance").attr('disabled', true);
-                $(element).find(".deleteCol").html('<span style = "color:#007a02">✓</span>')
-			}
-			, function(xhr, statusmsg, errormsg) {
-                $(element).find(".deleteCol").html('<span style = "color:#7a0004">✘</span>')
-		});	
-	})
 }
 
 $.urlParam = function(name){
@@ -75,6 +67,25 @@ function loadIngredient() {
     ); 
 }
 
+function loadComps() {
+    Agent.getJson("rest/recipeComp",
+        function(data) {
+            $.each(data, function (i, element) {
+                element.id = element.ingredientId;
+                Agent.getJson('rest/ingredient/' + element.ingredientId, function(data) {
+                        element.name = data.name;
+                        $("#rows").append(generateRow(element, true));
+                    }, function(xhr, statusmsg, errormsg) {
+                        element.name = "ERROR";
+                        $("#rows").append(generateRow(element, true));
+                    });
+
+
+            });
+        }
+    );
+}
+
 function generateIngredientHTML(element) {
 	return "<option value=" + element.id + ">" + element.name + "</option>";
 }
@@ -90,16 +101,16 @@ function generateIngredientHTML(element) {
 	<div>
 	Vælg råvarer   
 	  <select id="ingredientDropdown"> <option>Vælg råvare </select>
-	<button id="add">Tilføj</button>
+        <input id="amount" type="text" placeholder="gram">
+        <input id="tolerance" type="text" placeholder="0.1-20%">
+        <button id="add">Tilføj</button>
 	</div>
 	<br>
-	<table id = recCompTable>
+	<table id = recCompTable border = "1">
 		<thead>
 			<tr>
 				<td>ID</td>
 				<td>Navn</td>
-				<td>Mængde</td>
-				<td>Tolerance</td>
 				<td></td>
 			</tr>
 		</thead>
@@ -107,6 +118,6 @@ function generateIngredientHTML(element) {
 		
 		</tbody>
 	</table>
-	<a id="submitComp">Færdig</a>
+	<a id="finishComps">Færdig</a>
 </body>
 </html>
