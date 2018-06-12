@@ -190,7 +190,7 @@ public class WeightController {
 			errorInState("Ugyldigt raavarebatch nr.");
 			return;
 		}
-		curPbc.setibID(curIb.getIbID());
+		curPbc.setibID(curIb.getIbId());
 
 		//Check if PBC already done
 		if(pbcAlreadyDone()) {
@@ -252,7 +252,7 @@ public class WeightController {
 	private boolean pbcAlreadyDone() {
 		try {
 			for(ProductBatchCompDTO pbcTemp : pbcd.getProductBatchCompList(curPb.getPbId()))
-				if(pbcTemp.getibID() == curIb.getIbID())
+				if(pbcTemp.getibID() == curIb.getIbId())
 					return true;
 		} catch (DALException e) {
 			// TODO Auto-generated catch block

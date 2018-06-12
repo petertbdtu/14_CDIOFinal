@@ -61,7 +61,7 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 			Map<Integer, IngredientBatchDTO> batchesOfIngredient = new HashMap<Integer, IngredientBatchDTO>();
 			for (IngredientBatchDTO ingbatch : ingredientBatches.values())
 				if (ingbatch.getIngredientId() == ingredientId)
-					batchesOfIngredient.put(ingbatch.getIbID(), ingbatch);
+					batchesOfIngredient.put(ingbatch.getIbId(), ingbatch);
 			return new ArrayList<>(batchesOfIngredient.values());
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
@@ -74,8 +74,8 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 	public void createIngredientBatch(IngredientBatchDTO ingredientBatch) throws DALException {
 		try {
 			Map<Integer, IngredientBatchDTO> ingredientBatches = (HashMap<Integer, IngredientBatchDTO>) super.load();
-			if (!ingredientBatches.containsKey(ingredientBatch.getIbID())) {
-				ingredientBatches.put(ingredientBatch.getIbID(),ingredientBatch);
+			if (!ingredientBatches.containsKey(ingredientBatch.getIbId())) {
+				ingredientBatches.put(ingredientBatch.getIbId(),ingredientBatch);
 				super.save(ingredientBatches);
 			} else
 				throw new DALException("Ingredient with this ID already exists.");
@@ -89,7 +89,7 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 	public void updateIngredientBatch(IngredientBatchDTO ingredientBatch) throws DALException {
 		try {
 			Map<Integer, IngredientBatchDTO> ingredientBatches = (HashMap<Integer, IngredientBatchDTO>) super.load();
-			ingredientBatches.replace(ingredientBatch.getIbID(), ingredientBatch);
+			ingredientBatches.replace(ingredientBatch.getIbId(), ingredientBatch);
 			super.save(ingredientBatches);
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block

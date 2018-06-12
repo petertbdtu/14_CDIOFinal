@@ -4,20 +4,21 @@
 
 	<meta charset="UTF-8">
 	<title>Råvarebatch</title>
-	<link rel="stylesheet" href="ingredientbatch.css">
-	<script src="JavaScript.js"></script>
+	<link rel="stylesheet" href="style.css">
 	<script src="jquery-3.3.1.js"></script>
 	<script src="Agent.js"></script>
 	<script>
 	$(function() {
 		loadIngredient();
+		loadIngredientBatches();
 	})
 	
 	function loadIngredientBatches() {
+		$("#ingredientbatchtablebody").empty();
 	Agent.getJson("rest/ingredientbatch",
 		function(data) {
 			$.each(data, function (i, element) {
-				$("#ingredientbatchtablebody").append(generateProductBatchHTML2(element));
+				$("#ingredientbatchtablebody").append(generateIngredientBatchHTML2(element));
 			});
 		}
 	);
@@ -26,19 +27,19 @@
 	function loadIngredient() {
 	     Agent.getJson("rest/ingredient", function(data) { 
 	            $.each(data, function (i, element) { 
-	                $("#ingredientDropdown").append(generateIngredientHTML(element));
+	                $("#IngredientDropdown").append(generateIngredientHTML(element));
 	            });
 	         }
 	    ); 
 	}
 
 	function generateIngredientHTML(element) {
-		return "<option>" + element.name + "</option>";
+		return "<option value=" + element.id +">" + element.name + "</option>";
 	}
 	
 	function generateIngredientBatchHTML2(ingredientbatch) {
 		return 	'<tr><td>' + ingredientbatch.ibId + '</td>' +
-				'<td>' + ingredientbatch.Id + '</td>' +
+				'<td>' + ingredientbatch.ingredientId + '</td>' +
 				'<td>' + ingredientbatch.amount + '</td>' +
 				'</tr>';
 	}
@@ -46,11 +47,14 @@
 	
 	
 	function createIngredientBatch() {
+		var element = $("select#IngredientDropdown option:selected");
 		var ingredientBatchData = {};
+		ingredientBatchData.ingredientId = element.val();
 		ingredientBatchData.ibId = $("#inputBatchNumber").val();
-		ingredientBatchData.id = $("#ingredientDropdown").element.id();
-		ingredientBatchData.Amount = $("#inputAmount").val();
-		Agent.postJson("rest/ingredientbatch", ingredientBatchData)
+		ingredientBatchData.amount = $("#inputAmount").val();
+		Agent.postJson("rest/ingredientbatch", ingredientBatchData, function(){
+			loadIngredientBatches();
+		})
 	}
 	
 	$(function(){
@@ -60,7 +64,7 @@
 	
 	$(function(){
 		$('#showIngredients').on('click', function(){
-			$('#ingredientbatches').slideToggle(1000);
+			$('#ingredientbatches').slideToggle(400);
 		});
 	});
 	
@@ -75,7 +79,7 @@
 
 <h2 class="header">Vælg råvare.</h2>
 
-<div class="container" id="batchamount-container">
+<div id="batchamount-container">
 	<form class="form-batchamount" id="form-batchamount" onsubmit="createIngredientBatch(); return false;">
 		<select id="IngredientDropdown">
 			<option> Vælg Råvare
@@ -91,12 +95,12 @@
 <button id="showIngredients">Show Ingredient Batches</button>
 <div class="container" id="ingredientbatches">
 	<h1>Ingredientbatches</h1>
-		<table>
+		<table class="lefttable" id="fullwidth">
 			<thead>
 				<tr>
-					<td>IngredientBatchID</td>
-					<td>råvareID</td>
-					<td>Mængde</td>
+					<td class="align3">IngredientBatchID</td>
+					<td class="align3">råvareID</td>
+					<td class="align3">Mængde</td>
 				</tr>
 			</thead>
 			<tbody id="ingredientbatchtablebody"></tbody>
