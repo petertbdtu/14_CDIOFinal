@@ -36,7 +36,7 @@ public class RecipeDAO extends StorageDAO implements IRecipeDAO {
             if (recipes.containsKey(RecipeId))
                 return recipes.get(RecipeId);
             else
-                throw new DALException("Ingredient with this ID does not exist.");
+                throw new DALException("Recipe with this ID does not exist.");
         } catch (ClassNotFoundException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -63,7 +63,7 @@ public class RecipeDAO extends StorageDAO implements IRecipeDAO {
                 recipes.put(recipe.getRecipeId(),recipe);
                 super.save(recipes);
             } else
-                throw new DALException("Ingredient with this ID already exists.");
+                throw new DALException("Recipe with this ID already exists.");
         } catch (ClassNotFoundException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

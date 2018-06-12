@@ -9,11 +9,11 @@ public class Main {
     	WeightController wc = new WeightController();
     	
         /*UserDTO usr = new UserDTO(); //USR
-        usr.setUsrID(1);
+        usr.setUsrId(1);
         usr.setUsrName("Joachim");
         usr.setIni("j");
         usr.setCpr("sjov meme");
-        usr.setRoles((byte)0b00001111);
+        usr.setLabTech(true);
         UserDAO.getInstance().createUser(usr);
 
         RecipeDTO rec = new RecipeDTO(); //RECIPE
@@ -35,28 +35,24 @@ public class Main {
         IngredientDTO ing = new IngredientDTO(); //INGREDIENT
         ing.setId(10);
         ing.setName("Mountain Dew");
-        ing.setAmount(100);
         IngredientDAO.getInstance().createIngredient(ing);
         ing.setId(11);
         ing.setName("Kaffe");
-        ing.setAmount(100);
         IngredientDAO.getInstance().createIngredient(ing);
 
         IngredientBatchDTO ingBat = new IngredientBatchDTO(); //INGBATCH
         ingBat.setIbID(100);
-        ingBat.setSupplier("peps");
         ingBat.setAmount(1000);
-        ingBat.setIngbatchID(10);
+        ingBat.setIngredientId(10);
         IngredientBatchDAO.getInstance().createIngredientBatch(ingBat);
         ingBat.setIbID(101);
-        ingBat.setSupplier("carls");
-        ingBat.setIngbatchID(11);
+        ingBat.setIngredientId(11);
         IngredientBatchDAO.getInstance().createIngredientBatch(ingBat);
 
         ProductBatchDTO pb = new ProductBatchDTO();
-        pb.setStatus("1");
-        pb.setPbNr(1001);
-        pb.setRecept(2);
+        pb.setStatus(1);
+        pb.setPbId(1001);
+        pb.setRecipeId(2);
         ProductBatchDAO.getInstance().createProductBatch(pb);*/
 
 		wc.run();

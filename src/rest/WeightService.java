@@ -7,8 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import ase.runnableThread;
+import ase.WeightThread;
 
 @Path("WeightService")
 public class WeightService {
@@ -17,9 +16,9 @@ public class WeightService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response startWeight() {
-		if(Thread.currentThread().isAlive() == false) {
-			Thread thread = new Thread(new runnableThread());
-			thread.start();
+		WeightThread wt = WeightThread.getInstance();
+		if(!wt.isAlive()) {
+			wt.newThread();
 			return Response.status(200).build();
 		}
 		
@@ -29,7 +28,8 @@ public class WeightService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean checkStatus() {
-		return Thread.currentThread().isAlive();
+		WeightThread wt = WeightThread.getInstance();
+		return wt.isAlive();
 	}
 
 

@@ -3,6 +3,7 @@ package data.dto;
 import java.io.Serializable;
 
 public class RecipeCompDTO implements Serializable{
+	private static final long serialVersionUID = -6440335065542506197L;
 	private int ingredientId;
 	private int amount;
 	private double tolerance; //0-20% tolerance
@@ -48,7 +49,7 @@ public class RecipeCompDTO implements Serializable{
 		return tolerance;
 	}
 
-	public void setTolerance(int tolerance) {
+	public void setTolerance(double tolerance) {
 		this.tolerance = tolerance;
 	}
 }

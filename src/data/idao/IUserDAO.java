@@ -8,7 +8,7 @@ import data.dto.UserDTO;
 
 public interface IUserDAO {
 	UserDTO getUser(int oprId) throws DALException;
-	List getUserList();
+	List<UserDTO> getUserList();
 	void createUser(UserDTO opr) throws DALException;
 	void updateUser(UserDTO opr) throws DALException;
 }

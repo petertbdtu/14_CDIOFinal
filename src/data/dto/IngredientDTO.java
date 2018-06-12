@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 public class IngredientDTO implements Serializable {
 
-    private int id;
+	private static final long serialVersionUID = 4976420224532604395L;
+	private int id;
     private String name;
 
     public IngredientDTO() {
