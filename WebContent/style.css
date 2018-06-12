@@ -1,5 +1,12 @@
 @charset "UTF-8";
 
+body {
+	font-size: 100%;
+	font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+	background: #999;
+	   
+}
+
 h1{
 	text-align: center;
 }
@@ -20,6 +27,25 @@ a:hover, a:active {
 
 table, th, td {
 	text-align: center;
+	margin: auto;
+}
+
+.lefttable{
+	margin: 0;
+}
+
+.container{
+	background-color: #888;
+	width: 100%;
+}
+
+.align3{
+	border: 1px solid black;
+	width: 33%;
+}
+
+#fullwidth{
+	width: 100%;
 }
 
 #menu a{
@@ -28,13 +54,15 @@ table, th, td {
 }
 
 
-body {
-	font-size: 100%;
-	font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-	background: url("dtu.bmp") no-repeat fixed top right;
-   
-}
-
 #maincontainer{
 	
 }
+
+
+#adminlicense {
+	text-align: center;
+	
+}
+
+
+
