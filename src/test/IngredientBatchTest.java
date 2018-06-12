@@ -46,27 +46,27 @@ public class IngredientBatchTest {
 		instance = IngredientBatchDAO.getInstance();
 		
 		ibd1 = new IngredientBatchDTO();
-		ibd1.setIbID(1);
+		ibd1.setIbId(1);
 		ibd1.setAmount(3.75);
 		ibd1.setIngredientId(5);
 		
 		ibd2 = new IngredientBatchDTO();
-		ibd2.setIbID(104);
+		ibd2.setIbId(104);
 		ibd2.setAmount(4.222);
 		ibd2.setIngredientId(5);
 		
 		ibd3 = new IngredientBatchDTO();
-		ibd3.setIbID(99);
+		ibd3.setIbId(99);
 		ibd3.setAmount(5.4);
 		ibd3.setIngredientId(3);
 		
 		ibd4 = new IngredientBatchDTO();
-		ibd4.setIbID(66);
+		ibd4.setIbId(66);
 		ibd4.setAmount(7.77);
 		ibd4.setIngredientId(32);
 	
 		ibd5 = new IngredientBatchDTO();
-		ibd5.setIbID(999);
+		ibd5.setIbId(999);
 		ibd5.setAmount(8.56);
 		ibd5.setIngredientId(77);
 		
@@ -81,7 +81,7 @@ public class IngredientBatchTest {
 	@Test
 	public void testGetIngredientBatch() throws DALException {
 		IngredientBatchDTO tempIbd = instance.getIngredientBatch(1);
-		assertEquals(ibd1.getIbID(), tempIbd.getIbID());
+		assertEquals(ibd1.getIbId(), tempIbd.getIbId());
 	}
 
 	@Test
@@ -92,11 +92,11 @@ public class IngredientBatchTest {
 		boolean test3 = false;
 		
 		for (IngredientBatchDTO tempIbd : instance.getIngredientBatchList()) {
-			if (tempIbd.getIbID() == 1)
+			if (tempIbd.getIbId() == 1)
 				test1 = true;
-			else if(tempIbd.getIbID() == 104)
+			else if(tempIbd.getIbId() == 104)
 				test2 = true;
-			else if(tempIbd.getIbID() == 99)
+			else if(tempIbd.getIbId() == 99)
 				test3 = true;
 		}
 		
@@ -110,9 +110,9 @@ public class IngredientBatchTest {
 		boolean test2 = false;
 		
 		for (IngredientBatchDTO tempIbd : instance.getIngredientBatchList(5)) {
-			if (tempIbd.getIbID() == 1)
+			if (tempIbd.getIbId() == 1)
 				test1 = true;
-			else if(tempIbd.getIbID() == 104)
+			else if(tempIbd.getIbId() == 104)
 				test2 = true;
 		}
 		
@@ -123,7 +123,7 @@ public class IngredientBatchTest {
 	public void testCreateIngredientBatch() throws DALException {
 		instance.createIngredientBatch(ibd4);
 		IngredientBatchDTO tempIbd = instance.getIngredientBatch(66);
-		assertEquals(ibd4.getIbID(), tempIbd.getIbID());
+		assertEquals(ibd4.getIbId(), tempIbd.getIbId());
 	}
 
 	@Test
