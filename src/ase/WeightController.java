@@ -1,6 +1,9 @@
 package ase;
 
 import data.DALException;
+
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import data.dto.UserDTO;
@@ -44,12 +47,12 @@ public class WeightController implements Runnable {
 	UserDTO curLab;
 
 	public enum State {
-		LAB_ID, PB_ID, RB_ID
+		LAB_ID, PB_ID, RB_ID, END_SYSTEM
 	}
 
-	public WeightController() {
-		ws = new WeightSocket();
+	public WeightController(String ip) throws UnknownHostException, IOException {
 		state = State.LAB_ID;
+		ws = new WeightSocket(ip);
 		
 		ud = UserDAO.getInstance();
 		rd = RecipeDAO.getInstance();
@@ -66,21 +69,44 @@ public class WeightController implements Runnable {
 		while(isRunning) {
 			switch (state) {
 			case LAB_ID:
-				if(LabId())
-					state = State.PB_ID;
+				try {
+					if(LabId())
+						state = State.PB_ID;
+				} catch (IOException e) {
+					isRunning = false;
+				}
 				break;
 			case PB_ID:
-				if(PbId())
-					state = State.RB_ID;
-				else
-					state = State.LAB_ID;
+				try {
+					if(PbId())
+						state = State.RB_ID;
+					else
+						state = State.LAB_ID;
+				} catch (IOException e) {
+					isRunning = false;
+				}
 				break;
 			case RB_ID:
-				RbId();
-				if(moreIngredients())
-					state = State.RB_ID;
-				else
-					state = State.LAB_ID;
+				try {
+					RbId();
+					if(moreIngredients())
+						state = State.RB_ID;
+					else
+						state = State.END_SYSTEM;
+				} catch (IOException e) {
+					isRunning = false;
+				}
+
+				break;
+			case END_SYSTEM:
+				try {
+					if(EndSystem())
+						isRunning = false;
+					else
+						state = State.LAB_ID;
+				} catch (IOException e) {
+					isRunning = false;
+				}
 				break;
 			default:
 				state = State.LAB_ID;
@@ -89,7 +115,7 @@ public class WeightController implements Runnable {
 		}
 	}
 
-	private boolean LabId() {
+	private boolean LabId() throws IOException {
 		curLab = null;
 		
 		ws.clearText();
@@ -118,13 +144,13 @@ public class WeightController implements Runnable {
 		return ws.getConfirmation("Er brugeren korrekt?");     
 	}
 
-	private boolean PbId() {
+	private boolean PbId() throws IOException {
 		curPb = null;
-		int pbId = ws.getInput("Indtast produktbatch nr.:");
+		int pbId = ws.getInput("Indtast pbId:");
 
 		//check pbNo inside domain
 		if(pbId < 1 || pbId > 99999999){
-			errorInState("Ugyldigt produktbatch nr.");
+			errorInState("Ugyldigt pbId");
 			return false;
 		}
 		String tmpRecipeName = null;
@@ -133,13 +159,13 @@ public class WeightController implements Runnable {
 			curPb = pbd.getProductBatch(pbId);
 			tmpRecipeName = rd.getRecipe(curPb.getRecipeId()).getRecipeName();
 		} catch (DALException e) {
-			errorInState("Ugyldigt produktbatch nr.");
+			errorInState("Ugyldigt pbId");
 			return false;
 		}
 		
 		//Ensure PB.status = not done
 		if(curPb.getStatus() == 2) {
-			errorInState("Produktbatch er afsluttet");
+			errorInState("Pb er afsluttet");
 			return false;
 		}
 		
@@ -148,7 +174,7 @@ public class WeightController implements Runnable {
 		ws.clearText();
 		
 		//Ensure correct pbId entered
-		if(!ws.getConfirmation("Korrekt produktbatch?"))
+		if(!ws.getConfirmation("Korrekt pb?"))
 			return false;
 		
 		//Set PB.status = active
@@ -156,13 +182,13 @@ public class WeightController implements Runnable {
 		try {
 			pbd.updateProductBatch(curPb);
 		} catch (DALException e) {
-			errorInState("P.batch ikke opdateret");
+			errorInState("Pb ikke opdateret");
 			return false;
 		}
 		return true;
 	}
 
-	private void RbId() {
+	private void RbId() throws IOException {
 		curIb = null;
 		curRc = null;
 		
@@ -172,23 +198,23 @@ public class WeightController implements Runnable {
 		curPbc.setUsrID(curLab.getUsrId());
 
 		//tara registration
-		if(!ws.getConfirmation("Er vægten ubelastet?"))
-			while(!ws.getConfirmation("Er alt fjernet fra vægten?"));
+		if(!ws.getConfirmation("Er vaegten ubelastet?"))
+			while(!ws.getConfirmation("alt fjernet?"));
 		ws.tare();
-		ws.haltProgress("Placer tara");
+		ws.getConfirmation("Placer tara");
 		curPbc.setTara(ws.tare());
 
 		//Check if valid ibId
 		try {
-			curIb = ibd.getIngredientBatch(ws.getInput("Indtast RaavareBatch nr."));
+			curIb = ibd.getIngredientBatch(ws.getInput("Indtast RbId"));
 		} catch (DALException e) {
-			errorInState("Ugyldigt raavarebatch nr.");
+			errorInState("Ugyldigt RbId");
 			return;
 		}
 
 		//Check if ingredientBatch.ingredientId match recipe.ingredientId
 		if(!pbcInRecipe()) {
-			errorInState("Ugyldigt raavarebatch nr.");
+			errorInState("Ugyldigt RbId");
 			return;
 		}
 		curPbc.setibID(curIb.getIbId());
@@ -200,31 +226,37 @@ public class WeightController implements Runnable {
 		}
 
 		//Get weight
-		ws.haltProgress("Placer "+ curRc.getAmount()+"g");
+		ws.getConfirmation("Placer "+ curRc.getAmount()+"g");
 		curPbc.setNetto(ws.getWeight());
+		System.out.println(curPbc.getNetto());
+		System.out.println(curPbc.getTara());
 		
 		//Reset
 		ws.tare();
-		ws.haltProgress("Fjern alt");
+		ws.getConfirmation("Fjern alt");
 
 		//Get brut and check
 		int brut = ws.tare();
+		System.out.println(brut);
 		if(Math.abs(brut - (curPbc.getNetto() + curPbc.getTara())) <= 10) {
-			errorInState("Bruttocheck fejlet, Proev igen");
+			errorInState("Bruttocheck fejlet");
 			return;
 		}
-
+		
 		//Get diff and check tolerance
 		double diffWeight = Math.abs(curRc.getAmount() - curPbc.getNetto());
+		System.out.println(diffWeight);
+		System.out.println(curRc.getAmount() * 100);
+		System.out.println(curRc.getTolerance());
 		if(diffWeight / curRc.getAmount() * 100 > curRc.getTolerance()) {
-			errorInState("Udenfor tolerence, Proev igen");
+			errorInState("Udenfor tolerence");
 			return;
 		}
 		
 		try {
 			pbcd.createProductBatchComp(curPbc);
 		} catch (DALException e) {
-			errorInState("Kunne ikke gemme afvejning");
+			errorInState("Fejl, ikke gemt");
 			return;
 		}
 		
@@ -233,7 +265,11 @@ public class WeightController implements Runnable {
 		ws.clearText();
 	}
 
-	private void errorInState(String msg) {
+	private boolean EndSystem() throws IOException {
+		return ws.getConfirmation("Skal systemet afslutte?");
+	}
+	
+	private void errorInState(String msg) throws IOException {
 		ws.showError();
 		ws.showText(msg);
 		ws.sleep(3);
@@ -262,7 +298,7 @@ public class WeightController implements Runnable {
 		return false;
 	}
 
-	private boolean moreIngredients() {
+	private boolean moreIngredients() throws IOException {
 		boolean moreIngredients = false;
 		try {
 			List<RecipeCompDTO> rcList = rcd.getRecipeCompList(curPb.getRecipeId());
@@ -277,7 +313,7 @@ public class WeightController implements Runnable {
 			try {
 				pbd.updateProductBatch(curPb);
 			} catch (DALException e) {
-				errorInState("P.batch ikke opdateret");
+				errorInState("Pb ikke opdateret");
 			}
 		}
 

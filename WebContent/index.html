@@ -11,7 +11,7 @@
         })
 
         function runWeight() {
-            Agent.postJson("rest/WeightService", null,
+            Agent.postJson("rest/WeightService", $("#weightIp").val(),
                 function() {
                     checkStatus();
                 },
@@ -54,6 +54,7 @@
 				</table>
 			<div id="status"></div>
 			<button id ="weightStart">Forbind vægt</button>
+			<input id ="weightIp" placeholder="Indtast ip for vægt" type="text">
 		</div>
 	</body>
 </html>

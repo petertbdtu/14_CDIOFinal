@@ -1,5 +1,7 @@
 package ase;
 
+import java.io.IOException;
+
 public class WeightThread {
 	Thread thread;
 	private static WeightThread instance = new WeightThread();
@@ -10,9 +12,14 @@ public class WeightThread {
 	
 	public static WeightThread getInstance() { return instance; }
 	
-	public void newThread() {
-		thread = new Thread(new WeightController());
-		thread.start();
+	public void newThread(String ip) {
+		try {
+			thread = new Thread(new WeightController(ip));
+			thread.start();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean isAlive() {

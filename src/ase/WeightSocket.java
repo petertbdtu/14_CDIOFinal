@@ -2,119 +2,101 @@ package ase;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WeightSocket implements IWeightSocket{
 	String curIP;
-
 	Socket socket;
 	OutputStream os;
 	PrintWriter pw;
 	InputStream is;
 	BufferedReader br;
 
-	public WeightSocket(){
-		curIP = "localhost"; //TODO make ip dynamic
-		try {
-			socket = new Socket(curIP, 8000);
-			os = socket.getOutputStream();
-			pw = new PrintWriter(os);
-			is = socket.getInputStream();
-			br = new BufferedReader(new InputStreamReader(is));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public WeightSocket(String ip) throws UnknownHostException, IOException{
+		curIP = ip; //TODO make ip dynamic
+		socket = new Socket(curIP, 8000);
+		os = socket.getOutputStream();
+		pw = new PrintWriter(os);
+		is = socket.getInputStream();
+		br = new BufferedReader(new InputStreamReader(is));
 	}
 
 	@Override
-	public int getWeight() {
+	public int getWeight() throws IOException {
 		//Hvad betyder det her?
 		pw.println("S");
 		pw.flush();
-		
+
 		//Get input
-		String in;
+		String in = br.readLine();
 		String out = "";
-		try {
-			in = br.readLine();
-	    	Pattern regExr = Pattern.compile("\\d+");
-			Matcher match = regExr.matcher(in);
-			while(match.find())
-				out += match.group();
-		} catch (IOException e) {
-			out = "0";
-		}
+		Pattern regExr = Pattern.compile("\\d+");
+		Matcher match = regExr.matcher(in);
+		while(match.find())
+			out += match.group();
+		
+		if(out.length() == 5)
+			out = out.substring(0, 4);
 
 		//Return input
 		return Integer.parseInt(out);
 	}
 
 	@Override
-	public int tare() {
+	public int tare() throws IOException {
 		pw.println("T");
 		pw.flush();
-		
-		String in;
+
+		String in = br.readLine();
 		String out = "";
-		try {
-			in = br.readLine();
-	    	Pattern regExr = Pattern.compile("\\d+");
-			Matcher match = regExr.matcher(in);
-			while(match.find())
-				out += match.group();
-		} catch (IOException e) {
-			in = "0";
-		}
+
+		Pattern regExr = Pattern.compile("\\d+");
+		Matcher match = regExr.matcher(in);
+		while(match.find())
+			out += match.group();
+		
+		if(out.length() == 5)
+			out = out.substring(0, 4);
+		
 		return Integer.parseInt(out);
 	}
 
 	@Override
-	public void showError() {
+	public void showError() throws IOException {
 		pw.println("D \"ERROR\"");
 		pw.flush();
-		try {
-			while(!br.readLine().equals("D A"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		while(!br.readLine().equals("D A"));
 	}
 
 	@Override
-	public void showText(String msg) {
+	public void showText(String msg) throws IOException {
 		pw.println("P111 \"" + msg +"\"");
 		pw.flush();
-		try {
-			while(!br.readLine().equals("P111 A"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		while(!br.readLine().equals("P111 A"));
 	}
 
 	@Override
-	public void clearText() {
+	public void clearText() throws IOException {
+		showText("");
 		pw.println("DW");
 		pw.flush();
-		try {
-			while(!br.readLine().equals("DW A"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		while(!br.readLine().equals("DW A"));
 	}
-	
+
 	boolean tryParseInt(String value) {  
-	     try {  
-	         Integer.parseInt(value);  
-	         return true;  
-	      } catch (NumberFormatException e) {  
-	         return false;  
-	      }  
+		try {  
+			Integer.parseInt(value);  
+			return true;  
+		} catch (NumberFormatException e) {  
+			return false;  
+		}  
 	}
 
 	@Override
-	public int getInput(String msg) {
+	public int getInput(String msg) throws IOException {
 		String in = "";
 		int tmp = -1;
 		boolean inputRecieved = false;
@@ -123,35 +105,30 @@ public class WeightSocket implements IWeightSocket{
 		pw.flush();
 
 		while(!inputRecieved){
-			try {
-				in = br.readLine();
-				if(in.startsWith("RM20 A")) {
-					System.out.println(in);
-					System.out.println(in.indexOf("\"") + " " + in.lastIndexOf("\""));
-					in = in.substring(in.indexOf("\"")+1,in.lastIndexOf("\""));
-					System.out.println(in);
-
-					if(tryParseInt(in)) {
-						tmp = Integer.parseInt(in);
-						inputRecieved = true;
-					} else {
-						showText("Fejl - Kun tal tilladt");
-						sleep(3);
-						clearText();
-			            pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
-			            pw.flush();
-					}
-				} 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			in = br.readLine();
+			if(in.startsWith("RM20 A")) {
+				in = in.substring(in.indexOf("\"")+1,in.lastIndexOf("\""));
+				if(tryParseInt(in)) {
+					tmp = Integer.parseInt(in);
+					inputRecieved = true;
+				} else {
+					showText("Fejl - Kun tal tilladt");
+					sleep(3);
+					clearText();
+					pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
+					pw.flush();
+				}
+			} else if (in.startsWith("RM20 C")) {
+				clearText();
+				pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
+				pw.flush();
 			}
 		}
 		return tmp;
 	}
 
 	@Override
-	public boolean getConfirmation(String msg) {
+	public boolean getConfirmation(String msg) throws IOException {
 		String in = "";
 
 		pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
@@ -161,11 +138,7 @@ public class WeightSocket implements IWeightSocket{
 		boolean returnValue = false;
 
 		while(!answerRecieved) {
-
-			try {
-				in = br.readLine();
-			} catch (IOException e) {}
-
+			in = br.readLine();
 			if(in.equals("RM20 A \"y\"")){
 				returnValue = true;
 				answerRecieved = true;
@@ -173,8 +146,11 @@ public class WeightSocket implements IWeightSocket{
 				returnValue = false;
 				answerRecieved = true;
 			} else if (in.startsWith("RM20 A")) {
-				pw.println("RM20 8 \""+msg+"\" \" \" \"&3\"");
-				pw.flush();
+				returnValue = true;
+				answerRecieved = true;
+			} else if (in.startsWith("RM20 C")) {
+				returnValue = false;
+				answerRecieved = true;
 			}
 		}
 
@@ -183,21 +159,11 @@ public class WeightSocket implements IWeightSocket{
 	}
 
 	@Override
-	public void haltProgress(String msg) {
-		String in = "";
-
+	public void haltProgress(String msg) throws IOException {
 		pw.println("P111 \"" + msg + "\"");
 		pw.flush();
 
-		while (!in.startsWith("K A")) {
-			try {
-				in = br.readLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
+		while (br.readLine().startsWith("K A"));
 		clearText();
 	}
 

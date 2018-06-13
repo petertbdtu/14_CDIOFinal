@@ -15,10 +15,11 @@ public class WeightService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response startWeight() {
+	public Response startWeight(String ip) {
+		String tmp = ip.replaceAll("\"", "");
 		WeightThread wt = WeightThread.getInstance();
 		if(!wt.isAlive()) {
-			wt.newThread();
+			wt.newThread(tmp);
 			return Response.status(200).build();
 		}
 		
