@@ -27,7 +27,7 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	}
 
 	@Override
-	public ProductBatchCompDTO getProductBatchComp(int pbId, int ibId) throws DALException {
+	public synchronized ProductBatchCompDTO getProductBatchComp(int pbId, int ibId) throws DALException {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
 			String compKey = generateKey(pbId, ibId);
@@ -44,7 +44,7 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	}
 
 	@Override
-	public List<ProductBatchCompDTO> getProductBatchCompList(int pbId) {
+	public synchronized List<ProductBatchCompDTO> getProductBatchCompList(int pbId) {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
             List<ProductBatchCompDTO> batchesOfProduct = new ArrayList<>();
@@ -62,7 +62,7 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	}
 
 	@Override
-	public List<ProductBatchCompDTO> getProductBatchCompList() {
+	public synchronized List<ProductBatchCompDTO> getProductBatchCompList() {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
 			return new ArrayList<>(complist.values());
@@ -74,7 +74,7 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 		return null;
 	}
 	@Override
-	public void createProductBatchComp(ProductBatchCompDTO productBatchComp) throws DALException {
+	public synchronized void createProductBatchComp(ProductBatchCompDTO productBatchComp) throws DALException {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
 			String compString = generateKey(productBatchComp);
@@ -94,7 +94,7 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 
 
 	@Override
-	public void updateProductBatchComp(ProductBatchCompDTO productBatchComp) throws DALException {
+	public synchronized void updateProductBatchComp(ProductBatchCompDTO productBatchComp) throws DALException {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (HashMap<String, ProductBatchCompDTO>) super.load();
 			String compString = generateKey(productBatchComp);

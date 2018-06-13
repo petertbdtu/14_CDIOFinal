@@ -26,7 +26,7 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	}
 	
 	@Override
-	public ProductBatchDTO getProductBatch(int pbId) {
+	public synchronized ProductBatchDTO getProductBatch(int pbId) {
 		try {
 			Map<Integer, ProductBatchDTO> productBatches = (HashMap<Integer, ProductBatchDTO>) super.load();
 			return productBatches.get(pbId);
@@ -38,7 +38,7 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 
 	
 	@Override
-	public List<ProductBatchDTO> getProductBatchList() {
+	public synchronized List<ProductBatchDTO> getProductBatchList() {
 		try {
 			Map<Integer, ProductBatchDTO> productBatches = (HashMap<Integer, ProductBatchDTO>) super.load();
 			return new ArrayList<>(productBatches.values());
@@ -49,7 +49,7 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	}
 
 	@Override
-	public void createProductBatch(ProductBatchDTO productBatch) throws DALException {
+	public synchronized void createProductBatch(ProductBatchDTO productBatch) throws DALException {
 		try {
 			Map<Integer, ProductBatchDTO> productBatches = (HashMap<Integer, ProductBatchDTO>) super.load();
 			if(productBatches.containsKey(productBatch.getPbId())) {
@@ -64,7 +64,7 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	}
 
 	@Override
-	public void updateProductBatch(ProductBatchDTO productBatch) throws DALException {
+	public synchronized void updateProductBatch(ProductBatchDTO productBatch) throws DALException {
 		try {
 			Map<Integer, ProductBatchDTO> productBatches = (HashMap<Integer, ProductBatchDTO>) super.load();
 			if (productBatches.containsKey(productBatch.getPbId()))

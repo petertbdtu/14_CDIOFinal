@@ -31,7 +31,7 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 	} 
 
 	@Override
-	public IngredientDTO getIngredient(int ingredientId)  {
+	public synchronized IngredientDTO getIngredient(int ingredientId)  {
 		try {
 			Map<Integer, IngredientDTO> ingredients = (HashMap<Integer, IngredientDTO>) super.load();
 			return ingredients.get(ingredientId);
@@ -42,7 +42,7 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 	}
 
 	@Override
-	public List<IngredientDTO> getIngredientList() {
+	public synchronized List<IngredientDTO> getIngredientList() {
 		try {
 			Map<Integer, IngredientDTO> ingredients = (HashMap<Integer, IngredientDTO>) super.load();
 			return new ArrayList<>(ingredients.values()); //values indholder alle elementer i hashmapen
@@ -53,7 +53,7 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 	}
 
 	@Override
-	public void createIngredient(IngredientDTO ingredient) throws DALException { 
+	public synchronized void createIngredient(IngredientDTO ingredient) throws DALException { 
 		try {
 			Map<Integer, IngredientDTO> ingredients = (HashMap<Integer, IngredientDTO>) super.load(); //hentet en ny ingredients liste fra filen
 			if (!ingredients.containsKey(ingredient.getId())) {  //tjekker om den har en nøgle der er magen til den man er igang med at oprette.
@@ -67,7 +67,7 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 	}
 
 	@Override
-	public void updateIngredient(IngredientDTO ingredient) throws DALException {
+	public synchronized void updateIngredient(IngredientDTO ingredient) throws DALException {
 		try {
 			Map<Integer, IngredientDTO> ingredients = (HashMap<Integer, IngredientDTO>) super.load();
 			ingredients.replace(ingredient.getId(), ingredient); //ersattter hele rækken, hvis den findes. 

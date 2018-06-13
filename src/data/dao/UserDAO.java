@@ -29,7 +29,7 @@ public class UserDAO extends StorageDAO implements IUserDAO {
     }
   
     @Override
-    public UserDTO getUser(int id) throws DALException {
+    public synchronized UserDTO getUser(int id) throws DALException {
         try {
             Map<Integer,UserDTO> users = (HashMap<Integer, UserDTO>) super.load();
             if (users.containsKey(id))
@@ -44,7 +44,7 @@ public class UserDAO extends StorageDAO implements IUserDAO {
     }
 
     @Override
-    public List<UserDTO> getUserList() {
+    public synchronized List<UserDTO> getUserList() {
         try {
             Map<Integer, UserDTO> users = (HashMap<Integer, UserDTO>) super.load();
             return new ArrayList<>(users.values());
@@ -55,7 +55,7 @@ public class UserDAO extends StorageDAO implements IUserDAO {
     }
 
     @Override
-    public void createUser(UserDTO userDTO) throws DALException {
+    public synchronized void createUser(UserDTO userDTO) throws DALException {
         try {
             Map<Integer, UserDTO> users = (HashMap<Integer, UserDTO>) super.load();
             if (!users.containsKey(userDTO.getUsrId())) {
@@ -70,7 +70,7 @@ public class UserDAO extends StorageDAO implements IUserDAO {
     }
 
     @Override
-    public void updateUser(UserDTO userDTO) throws DALException {
+    public synchronized void updateUser(UserDTO userDTO) throws DALException {
         try {
             Map<Integer, UserDTO> users = (HashMap<Integer, UserDTO>) super.load();
             if (users.containsKey(userDTO.getUsrId())) {

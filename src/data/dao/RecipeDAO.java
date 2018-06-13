@@ -30,7 +30,7 @@ public class RecipeDAO extends StorageDAO implements IRecipeDAO {
     }
 
     @Override
-    public RecipeDTO getRecipe(int RecipeId) throws DALException {
+    public synchronized RecipeDTO getRecipe(int RecipeId) throws DALException {
         try {
             Map<Integer,RecipeDTO> recipes = (HashMap<Integer, RecipeDTO>) super.load();
             if (recipes.containsKey(RecipeId))
@@ -45,7 +45,7 @@ public class RecipeDAO extends StorageDAO implements IRecipeDAO {
     }
 
     @Override
-    public List<RecipeDTO> getRecipeList() {
+    public synchronized List<RecipeDTO> getRecipeList() {
         try {
             Map<Integer, RecipeDTO> recipes = (HashMap<Integer, RecipeDTO>) super.load();
             return new ArrayList<>(recipes.values());
@@ -56,7 +56,7 @@ public class RecipeDAO extends StorageDAO implements IRecipeDAO {
     }
 
     @Override
-    public void createRecipe(RecipeDTO recipe) throws DALException {
+    public synchronized void createRecipe(RecipeDTO recipe) throws DALException {
         try {
             Map<Integer, RecipeDTO> recipes = (HashMap<Integer, RecipeDTO>) super.load();
             if (!recipes.containsKey(recipe.getRecipeId())) {
@@ -71,7 +71,7 @@ public class RecipeDAO extends StorageDAO implements IRecipeDAO {
     }
 
     @Override
-    public void updateRecipe(RecipeDTO recipe) {
+    public synchronized void updateRecipe(RecipeDTO recipe) {
         try {
             Map<Integer, RecipeDTO> recipes = (HashMap<Integer, RecipeDTO>) super.load();
             recipes.replace(recipe.getRecipeId(), recipe);
