@@ -31,7 +31,7 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 	}
 
 	@Override
-	public RecipeCompDTO getRecipeComp(int recipeId, int ingredientId) throws DALException {
+	public synchronized RecipeCompDTO getRecipeComp(int recipeId, int ingredientId) throws DALException {
 		try {
 			String keyString = generateKey(recipeId, ingredientId);
 			Map<String, RecipeCompDTO> component = (Map<String, RecipeCompDTO>) super.load();
@@ -46,7 +46,7 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 	}
 
 	@Override
-	public List<RecipeCompDTO> getRecipeCompList(int recipeId) {
+	public synchronized List<RecipeCompDTO> getRecipeCompList(int recipeId) {
 		try {
 			Map<String, RecipeCompDTO> component = (Map<String, RecipeCompDTO>) super.load();
 			List<RecipeCompDTO> recipeComps = new ArrayList<>();
@@ -62,7 +62,7 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 	}
 
 	@Override
-	public List<RecipeCompDTO> getRecipeCompList() {
+	public synchronized List<RecipeCompDTO> getRecipeCompList() {
 		try {
 			Map<String, RecipeCompDTO> component = (Map<String, RecipeCompDTO>) super.load();
 			return new ArrayList<>(component.values());
@@ -74,7 +74,7 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 	}
 
 	@Override
-	public void createRecipeComp(RecipeCompDTO recipeComp) throws DALException {
+	public synchronized void createRecipeComp(RecipeCompDTO recipeComp) throws DALException {
 		try {
 			String keyString = generateKey(recipeComp);
 			Map<String, RecipeCompDTO> component = (Map<String, RecipeCompDTO>) super.load();
@@ -89,7 +89,7 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 	}
 
 	@Override
-	public void updateRecipeComp(RecipeCompDTO recipeComp) throws DALException {
+	public synchronized void updateRecipeComp(RecipeCompDTO recipeComp) throws DALException {
 		try {
 			String keyString = generateKey(recipeComp);
 			Map<String, RecipeCompDTO> component = (Map<String, RecipeCompDTO>) super.load();

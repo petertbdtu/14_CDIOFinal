@@ -31,6 +31,21 @@ public class RecipeCompService {
 		}
 	}
 	
+	@Path("list")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createRecipeComponents(ArrayList <RecipeCompDTO> compList)
+	{
+		try {
+			for (RecipeCompDTO comp : compList ) {
+				RecipeCompDAO.getInstance().createRecipeComp(comp);
+			}
+			return Response.ok().build();
+		} catch (DALException e) {
+			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build());
+		}
+	}
+	
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
     public ArrayList<RecipeCompDTO> readRecipeCompList()

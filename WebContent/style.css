@@ -28,6 +28,14 @@ table, th, td {
 	margin: auto;
 }
 
+select#ingredientDropdown {
+	width: 20%;
+}
+
+table#recCompTable {
+	width: 50%;
+}
+
 .lefttable{
 	margin: 0;
 }
@@ -41,14 +49,18 @@ table, th, td {
 	width: 100%;
 }
 
-#menu{
+#menu, #tilbage{
 	text-align: left;
 }
 
-#menu a{
+#menu a, #tilbage{
     background-color: #ff0000;
     padding: 2px 4px;
-}
+    margin: 2px;
+    color: white;
+    float: left;
+    cursor: pointer;
+    }
 
 
 #maincontainer{

@@ -28,7 +28,7 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 	}
 	
 	@Override
-	public IngredientBatchDTO getIngredientBatch(int ibId) throws DALException {
+	public synchronized IngredientBatchDTO getIngredientBatch(int ibId) throws DALException {
 		Map<Integer,IngredientBatchDTO> ingredientBatches = null;
 		try {
 			ingredientBatches = (Map<Integer, IngredientBatchDTO>) super.load();
@@ -44,7 +44,7 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 	}
 
 	@Override
-	public List<IngredientBatchDTO> getIngredientBatchList() {
+	public synchronized List<IngredientBatchDTO> getIngredientBatchList() {
 		try {
 			Map<Integer, IngredientBatchDTO> ingredientBatches = (HashMap<Integer, IngredientBatchDTO>) super.load();
 			return new ArrayList<>(ingredientBatches.values());
@@ -55,7 +55,7 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 	}
 
 	@Override
-	public List<IngredientBatchDTO> getIngredientBatchList(int ingredientId)  throws DALException{
+	public synchronized List<IngredientBatchDTO> getIngredientBatchList(int ingredientId)  throws DALException{
 		try {
 			Map<Integer, IngredientBatchDTO> ingredientBatches = (HashMap<Integer, IngredientBatchDTO>) super.load();
 			Map<Integer, IngredientBatchDTO> batchesOfIngredient = new HashMap<Integer, IngredientBatchDTO>();
@@ -71,7 +71,7 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 	}
 
 	@Override
-	public void createIngredientBatch(IngredientBatchDTO ingredientBatch) throws DALException {
+	public synchronized void createIngredientBatch(IngredientBatchDTO ingredientBatch) throws DALException {
 		try {
 			Map<Integer, IngredientBatchDTO> ingredientBatches = (HashMap<Integer, IngredientBatchDTO>) super.load();
 			if (!ingredientBatches.containsKey(ingredientBatch.getIbId())) {
@@ -86,7 +86,7 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 	}
 
 	@Override
-	public void updateIngredientBatch(IngredientBatchDTO ingredientBatch) throws DALException {
+	public synchronized void updateIngredientBatch(IngredientBatchDTO ingredientBatch) throws DALException {
 		try {
 			Map<Integer, IngredientBatchDTO> ingredientBatches = (HashMap<Integer, IngredientBatchDTO>) super.load();
 			ingredientBatches.replace(ingredientBatch.getIbId(), ingredientBatch);

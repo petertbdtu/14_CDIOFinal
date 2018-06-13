@@ -75,7 +75,9 @@
  <div id="menu">
 		<b>Menu</b><br>
 		<a href="index.html">Log ud</a>
-	</div>
+ </div>
+	
+ <span id="tilbage" onclick="window.history.back()">Tilbage</span><br>
 
 <h2 class="header">Vælg råvare.</h2>
 
@@ -84,10 +86,10 @@
 		<select id="IngredientDropdown">
 			<option> Vælg Råvare
 		</select>
+		<label for="inputBatchNumber" class="sr-only">Batch nummer</label>
+        <input type="number" id="inputBatchNumber" class="form-control" min="1" max="99999999" placeholder="Batch nummer">
 		<label for="inputAmount" class="sr-only">Mængde</label>
         <input type="number" id="inputAmount" class="form-control" min="1" max="99999999" placeholder="Mængde" autofocus>
-        <label for="inputBatchNumber" class="sr-only">Batch nummer</label>
-        <input type="number" id="inputBatchNumber" class="form-control" min="1" max="99999999" placeholder="Batch nummer">
         <input type="submit" value="Opret">
 	</form>
 </div><br>

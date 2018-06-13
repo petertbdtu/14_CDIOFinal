@@ -46,7 +46,7 @@ function redirect() {
 }
 
 function redirectId(id){
-    window.location.href = "recipeComp.html?id=" + id
+    window.location.href = "printrecipecomp.html?id=" + id
 }
 
 function loadRecipes() {
@@ -83,6 +83,9 @@ function createRecipe() {
 		<b>Menu</b><br>
 		<a href="index.html">Log ud</a>
 	</div>
+	
+	<span id="tilbage" onclick="window.history.back()">Tilbage</span><br>
+
 
 		<h2>Recept administration</h2>
 			<input type="text" id="recipeID" placeholder="Recept ID">
