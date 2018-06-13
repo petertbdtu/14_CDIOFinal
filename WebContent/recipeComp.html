@@ -20,29 +20,32 @@ $(function(){
 		recipeCompData.amount = $("#amount").find(".amount").val();
         recipeCompData.tolerance = $("#tolerance").find(".tolerance").val();
         $("#rows").append(generateRow(recipeCompData));
+        $("select#ingredientDropdown option:selected").remove();
+        if ($("select#ingredientDropdown").has("option").length <= 0) {
+        	$("#add").attr("disabled", true);
+        }
 	})
 	
 	$("#rows").on('click', '.delete', function() {
 		var self = $(this).closest("tr");
+		element = {}
+		element.id = self.find(".ingId").text();
+		element.name = self.find(".ingName").text();
+		$("#ingredientDropdown").append(generateIngredientHTML(element));
 		self.remove();
+		$("#add").attr("disabled", false);
 	});
 	
 	$("#finishComps").click(function () {
 		sendComponentsAsArray();
-		//window.location.href = "recipe.html";
-	});
-	
-	$("#rows").on('click', '.delete', function() {
-		var self = $(this).closest("tr");
-		self.remove();
 	});
 })
 
 function generateRow(element) {
  	return '<tr><td class="ingId">' + element.ingredientId + '</td>' +
-	'<td class="recName">' + element.ingredientName + '</td>' + 
-	'<td> <input class="amount" type="text" placeholder="gram"> </td>' +
-	'<td> <input class="tolerance" type="text" placeholder="0.1-20%"> </td>' +
+	'<td class="ingName">' + element.ingredientName + '</td>' + 
+	'<td> <input class="amount" type="number" min="0" placeholder="gram"> </td>' +
+	'<td> <input class="tolerance" type="number" min="0.1" max="20" step="0.1" "placeholder="0.1-20%"> </td>' +
 	'<td class = "deleteCol"> <button class="delete"> Slet </button> </td>)' +
 	'</tr>';
 }
@@ -81,10 +84,11 @@ function sendComponentsAsArray() {
 	{
 		Agent.postJson('rest/recipeComp/list', recipeCompArray,
 			function(data) {
-				alert("Sent array");
+				$("#finishCompsSpan").html("Sendt");
+				window.location.href = "printrecipecomp.html?id="+  urlid;
     	    },
     		function(xhr, statusmsg, errormsg) {
-				alert("Failed to send array");
+				alert("Failed to send");
     	    }
 		);
 	}
@@ -107,9 +111,8 @@ function generateIngredientHTML(element) {
 	</div>
 	<br><br>
 	<div>
-		Vælg råvarer
+		Vælg råvare
 		<select id="ingredientDropdown">
-			<option>Vælg råvare</option>
 		</select>
         <button id="add">Tilføj</button>
 	</div>
@@ -129,6 +132,6 @@ function generateIngredientHTML(element) {
 		</tbody>
 	</table>
 	<br>
-	<a id="finishComps">Færdig</a>
+	<span id="finishCompsSpan"><a id="finishComps">Færdig</a></span>
 </body>
 </html>
