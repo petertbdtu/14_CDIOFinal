@@ -7,28 +7,19 @@
 <script src="jquery-3.3.1.js"></script>
 <script src="Agent.js"></script>
 <script>
+var urlid = 0;
 $(function(){
+	urlid = $.urlParam("id");
 	loadIngredient();
-	loadComps();
+	
 	$("#add").click(function() {
         var recipeCompData = {};
-        recipeCompData.recipeId = $.urlParam('id');;
-        recipeCompData.ingredientId = $("#ingredientDropdown").val();
+        recipeCompData.recipeId = urlid;
+        recipeCompData.ingredientId = $("select#ingredientDropdown option:selected").val();
+        recipeCompData.ingredientName = $("select#ingredientDropdown option:selected").text();
 		recipeCompData.amount = $("#amount").find(".amount").val();
         recipeCompData.tolerance = $("#tolerance").find(".tolerance").val();
-
-        element = {};
-        element.name = $("select#ingredientDropdown option:selected").text();
-        element.id = $("#ingredientDropdown").val();
-        Agent.postJson('rest/recipeComp', recipeCompData, function() {
-                $("#rows").append(generateRow(element, true));
-            }
-            , function(xhr, statusmsg, errormsg) {
-                $("#rows").append(generateRow(element, false));
-            });
-
-
-
+        $("#rows").append(generateRow(recipeCompData));
 	})
 	
 	$("#rows").on('click', '.delete', function() {
@@ -36,13 +27,23 @@ $(function(){
 		self.remove();
 	});
 	
-	$("#finishComps").click(function() {window.location.href = "recipe.html";});
+	$("#finishComps").click(function () {
+		sendComponentsAsArray();
+		//window.location.href = "recipe.html";
+	});
+	
+	$("#rows").on('click', '.delete', function() {
+		var self = $(this).closest("tr");
+		self.remove();
+	});
 })
 
-function generateRow(element, success) {
- 	return '<tr><td class="ingId">' + element.id + '</td>' +
-	'<td class="recName">' + element.name + '</td>' +
-    '<td>' + (success ? '<span style = "color:#007a02">✓</span></td>' : '<span style = "color:#7a0004">✘</span></td>') +
+function generateRow(element) {
+ 	return '<tr><td class="ingId">' + element.ingredientId + '</td>' +
+	'<td class="recName">' + element.ingredientName + '</td>' + 
+	'<td> <input class="amount" type="text" placeholder="gram"> </td>' +
+	'<td> <input class="tolerance" type="text" placeholder="0.1-20%"> </td>' +
+	'<td class = "deleteCol"> <button class="delete"> Slet </button> </td>)' +
 	'</tr>';
 }
 
@@ -56,7 +57,6 @@ $.urlParam = function(name){
     }
 }
 
-
 function loadIngredient() {
      Agent.getJson("rest/ingredient",
         function(data) { 
@@ -67,23 +67,30 @@ function loadIngredient() {
     ); 
 }
 
-function loadComps() {
-    Agent.getJson("rest/recipeComp",
-        function(data) {
-            $.each(data, function (i, element) {
-                element.id = element.ingredientId;
-                Agent.getJson('rest/ingredient/' + element.ingredientId, function(data) {
-                        element.name = data.name;
-                        $("#rows").append(generateRow(element, true));
-                    }, function(xhr, statusmsg, errormsg) {
-                        element.name = "ERROR";
-                        $("#rows").append(generateRow(element, true));
-                    });
-
-
-            });
-        }
-    );
+function sendComponentsAsArray() {
+	var recipeCompArray = [];
+	$("#rows").find('tr').each(function(i, element) {
+		var recipeCompData = {};
+		recipeCompData.recipeId = urlid;
+		recipeCompData.ingredientId = $(element).find(".ingId").text();
+		recipeCompData.amount = $(element).find(".amount").val();
+		recipeCompData.tolerance = $(element).find(".tolerance").val();
+		recipeCompArray.push(recipeCompData);
+	});
+	if (!(recipeCompArray === undefined || recipeCompArray.length <= 0))
+	{
+		Agent.postJson('rest/recipeComp/list', recipeCompArray,
+			function(data) {
+				alert("Sent array");
+    	    },
+    		function(xhr, statusmsg, errormsg) {
+				alert("Failed to send array");
+    	    }
+		);
+	}
+	else {
+		alert("No components selected");
+	}
 }
 
 function generateIngredientHTML(element) {
@@ -97,20 +104,22 @@ function generateIngredientHTML(element) {
 		<b>Menu</b><br>
 		<a href="index.html">Log ud</a>
 	</div>
-	<br><br>
+	<br>
 	<div>
-	Vælg råvarer   
-	  <select id="ingredientDropdown"> <option>Vælg råvare </select>
-        <input id="amount" type="text" placeholder="gram">
-        <input id="tolerance" type="text" placeholder="0.1-20%">
+		Vælg råvarer
+		<select id="ingredientDropdown">
+			<option>Vælg råvare</option>
+		</select>
         <button id="add">Tilføj</button>
 	</div>
 	<br>
-	<table id = recCompTable border = "1">
+	<table class="lefttable" id = recCompTable border = "1">
 		<thead>
 			<tr>
 				<td>ID</td>
 				<td>Navn</td>
+				<td>Mængde</td>
+				<td>Tolerance</td>
 				<td></td>
 			</tr>
 		</thead>
@@ -118,6 +127,7 @@ function generateIngredientHTML(element) {
 		
 		</tbody>
 	</table>
+	<br>
 	<a id="finishComps">Færdig</a>
 </body>
 </html>
