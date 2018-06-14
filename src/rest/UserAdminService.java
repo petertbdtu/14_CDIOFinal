@@ -25,14 +25,13 @@ public class UserAdminService {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createUser(UserDTO userDTO)
+    public Response createUser(UserDTO userDTO) throws WebDAOException
     {
     	try {
     		UserDAO.getInstance().createUser(userDTO);
     		return Response.ok().build();  //laver en response 200 ok og bygger den
     	}catch (DALException e) {
-    		e.printStackTrace();
-    		throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build());
+    		throw new WebDAOException(e.getMessage());
     	}
     }
 
@@ -44,28 +43,26 @@ public class UserAdminService {
     }
 
     @GET
-    @Path("id}")
+    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public UserDTO readUser(@PathParam("id") int id)
+    public UserDTO readUser(@PathParam("id") int id) throws WebDAOException
     {
         try {
 			return UserDAO.getInstance().getUser(id);
 		} catch (DALException e) {
-			e.printStackTrace();
+			throw new WebDAOException(e.getMessage());
 		}
-        return null;
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateUser(UserDTO userDTO)
+    public Response updateUser(UserDTO userDTO) throws WebDAOException
     {
         try {
             UserDAO.getInstance().updateUser(userDTO);
             return Response.ok().build();
-
         } catch (DALException e) {
-            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+            throw new WebDAOException(e.getMessage());
         }
     }
 }
