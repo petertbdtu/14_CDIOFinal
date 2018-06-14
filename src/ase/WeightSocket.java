@@ -16,7 +16,7 @@ public class WeightSocket implements IWeightSocket{
 	BufferedReader br;
 
 	public WeightSocket(String ip) throws UnknownHostException, IOException{
-		curIP = ip; //TODO make ip dynamic
+		curIP = ip;
 		socket = new Socket(curIP, 8000);
 		os = socket.getOutputStream();
 		pw = new PrintWriter(os);
@@ -26,7 +26,6 @@ public class WeightSocket implements IWeightSocket{
 
 	@Override
 	public int getWeight() throws IOException {
-		//Hvad betyder det her?
 		pw.println("S");
 		pw.flush();
 
@@ -39,7 +38,7 @@ public class WeightSocket implements IWeightSocket{
 			out += match.group();
 		
 		if(out.length() == 5)
-			out = out.substring(0, 4);
+			out = out.substring(0, 4); //in.length - 1
 
 		//Return input
 		return Integer.parseInt(out);
@@ -160,11 +159,17 @@ public class WeightSocket implements IWeightSocket{
 
 	@Override
 	public void haltProgress(String msg) throws IOException {
+		pw.println("K 3"); //K 3 mode, no function - send code
+		pw.flush();
+
 		pw.println("P111 \"" + msg + "\"");
 		pw.flush();
 
-		while (br.readLine().startsWith("K A"));
+		while (br.readLine().startsWith("K C 4"));
 		clearText();
+
+		pw.println("K 1"); //K 1 mode, exec function - no code
+		pw.flush();
 	}
 
 	@Override
@@ -182,7 +187,7 @@ public class WeightSocket implements IWeightSocket{
 	@Override
 	public void sleep(int s) {
 		try {
-			TimeUnit.SECONDS.sleep(3);
+			TimeUnit.SECONDS.sleep(s);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

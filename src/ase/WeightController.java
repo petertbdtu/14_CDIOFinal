@@ -153,7 +153,7 @@ public class WeightController implements Runnable {
 			errorInState("Ugyldigt pbId");
 			return false;
 		}
-		String tmpRecipeName = null;
+		String tmpRecipeName;
 		try {
 			//Ensure pbId exists
 			curPb = pbd.getProductBatch(pbId);
@@ -179,6 +179,7 @@ public class WeightController implements Runnable {
 		
 		//Set PB.status = active
 		curPb.setStatus(1);
+		//Set start-date here
 		try {
 			pbd.updateProductBatch(curPb);
 		} catch (DALException e) {
@@ -226,10 +227,8 @@ public class WeightController implements Runnable {
 		}
 
 		//Get weight
-		ws.getConfirmation("Placer "+ curRc.getAmount()+"g");
+		ws.haltProgress("Placer "+ curRc.getAmount()+"g, [-> slut");
 		curPbc.setNetto(ws.getWeight());
-		System.out.println(curPbc.getNetto());
-		System.out.println(curPbc.getTara());
 		
 		//Reset
 		ws.tare();
@@ -237,17 +236,13 @@ public class WeightController implements Runnable {
 
 		//Get brut and check
 		int brut = ws.tare();
-		System.out.println(brut);
-		if(Math.abs(brut - (curPbc.getNetto() + curPbc.getTara())) <= 10) {
+		if(Math.abs(brut - (curPbc.getNetto() + curPbc.getTara())) <= 2) {
 			errorInState("Bruttocheck fejlet");
 			return;
 		}
 		
 		//Get diff and check tolerance
 		double diffWeight = Math.abs(curRc.getAmount() - curPbc.getNetto());
-		System.out.println(diffWeight);
-		System.out.println(curRc.getAmount() * 100);
-		System.out.println(curRc.getTolerance());
 		if(diffWeight / curRc.getAmount() * 100 > curRc.getTolerance()) {
 			errorInState("Udenfor tolerence");
 			return;
@@ -292,7 +287,6 @@ public class WeightController implements Runnable {
 				if(pbcTemp.getibID() == curIb.getIbId())
 					return true;
 		} catch (DALException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -310,6 +304,7 @@ public class WeightController implements Runnable {
 			moreIngredients = ws.getConfirmation("Vil du afveje mere?");
 		} else {
 			curPb.setStatus(2);
+			//Set End-date here
 			try {
 				pbd.updateProductBatch(curPb);
 			} catch (DALException e) {
