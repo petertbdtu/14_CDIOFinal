@@ -24,6 +24,7 @@ public class ProductBatchService {
     public Response createProductBatch(ProductBatchDTO productBatchDTO) throws WebDAOException
     {
         try {
+            productBatchDTO.setStatus(0);
         	// RecipeDAO getRecipe throws DALException if recipe does not exist.
         	RecipeDAO.getInstance().getRecipe(productBatchDTO.getRecipeId());
         	ProductBatchDAO.getInstance().createProductBatch(productBatchDTO);
