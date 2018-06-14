@@ -43,8 +43,12 @@ public class ProductBatchService {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public ProductBatchDTO readProductBatch(@PathParam("id") int id)
+    public ProductBatchDTO readProductBatch(@PathParam("id") int id) throws WebDAOException
     {
-        return ProductBatchDAO.getInstance().getProductBatch(id);
+        try {
+			return ProductBatchDAO.getInstance().getProductBatch(id);
+		} catch (DALException e) {
+			throw new WebDAOException(e.getMessage());
+		}
     }
 }

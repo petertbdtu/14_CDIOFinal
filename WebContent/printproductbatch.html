@@ -26,7 +26,7 @@ function loadProductBatchInfo (pbId) {
 		function(data) {
 			printInfo(data);
 		}, function(xhr, statusmsg, errormsg) {
-			alert("Ugyldigt produktbatch");
+			alert(xhr.responseJSON.message);
 		}
 	);
 }

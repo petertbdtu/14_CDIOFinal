@@ -19,7 +19,6 @@ import data.dao.RecipeDAO;
 import data.dao.UserDAO;
 import data.dto.ProductBatchCompDTO;
 import data.dto.ProductBatchDTO;
-import data.dto.ProductBatchPrintCompDTO;
 import data.dto.RecipeCompDTO;
 import data.dto.RecipeDTO;
 
@@ -34,9 +33,12 @@ public class ProductBatchPrintService {
 	public List<ProductBatchPrintCompDTO> readProductBatch(@PathParam("id") int pbId) throws WebDAOException {
 		try {
 			ProductBatchDTO productBatch = ProductBatchDAO.getInstance().getProductBatch(pbId);
+			
 			RecipeDTO recipe = RecipeDAO.getInstance().getRecipe(productBatch.getRecipeId());
+			
 			List<RecipeCompDTO> recipeComponents = RecipeCompDAO.getInstance()
 					.getRecipeCompList(productBatch.getRecipeId());
+			
 			List<ProductBatchCompDTO> productBatchComponents = ProductBatchCompDAO.getInstance()
 					.getProductBatchCompList(pbId);
 
@@ -44,7 +46,9 @@ public class ProductBatchPrintService {
 
 			for (RecipeCompDTO recipeComp : recipeComponents) {
 				ProductBatchPrintCompDTO newComp = new ProductBatchPrintCompDTO();
-				newComp.setPart(1); // Nobody knows what this is
+				
+				//TODO Implement splitting recept components into parts
+				newComp.setPart(1);
 
 				int ingredientId = recipeComp.getIngredientId();
 				newComp.setIngredientId(ingredientId);
@@ -53,10 +57,9 @@ public class ProductBatchPrintService {
 
 				newComp.setName(IngredientDAO.getInstance().getIngredient(ingredientId).getName());
 
-				// I hate this. Searches for product batch component with matching ingredient ID
-				// in a list.
+				// Searches for product batch component with
+				// matching ingredient ID in a list.
 				for (ProductBatchCompDTO pbc : productBatchComponents) {
-					// AAUUUGHHH
 					if (recipeComp.getIngredientId() == IngredientBatchDAO.getInstance()
 							.getIngredientBatch(pbc.getibID()).getIngredientId()) {
 						newComp.setIbID(pbc.getibID());
@@ -69,19 +72,98 @@ public class ProductBatchPrintService {
 				pbinfoList.add(newComp);
 			}
 			return pbinfoList;
-		} 
-		catch (NullPointerException e) {
-			/* Can theoretically occur if any of the following are nonexistent:
-			 * ProductBatch for the inputted ID.
-			 * Recipe for the ProductBatch (ProductBatch should not exist if this is the case)
-			 * 
-			 */
-			
-			throw new WebDAOException("No product batch with this ID exists");
-		}
-		catch (DALException e) {
-			e.printStackTrace();
+		} catch (DALException e) {
 			throw new WebDAOException(e.getMessage());
 		}
+	}
+
+	private class ProductBatchPrintCompDTO {
+
+		private String name; // Name of the ingredient
+		private int ingredientId;
+		private int amount; // Amount in the batch
+		private double tolerance;
+		private int ibId; // The ingredient batch it is from
+		private double tara;
+		private double netto;
+		private String ini; // Initials of the operator that weighed it
+
+		private int part;
+
+		public ProductBatchPrintCompDTO() {
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public int getIngredientId() {
+			return ingredientId;
+		}
+
+		public void setIngredientId(int ingredientId) {
+			this.ingredientId = ingredientId;
+		}
+
+		public int getAmount() {
+			return amount;
+		}
+
+		public void setAmount(int amount) {
+			this.amount = amount;
+		}
+
+		public double getTolerance() {
+			return tolerance;
+		}
+
+		public void setTolerance(double tolerance) {
+			this.tolerance = tolerance;
+		}
+
+		public int getIbID() {
+			return ibId;
+		}
+
+		public void setIbID(int ibID) {
+			this.ibId = ibID;
+		}
+
+		public double getTara() {
+			return tara;
+		}
+
+		public void setTara(double tara) {
+			this.tara = tara;
+		}
+
+		public double getNetto() {
+			return netto;
+		}
+
+		public void setNetto(double netto) {
+			this.netto = netto;
+		}
+
+		public String getIni() {
+			return ini;
+		}
+
+		public void setIni(String ini) {
+			this.ini = ini;
+		}
+
+		public int getPart() {
+			return part;
+		}
+
+		public void setPart(int part) {
+			this.part = part;
+		}
+
 	}
 }

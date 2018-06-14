@@ -26,10 +26,17 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	}
 	
 	@Override
-	public synchronized ProductBatchDTO getProductBatch(int pbId) {
+	public synchronized ProductBatchDTO getProductBatch(int pbId) throws DALException {
 		try {
 			Map<Integer, ProductBatchDTO> productBatches = (HashMap<Integer, ProductBatchDTO>) super.load();
-			return productBatches.get(pbId);
+			if (productBatches.containsKey(pbId))
+			{
+				return productBatches.get(pbId);
+			}
+			else
+			{
+				throw new DALException("No product batch with this ID exists");
+			}
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
