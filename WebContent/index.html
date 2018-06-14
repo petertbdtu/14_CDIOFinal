@@ -13,13 +13,13 @@ $(function() {
 			function() {
 			Agent.postJson("rest/debug"), null,
 			function() {
-				alert("Data nulstillet.");
+				alert("Data reset, Test data added.");
 			},
 			function () {
-				alert("fAck, vi slette alt og oprettede ikke noget nyt.");
+				alert("Data deleted, none created");
 			}
 		}, function() {
-			alert("du dum.");
+			alert("Couldn't reset");
 		}
 		)
 	})
@@ -29,7 +29,7 @@ $(function() {
 <body>
 <br>
 <div class="centered">
-<h1>Velkommen til Novo Nordisk A/S</h1>
+<h1>Velkommen</h1>
 <br>
 <br>
 <br>
