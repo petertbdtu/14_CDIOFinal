@@ -38,6 +38,7 @@ public class WeightSocket implements IWeightSocket{
 		pw.flush();
 
 		//Grabs a line as a string from the BufferedReader
+		
 		String in = br.readLine();
 		String out = "";
 		Pattern regExr = Pattern.compile("\\d+");
@@ -213,6 +214,8 @@ public class WeightSocket implements IWeightSocket{
 
 		pw.println("K 1"); //K 1 mode, exec function - no code
 		pw.flush();
+		
+		while(!br.readLine().equals("K A"));
 	}
 
 	/*
@@ -225,11 +228,14 @@ public class WeightSocket implements IWeightSocket{
 	}
 
     /*
-     * Method used in testing, only applicable on the simulator - unused in the actual program
+     * Method that should terminate the connection to both the simulator and the actual scales
      */
 	@Override
 	public void exit() {
-		pw.println("Q");
+		pw.println("Q"); //Simulator, ignored by HW scale
+		pw.flush();
+		
+		pw.println("PWR 1"); //HW scale reset
 		pw.flush();
 	}
 

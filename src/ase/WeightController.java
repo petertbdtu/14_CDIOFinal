@@ -119,6 +119,8 @@ public class WeightController implements Runnable {
 				break;
 			}
 		}
+		
+		ws.exit();
 	}
 
 	private boolean LabId() throws IOException {
