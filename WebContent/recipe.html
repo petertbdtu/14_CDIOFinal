@@ -72,9 +72,7 @@ function createRecipe() {
    	Agent.postJson('rest/recipe', recipeData, function(data){
     		redirect();
 		}, function(xhr, statusmsg, errormsg) {
-			alert(xhr);
-			alert(statusmsg);
-			alert(errormsg);
+			alert(xhr.responseJSON.message);
 		});
 }
 </script>

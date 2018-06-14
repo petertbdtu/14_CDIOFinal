@@ -54,7 +54,9 @@
 		ingredientBatchData.amount = $("#inputAmount").val();
 		Agent.postJson("rest/ingredientbatch", ingredientBatchData, function(){
 			loadIngredientBatches();
-		})
+		}, function(xhr, statusmsg, errormsg) {
+            alert(xhr.responseJSON.message);
+        })
 	}
 	
 	$(function(){

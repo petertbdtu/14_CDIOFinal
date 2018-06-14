@@ -17,8 +17,6 @@ $(function(){
         recipeCompData.recipeId = urlid;
         recipeCompData.ingredientId = $("select#ingredientDropdown option:selected").val();
         recipeCompData.ingredientName = $("select#ingredientDropdown option:selected").text();
-		recipeCompData.amount = $("#amount").find(".amount").val();
-        recipeCompData.tolerance = $("#tolerance").find(".tolerance").val();
         $("#rows").append(generateRow(recipeCompData));
         $("select#ingredientDropdown option:selected").remove();
         if ($("select#ingredientDropdown").has("option").length <= 0) {

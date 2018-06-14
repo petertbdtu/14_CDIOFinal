@@ -54,7 +54,7 @@ function createProductBatch() {
    	var productbatchData = {}
    	productbatchData.pbId = $("#pbId").val();
    	productbatchData.recipeId = $("#recipeId").val();
-   	productbatchData.status = 0; // Initial status is 'not active'. Maybe don't do this client-side?
+   	productbatchData.status = 0;
    	Agent.postJson('rest/productbatch', productbatchData, function(data){
 			$("#productbatchtablebody").append(generateProductBatchHTML(productbatchData));
 		}, function(xhr, statusmsg, errormsg) {

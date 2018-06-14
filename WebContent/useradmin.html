@@ -78,9 +78,7 @@ $(function(){
         Agent.putJson('rest/useradmin', userData, function(data){
 
         }, function(xhr, statusmsg, errormsg) {
-            alert(xhr);
-            alert(statusmsg);
-            alert(errormsg);
+            alert(xhr.responseJSON.message);
         });
     });
 })
@@ -143,9 +141,7 @@ function createUser() {
     Agent.postJson('rest/useradmin', userData, function(data){
         $("#userTableBody").append(generateUserHTML(userData)); //hvis der er succes tilføjer den hvis ikke viser den fejl 
     }, function(xhr, statusmsg, errormsg) {
-        alert(xhr); //obejekt objekt, sker kun fejl. 
-        alert(statusmsg);
-        alert(errormsg);
+        alert(xhr.responseJSON.message);
     });
 }
 

@@ -138,11 +138,6 @@ $.urlParam = function(name){
 	<span id="tilbage" onclick="window.history.back()">Tilbage</span>
 	<br><br>
 
-	<!-- DATE, PB INFO, RECIPE INFO
-	Udskrevet			02-06-05
-	Produkt Batch nr.	00000111
-	Recept nr.			00002222 -->
-
 	<div id="printinfo">
 		Udskrevet <span id="date"></span><br>
 		Produkt Batch nr. <span id="pbnum"></span><br>
@@ -150,42 +145,19 @@ $.urlParam = function(name){
 	</div>
 	<br>
 
-	<!--
-	LIST OF COMPONENTS
-	LIST IS BASED ON RECIPE; ALL POSSIBLE COMPONENTS ARE SHOWN
-	EVEN THOSE NOT YET ADDED -->
 	<div class="container" id="pbcomponents"></div>
 	<br>
 
-	<!-- SUM TARE AND NET WEIGHT ARE ONLY KNOWN AFTER FINISHING
-	Sum Tara:
-	Sum Netto: 
-	
-	Sum Tara:	0,130
-	Sum Netto:	5,958 -->
 	<div id="weightinfo">
 		Sum Tara: <span id="taresum"></span><br>
 		Sum Netto: <span id="netsum"></span>
 	</div>
 	<br>
 
-	<!-- DO WE ACTUALLY WRITE DOWN THE DATES ANYWHERE?
-	Produktion Status:	Startet
-	Produktion Startet:	2005-06-01 15:33:10
-	Produktion Slut:
-	
-	Produktion Status:	Underproduktion
-	Produktion Startet:	2005-06-01 15:33:10
-	Produktion Slut:
-	
-	Produktion Status:	Afsluttet
-	Produktion Startet:	2005-06-01 15:33:10
-	Produktion Slut:	2005-06-02 07:42:34 -->
-
 	<div id="pbinfo">
 		Produktion Status: <span id="pbstatus"></span><br>
-		Produktion Startet: <span id="pbstarttime"></span><br>
-		Produktion Slut: <span id="pbfinishtime"></span>
+		Produktion Startet: <span id="pbstarttime"></span><br> 	//TODO Implement start and end
+		Produktion Slut: <span id="pbfinishtime"></span> 		//date for ProductBatch backend
 	</div>
 
 </body>
