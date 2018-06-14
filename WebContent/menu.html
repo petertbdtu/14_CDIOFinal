@@ -5,12 +5,12 @@
 	<script src="jquery-3.3.1.js"></script>
 	<script src="Agent.js"></script>
 	<script>
-        $(function(){
+        $(function(){ //Calls the method checkStatus. If the the button #wieghtStart is pressed it runs the method runWeight
             checkStatus();
             $("#weightStart").click(function() {runWeight()});
         })
 
-        function runWeight() {
+        function runWeight() {//messages weightService and calls the method checkStatus.
             Agent.postJson("rest/WeightService", $("#weightIp").val(),
                 function() {
                     checkStatus();
@@ -21,7 +21,7 @@
             );
         }
 
-        function checkStatus() {
+        function checkStatus() {//Checks if the weight is connected
             Agent.getJson("rest/WeightService",
                 function(Response) {
                     if(Response == true) {

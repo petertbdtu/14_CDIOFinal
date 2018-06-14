@@ -8,7 +8,7 @@
 <script src="Agent.js"></script>
 <script>
 
-$(function(){
+$(function(){ //takes the id from the url and calls two methods based on it.
 	var pbId = $.urlParam('id');
 	if (pbId)
 	{
@@ -17,10 +17,11 @@ $(function(){
 	}
 	else
 	{
-		alert("Intet produktbatch valgt.");
+		alert("Intet produktbatch valgt."); //alerts if no productbatch has been chosen
 	}
 })
 
+//GETs the product batch with corresponding id.
 function loadProductBatchInfo (pbId) {
 	Agent.getJson("rest/productbatch/" + pbId,
 		function(data) {
@@ -31,6 +32,7 @@ function loadProductBatchInfo (pbId) {
 	);
 }
 
+//GETs the weight of the tara and netto from the datalayer and appends them to html.
 function loadAndPrintList(pbId) {
 	Agent.getJson("rest/printproductbatch/" + pbId,
 		function(data) {
@@ -74,6 +76,7 @@ function generateComponentHTML(printcomponent) {
 	return html;
 }
 
+//prints the info for the producktbatch with the id.
 function printInfo(pb) {
 	
 	$("#date").html(getTodayFormatted());
