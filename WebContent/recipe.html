@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Recept administration</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="jquery-3.3.1.js"></script>
+<script src="Agent.js"></script>
+<script>
+$(function(){ //calls the method loadRecipes, and calls a the function createRecipe when a button is clicked.
+    loadRecipes();
+    $( "#createRecipe" ).click(function() {
+    	createRecipe();
+	});
+
+	//finds the closest id on click and calls the method redirectId based on that.
+    $("#recepter").on('click', '.recShow', function() {
+        var self = $(this).closest("tr");
+        var recipeId = self.find(".curId").text();
+        redirectId(recipeId);
+    });
+})
+
+//GETs a list of recipe components and appends it.
+function loadRecipeCompList () {
+	var urlid = $.urlParam('id');
+	Agent.getJson("rest/recipecomp/" + urlid, 
+		function(data) {
+        	$.each(data, function (i, element) { 
+            	$("#rows").append(generateRow(element));
+       		 });
+    	 }
+	);
+}
+
+//greates a row of components from an element.
+function generateRow(element) {
+ 	return '<tr><td class="ingId">' + element.id + '</td>' +
+	'<td class="recName">' + element.name + '</td>' + 
+	'<td> <input class="amount" type="text" placeholder="gram"> </td>' +
+	'<td> <input class="tolerance" type="text" placeholder="0.1-20%"> </td>' + 
+	'<td> <button class="delete"> Slet </button> </td>)' +
+	'</tr>';
+}
+
+//redirect to a new page with the recipe id as url id
+function redirect() {
+	var id = $("#recipeID").val();
+	window.location.href = "recipecomp.html?id=" + id;
+}
+
+//redirect to a new page with the specified id as url id
+function redirectId(id){
+    window.location.href = "printrecipecomp.html?id=" + id
+}
+
+//GETs a list with the recipes and appends them
+function loadRecipes() {
+	Agent.getJson("rest/recipe",
+		function(data) {
+			$.each(data, function (i, element) {
+				$("#shownRecipes").append(generateRecipeHTML(element));
+			});
+		}
+	);
+}
+//Convenience function for generating html
+function generateRecipeHTML(recipe) {
+	return 	'<tr><td class = "curId">' + recipe.recipeId + '</td>' +
+			'<td>' + recipe.recipeName + '</td>' + 
+			'<td> <button class="recShow">Vis</button></td>' +
+			'</tr>';
+}
+
+//POSTs a recipe to the datalayer
+function createRecipe() {
+   	var recipeData = {};
+   	recipeData.recipeId = $("#recipeID").val();
+   	recipeData.recipeName = $("#recipeName").val();
+   	Agent.postJson('rest/recipe', recipeData, function(data){
+    		redirect();
+		}, function(xhr, statusmsg, errormsg) {
+			alert(xhr.responseJSON.message);
+		});
+}
+</script>
+<body>
+	<div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+	</div>
+	
+	<span id="tilbage" onclick="window.history.back()">Tilbage</span><br>
+
+
+		<h2>Recept administration</h2>
+			<input type="text" id="recipeID" placeholder="Recept ID">
+			<input type="text" id="recipeName" placeholder="Recept navn">
+		<br>
+		<a id="createRecipe">Tilføj råvarer</a>
+	<div class="container">
+		<h2>Recepter</h2>
+		<table id="recepter" class="lefttable">
+			<thead>
+				<tr>
+					<td>ID</td>
+					<td>Navn</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody id="shownRecipes">
+			
+			</tbody>
+		</table>
+		</div>
+</body>
+</html>

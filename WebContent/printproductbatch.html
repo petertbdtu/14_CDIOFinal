@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Produktbatch Visning</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="jquery-3.3.1.js"></script>
+<script src="Agent.js"></script>
+<script>
+
+$(function(){ //takes the id from the url and calls two methods based on it.
+	var pbId = $.urlParam('id');
+	if (pbId)
+	{
+		loadProductBatchInfo(pbId)
+		loadAndPrintList(pbId);
+	}
+	else
+	{
+		alert("Intet produktbatch valgt."); //alerts if no productbatch has been chosen
+	}
+})
+
+//GETs the product batch with corresponding id.
+function loadProductBatchInfo (pbId) {
+	Agent.getJson("rest/productbatch/" + pbId,
+		function(data) {
+			printInfo(data);
+		}, function(xhr, statusmsg, errormsg) {
+			alert(xhr.responseJSON.message);
+		}
+	);
+}
+
+//GETs the weight of the tara and netto from the datalayer and appends them to html.
+function loadAndPrintList(pbId) {
+	Agent.getJson("rest/printproductbatch/" + pbId,
+		function(data) {
+			var sumnet = 0;
+			var sumtare = 0;
+			$.each(data, function (i, element) {
+				$("#pbcomponents").append(generateComponentHTML(element));
+				sumnet += element.netto;
+				sumtare += element.tara;
+			});
+			$("#netsum").html(sumnet);
+			$("#taresum").html(sumtare);
+		}
+	);
+}
+
+//Convenience function for generating html
+function generateComponentHTML(printcomponent) {
+	var html = '<div class="pbcomponent">' +
+			'Råvare nr.: ' + printcomponent.ingredientId + '<br>' +
+			'Råvare navn: ' + printcomponent.name + '<br>' +
+			'<hr>' +
+			'<table class=\"lefttable\"><thead><tr><td>Del</td>' +
+			'<td>Mængde</td>' +
+			'<td>Tolerance</td>' +
+			'<td>Tara </td>' +
+			'<td>Netto (kg)</td>' +
+			'<td>Batch</td>' +
+			'<td>Opr.</td>' +
+			'<td>Terminal</td>' +
+			'</tr></thead>' +
+			'<tbody><tr><td>' + printcomponent.part + '</td>' +
+			'<td>' + printcomponent.amount + '</td>' +
+			'<td>' + printcomponent.tolerance + '</td>' +
+			'<td>' + (printcomponent.tara > 0 ? printcomponent.tara : '') + '</td>' +
+			'<td>' + (printcomponent.netto > 0 ? printcomponent.netto : '') + '</td>' +
+			'<td>' + (printcomponent.ibID ? printcomponent.ibID : '') + '</td>' +
+			'<td>' + (printcomponent.ini ? printcomponent.ini : '') + '</td>' +
+			'<td>1</td>' + // Terminal hardcoded to 1.
+			'</tr></tbody></table></div><br>';
+	return html;
+}
+
+//prints the info for the producktbatch with the id.
+function printInfo(pb) {
+	
+	$("#date").html(getTodayFormatted());
+	$("#pbnum").html(pad(pb.pbId, 8));
+	$("#recipenum").html(pad(pb.recipeId, 8));
+	var pbstatus = '';
+	switch (pb.status) {
+	case 0: pbstatus = 'Startet';
+		break;
+	case 1: pbstatus = 'Under produktion';
+		break;
+	case 2: pbstatus = 'Afsluttet';
+		break;
+	default: pbstatus = 'UKENDT';
+		break;
+	}
+	$("#pbstatus").html(pbstatus);
+	// Also print start + end dates. (NOT IMPLEMENTED SERVERSIDE)
+}
+
+// https://stackoverflow.com/a/12409344
+function getTodayFormatted()
+{
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
+	if(dd<10){
+	    dd='0'+dd;
+	} 
+	if(mm<10){
+	    mm='0'+mm;
+	} 
+	var today = dd+'-'+mm+'-'+yyyy;
+	return today;
+}
+
+// https://stackoverflow.com/a/2998822
+function pad(num, size) {
+	// Only works up to nine leading zeroes, but our IDs should at most be 8 digits.
+    var s = "000000000" + num;
+    return s.substr(s.length-size);
+}
+
+// https://stackoverflow.com/a/25359264
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return decodeURI(results[1]) || 0;
+    }
+}
+
+</script>
+</head>
+<body>
+	<div id="menu">
+		<b>Menu</b><br> <a href="index.html">Log ud</a>
+	</div>
+	<span id="tilbage" onclick="window.history.back()">Tilbage</span>
+	<br><br>
+
+	<div id="printinfo">
+		Udskrevet <span id="date"></span><br>
+		Produkt Batch nr. <span id="pbnum"></span><br>
+		Recept nr. <span id="recipenum"></span>
+	</div>
+	<br>
+
+	<div class="container" id="pbcomponents"></div>
+	<br>
+
+	<div id="weightinfo">
+		Sum Tara: <span id="taresum"></span><br>
+		Sum Netto: <span id="netsum"></span>
+	</div>
+	<br>
+
+	<div id="pbinfo">
+		Produktion Status: <span id="pbstatus"></span><br>
+		Produktion Startet: <span id="pbstarttime"></span><br> <!-- TODO Implement start and end -->
+		Produktion Slut: <span id="pbfinishtime"></span> <!-- date for ProductBatch backend -->
+	</div>
+
+</body>
+</html>

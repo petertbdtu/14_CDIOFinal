@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Råvareadministration</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+    <script src="jquery-3.3.1.js"></script>
+    <script src="Agent.js"></script>
+    <script>
+        $(function(){//calls the method loadIngredient.
+            //When the button #ingredientOpret is clicked calls the method opretIngredient.
+            loadIngredient();
+            $( "#ingredientOpret" ).click(function() {
+                opretIngredient();
+            });
+            /* finds the closest tablerow when an editbutton is clicked.
+               changes the current inName to a text field where you can write new name
+               changes the current editbutton to an okbutton */
+            $("#ingredientTable").on('click', '.editbutton', function() {
+                var self = $(this).closest("tr");
+                var col2_value = self.find(".inName").text();
+                self.find(".inName").html("<input type = text class = inNameEdit>");
+                self.find(".inNameEdit").val(col2_value);
+                self.find(".editbutton").text("Ok");
+                self.find(".editbutton").toggleClass('editbutton okbutton');
+            });
+            /* finds the closest tablerow when an okbutton is clickedand takes their values.
+               changes the button back to and editbutton.
+               PUTs the data in the row to the datalayer */
+            $("#ingredientTable").on('click', '.okbutton', function() {
+                var self = $(this).closest("tr");
+                var col1_value = self.find(".inId").text();
+                var col2_value = self.find(".inNameEdit").val();
+                self.find(".inName").html("");
+                self.find(".inName").text(col2_value);
+                self.find(".okbutton").text("Ret");
+                self.find(".okbutton").toggleClass('okbutton editbutton');
+                //her skal der så postes ændringer til datalaget
+                var ingredientData = {}
+                ingredientData.id = col1_value;
+                ingredientData.name = col2_value;
+                Agent.putJson('rest/ingredient', ingredientData, function(data){
+
+                }, function(xhr, statusmsg, errormsg) {
+                    alert(xhr.responseJSON.message);
+                });
+            });
+        })
+
+        //GETs the ingredients the datalayer into a table.
+        function loadIngredient() {
+            $("#ingredientTableBody").empty();
+            //Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data).
+            // $('').append('html'), appends html to an html element.
+            Agent.getJson("rest/ingredient",
+                function(data) {
+                    $.each(data, function (i, element) {
+                        $("#ingredientTable").append(generateIngredientHTML(element));
+                    });
+                }
+            );
+        }
+        //Convenience function for generating html
+        function generateIngredientHTML(ingredient) {
+            return 	'<tr><td class = inId>' + ingredient.id + '</td>' +
+                '<td class = inName>' + ingredient.name + '</td>' +
+                '<td><button class = "editbutton">Ret</button></td>' +
+                '</tr>';
+        }
+        
+        //POSTs the data in the input cells to the datalayer
+        function opretIngredient() {
+            var ingredientData = {}
+            ingredientData.id = $("#id").val();
+            ingredientData.name = $("#name").val();
+            //$("#ingredientTableBody").append(generateIngredientHTML(ingredientData)); //for testing
+            Agent.postJson('rest/ingredient', ingredientData, function(data){
+                $("#ingredientTableBody").append(generateIngredientHTML(ingredientData));
+            }, function(xhr, statusmsg, errormsg) {
+                alert(xhr.responseJSON.message);
+            });
+        }
+
+    </script>
+</head>
+<body>
+ <div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+ </div>
+ 
+ <span id="tilbage" onclick="window.history.back()">Tilbage</span><br>
+
+
+    <div>
+        <h2>Råvareopretning</h2>
+        <table class="lefttable">
+            <tr>
+               <th>Nr.</th>
+               <th>Navn</th>
+            </tr>
+            <tr>
+                <td><input type = number id = "id"></td>
+                <td><input type = text id = "name"></td>
+            </tr>
+        </table>
+        <button id = "ingredientOpret">Opret</button>
+    </div>
+    
+    <h2>Råvareadministration</h2>
+   
+    <div>
+        <table border = "1" class="lefttable" id = "ingredientTable">
+            <thead>
+            <tr>
+                <th>Nr.</th>
+                <th>Navn</th>
+                <th>Rette?</th>
+            </tr>
+            </thead>
+            <tbody id = "ingredientTableBody">
+
+            </tbody>
+        </table>
+    </div>
+    
+</body>
+</html>
