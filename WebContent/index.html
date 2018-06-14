@@ -2,59 +2,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-	<script src="jquery-3.3.1.js"></script>
-	<script src="Agent.js"></script>
-	<script>
-        $(function(){
-            checkStatus();
-            $("#weightStart").click(function() {runWeight()});
-        })
-
-        function runWeight() {
-            Agent.postJson("rest/WeightService", $("#weightIp").val(),
-                function() {
-                    checkStatus();
-                },
-                function() {
-                    checkStatus();
-                }
-            );
-        }
-
-        function checkStatus() {
-            Agent.getJson("rest/WeightService",
-                function(Response) {
-                    if(Response == true) {
-                        $("#status").html('<span style="color:green font-size:11px">Vægten er forbundet</span>');
-                    }
-                    else {
-                        $("#status").html('<span style="color:red font-size:11px">Vægten er ikke forbundet</span>');
-                    };
-                },
-                function() {
-                    $("#status").html('<span style="color:red font-size:11px">Kunne ikke få vægtstatus</span>');
-                }
-            );
-        }
-	</script>
-
-<title>Login</title>
-
+<title>Forside</title>
 <link rel="stylesheet" type="text/css" href="style.css">
-
 </head>
-	<body>
-		<div class="centered">
-			<h1 id=adminlicense>Administrator License</h1>
-				<table>
-					<tr><th> Vælg din rolle</th></tr>
-					<tr><td> <a href="useradmin.html">Administrator</a></td></tr>
-					<tr><td> <a href="pharmacistmenu.html">Farmaceut</a></td></tr>
-					<tr><td> <a href="productionleadermenu.html">Produktionsleder</a></td></tr>
-				</table>
-			<div id="status"></div>
-			<button id ="weightStart">Forbind vægt</button>
-			<input id ="weightIp" placeholder="Indtast ip for vægt" type="text">
-		</div>
-	</body>
+<body>
+
+<br>
+<div class="centered">
+<h1>Velkommen til Novo Nordisk A/S</h1>
+<br>
+<br>
+<br>
+<a id="logIn" href="menu.html">Log ind</a>
+</div>
+</body>
 </html>

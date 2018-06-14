@@ -14,6 +14,9 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 	
 	private static IngredientBatchDAO instance = new IngredientBatchDAO();
 	
+	/*
+	 * Constructor which ensures that a file exists.
+	 */
 	private IngredientBatchDAO() {
 		try {
 			Map<Integer,IngredientBatchDTO> ingredientBatches = (Map<Integer, IngredientBatchDTO>) super.load();
@@ -22,11 +25,18 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 		}
 	}
 	
+    /*
+     * Used for static reference to instance.
+     */
 	public static IngredientBatchDAO getInstance()
 	{
 		return instance;
 	}
 	
+	/*
+	 * Returns a specific ingredient batch with
+	 * the specific ID
+	 */
 	@Override
 	public synchronized IngredientBatchDTO getIngredientBatch(int ibId) throws DALException {
 		Map<Integer,IngredientBatchDTO> ingredientBatches = null;
@@ -37,12 +47,14 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 			else
 				throw new DALException("Ingredient with this ID does not exist.");
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
 
+	/*
+	 * Returns a list with all ingredient batches
+	 */
 	@Override
 	public synchronized List<IngredientBatchDTO> getIngredientBatchList() {
 		try {
@@ -54,6 +66,10 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 		return null;
 	}
 
+	/*
+	 * Returns a list of ingredient batches which
+	 * have the given ingredientId
+	 */
 	@Override
 	public synchronized List<IngredientBatchDTO> getIngredientBatchList(int ingredientId)  throws DALException{
 		try {
@@ -64,12 +80,17 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 					batchesOfIngredient.put(ingbatch.getIbId(), ingbatch);
 			return new ArrayList<>(batchesOfIngredient.values());
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
 
+	/*
+	 * Puts a ingredient batch to the map and saves
+	 * to file.
+	 * 
+	 * ERROR if it already exists
+	 */
 	@Override
 	public synchronized void createIngredientBatch(IngredientBatchDTO ingredientBatch) throws DALException {
 		try {
@@ -80,11 +101,14 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 			} else
 				throw new DALException("Ingredient with this ID already exists.");
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	/*
+	 * Replaces an already created ingredient batch with
+	 * the inputed one
+	 */
 	@Override
 	public synchronized void updateIngredientBatch(IngredientBatchDTO ingredientBatch) throws DALException {
 		try {
@@ -92,7 +116,6 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 			ingredientBatches.replace(ingredientBatch.getIbId(), ingredientBatch);
 			super.save(ingredientBatches);
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -25,6 +25,9 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 		}
 	}
 
+    /*
+     * Used for static reference to instance.
+     */
 	public static ProductBatchCompDAO getInstance() {
 		return instance;
 	}
@@ -111,7 +114,7 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 
 	/*
 	 * Replaces an already created productBatchComp with
-	 * the inputted one
+	 * the inputed one
 	 */
 	@Override
 	public synchronized void updateProductBatchComp(ProductBatchCompDTO productBatchComp) throws DALException {

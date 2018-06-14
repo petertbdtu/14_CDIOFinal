@@ -10,6 +10,7 @@ body {
 	text-align: center;
 }
 
+
 a:link, a:visited, #addComp {
     background-color: #267ec1;
     color: white;
@@ -61,7 +62,6 @@ table#recCompTable {
     float: left;
     cursor: pointer;
     }
-
 
 #maincontainer{
 	
