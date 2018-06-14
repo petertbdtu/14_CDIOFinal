@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Opret recept</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="jquery-3.3.1.js"></script>
+<script src="Agent.js"></script>
+<script>
+var urlid = 0;
+$(function(){
+	urlid = $.urlParam("id");
+	loadComps();
+})
+
+function generateRow(element) {
+ 	return '<tr><td class="ingId">' + element.ingredientId + '</td>' +
+	'<td class="recName">' + element.ingredientName + '</td>' + 
+	'<td class="amount">' + element.amount + '</td>' +
+	'<td class="tolerance">' + element.tolerance + '</td>' +
+	'</tr>';
+}
+
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return decodeURI(results[1]) || 0;
+    }
+}
+
+function loadComps() {
+    Agent.getJson("rest/recipeComp/" + urlid,
+        function(data) {
+            $.each(data, function (i, element) {
+                element.id = element.ingredientId;
+                Agent.getJson('rest/ingredient/' + element.ingredientId, function(data) {
+                        element.ingredientName = data.name;
+                        $("#rows").append(generateRow(element, true));
+                    }, function(xhr, statusmsg, errormsg) {
+                        element.name = "ERROR";
+                        $("#rows").append(generateRow(element, true));
+                    });
+
+
+            });
+        }
+    );
+}
+
+</script>
+</head>
+<body>
+	<div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+	</div>
+	<span id="tilbage" onclick="window.history.back()">Tilbage</span>
+	<br><br>
+	<table class="lefttable" id = recCompTable border = "1">
+		<thead>
+			<tr>
+				<td>ID</td>
+				<td>Navn</td>
+				<td>Mængde</td>
+				<td>Tolerance</td>
+			</tr>
+		</thead>
+		<tbody id=rows>
+		
+		</tbody>
+	</table>
+</body>
+</html>

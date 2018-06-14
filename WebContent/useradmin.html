@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Brugeradministration</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="jquery-3.3.1.js"></script>
+<script src="Agent.js"></script>
+
+<script >
+
+$(function(){ //calls the method loadUsers. Calls the method createUser, when button with id userCreate is clicked
+   loadUsers();
+   $( "#userCreate" ).click(function() {
+        createUser();
+    });
+
+    //changes the closest row so it can be edited when the button with the class editbutton is clicked.
+    $("#userTable").on('click', '.editbutton', function() {
+        var row = $(this).closest("tr");
+        var col2_value = row.find(".name").text();
+        var col3_value = row.find(".ini").text();
+        var col4_value = row.find(".cpr").text();
+        row.find(".name").html("<input type = text class = editname>");
+        row.find(".ini").html("<input type = text class = editini>");
+        row.find(".cpr").html("<input type = text class = editcpr>");
+        row.find(".editname").val(col2_value);
+        row.find(".editini").val(col3_value);
+        row.find(".editcpr").val(col4_value);
+        row.find(".active").attr('disabled',false);
+        row.find(".isAdmin").attr('disabled',false);
+        row.find(".isPharma").attr('disabled',false);
+        row.find(".isProdLead").attr('disabled',false);
+        row.find(".isLabTech").attr('disabled',false);
+        row.find(".editbutton").text("Ok");
+        row.find(".editbutton").toggleClass('editbutton okbutton');
+    });
+
+
+//self = selve rækken 
+//fuctionen kaldes fra knappen, derfor vi kan lave et kald for this(er knappen)
+    $("#userTable").on('click', '.okbutton', function() {
+        var row = $(this).closest("tr");
+        var col1_value = row.find(".userId").text();
+        var col2_value = row.find(".editname").val();
+        var col3_value = row.find(".editini").val();
+        var col4_value = row.find(".editcpr").val();
+        var col51_value = row.find(".isAdmin").is(":checked");
+        var col52_value = row.find(".isPharma").is(":checked");;
+        var col53_value = row.find(".isProdLead").is(":checked");
+        var col54_value = row.find(".isLabTech").is(":checked");
+        var col6_value = row.find(".active").is(":checked");
+        row.find(".name").html("");
+        row.find(".ini").html("");
+        row.find(".cpr").html("");
+        row.find(".name").text(col2_value);
+        row.find(".ini").text(col3_value);
+        row.find(".cpr").text(col4_value);
+        row.find(".isAdmin").attr('disabled',true);
+        row.find(".isPharma").attr('disabled',true);
+        row.find(".isProdLead").attr('disabled',true);
+        row.find(".isLabTech").attr('disabled',true);
+        row.find(".active").attr('disabled',true);
+        row.find(".okbutton").text("Ret");
+        row.find(".okbutton").toggleClass('okbutton editbutton');
+        //her skal der så postes ændringer til datalaget
+        
+       //når der er rettet i bruger, skal den hente fra servern  
+        var userData = {}
+        userData.usrId = col1_value;
+        userData.usrName = col2_value;
+        userData.ini = col3_value;
+        userData.cpr = col4_value;
+        userData.admin = col51_value;
+        userData.pharma = col52_value;
+        userData.prodLead = col53_value;
+        userData.labTech = col54_value;
+        userData.active = col6_value;
+        Agent.putJson('rest/useradmin', userData, function(data){
+
+        }, function(xhr, statusmsg, errormsg) {
+            alert(xhr.responseJSON.message);
+        });
+    });
+})
+
+//GETs users from the datalayer and appends them
+function loadUsers() {
+    $("#userTableBody").empty();
+    //Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data).
+    // $('').append('html'), appends html to an html element.
+    Agent.getJson("rest/useradmin",
+        function(data) {
+            $.each(data, function (i, element) {
+                $("#userTable").append(generateUserHTML(element));
+            });
+        }
+    );
+}
+//Convenience function for generating html
+function generateUserHTML(user) {
+    return 	'<tr><td class = userId>' + user.usrId + '</td>' +
+        '<td class = name>' + user.usrName+ '</td>' +
+        '<td class = ini>' + user.ini + '</td>' +
+        '<td class = cpr>' + user.cpr + '</td>' +
+        '<td class = roles>' + 
+			'<table><tr><td><input type="checkbox" class="isAdmin" value="" disabled ' + 
+	        (user.admin ? 'checked' : '') +
+	        '>Admin</td></tr>' + 
+	        '<tr><td><input type="checkbox" class="isPharma" value="" disabled ' + 
+	        (user.pharma ? 'checked' : '') + 
+	        '>Farmaceut</td></tr>' + 
+	        '<tr><td><input type="checkbox" class="isProdLead" value="" disabled ' + 
+	        (user.prodLead ? 'checked' : '') + 
+	        '>Produktionsleder</td></tr>' + 
+	        '<tr><td><input type="checkbox" class="isLabTech" value="" disabled ' + 
+	        (user.labTech ? 'checked' : '') +
+	        '>Laborant</td></tr></table>'
+        + '</td>' +
+        '<td class = active><input type="checkbox" class="active" value="" disabled ' + 
+        (user.active ? 'checked' : '') +
+        '></td>' +
+        '<td><button class = "editbutton">Ret</button></td>' +
+        '</tr>';
+        
+}
+
+
+//opretter objekt som userdata og poster det 
+//Agent = forenkle ajax med Json
+
+function createUser() {
+    var userData = {} //userData er det objekt der bliver sent og dens attributter der skal matche med dtoén (usrid, name)
+    userData.usrId = $("#userid").val();
+    userData.usrName = $("#name").val();
+    userData.ini = $("#ini").val();
+    userData.cpr = $("#cpr").val();
+ 	userData.admin= $("#roleadmin").is(":checked")
+    userData.pharma= $("#rolefarma").is(":checked")
+    userData.prodLead= $("#roleprod").is(":checked")
+    userData.labTech= $("#rolelab").is(":checked")
+    userData.active = $('input[name=active]:checked').val();
+    Agent.postJson('rest/useradmin', userData, function(data){
+        $("#userTableBody").append(generateUserHTML(userData)); //hvis der er succes tilføjer den hvis ikke viser den fejl 
+    }, function(xhr, statusmsg, errormsg) {
+        alert(xhr.responseJSON.message);
+    });
+}
+
+</script>
+            
+            
+            
+</head>
+<body>
+ <div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+	</div>
+	<br>
+	
+<h1>Brugeradministration</h1>	
+
+<div>
+	<h2>Opret ny bruger</h2>
+
+		Bruger ID<br>
+		<input type="var" id ="userid"><br>	
+		Navn<br>
+		<input type="text" id="name"><br>
+		Initialer<br>
+		<input type="text" id="ini"><br>
+		Cpr<br>
+		<input type="text" id="cpr"><br>
+		
+		
+		Rolle<br>
+		<input type="checkbox" id="roleadmin" value="Administrator"> Administrator
+		<input type="checkbox" id="rolefarma" value="Farmaceut"> Farmaceut
+		<input type="checkbox" id="roleprod" value="Produktionsleder"> Produktionsleder<br>
+		<input type="checkbox" id="rolelab" value="Laborant"> Laborant <br>
+		
+		Aktiv<br>
+		<input type="radio" name="active" value=true> Ja
+		<input type="radio" name="active"value=false> Nej
+		<br>
+		
+		<button type="button" id= "userCreate">Opret ny bruger</button>
+		
+
+<br>
+
+<div>
+        <table border= "3" class="lefttable" id = "userTable">
+            <thead>
+            <tr>
+                <th>Bruger ID</th>
+                <th>Navn</th>
+                <th>Ini</th>
+                <th>cpr</th>
+                <th>roles</th>
+                <th>aktiv</th>
+                 <th>Redigere bruger</th>
+            </tr>
+            </thead>
+            <tbody id = "userTableBody">
+
+            </tbody>
+        </table>
+    </div>
+
+
+</DIV>	
+</body>
+</html>

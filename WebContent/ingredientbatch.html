@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="UTF-8">
+	<title>Råvarebatch</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="jquery-3.3.1.js"></script>
+	<script src="Agent.js"></script>
+	<script>
+	$(function() { //calls the methods when the page has loaded
+		loadIngredient();
+		loadIngredientBatches();
+	})
+
+    //Empties the ingredientbatch table and loads the ingredientbatches from the datalayer
+    function loadIngredientBatches() {
+  $("#ingredientbatchtablebody").empty();
+	Agent.getJson("rest/ingredientbatch",
+		function(data) {
+			$.each(data, function (i, element) {
+				$("#ingredientbatchtablebody").append(generateIngredientBatchHTML2(element));
+			});
+		}
+	);
+}
+
+    //GETs the ingredients from the datalayer
+	function loadIngredient() {
+	     Agent.getJson("rest/ingredient", function(data) { 
+	            $.each(data, function (i, element) { 
+	                $("#IngredientDropdown").append(generateIngredientHTML(element));
+	            });
+	         }
+	    ); 
+	}
+
+    //Takes the loaded element makes it into an option element with the value of it's id.
+    function generateIngredientHTML(element) {
+		return "<option value=" + element.id +">" + element.name + "</option>";
+	}
+
+    //Takes the loaded element and makes it into a tablerow with three cells
+    function generateIngredientBatchHTML2(ingredientbatch) {
+		return 	'<tr><td>' + ingredientbatch.ibId + '</td>' +
+				'<td>' + ingredientbatch.ingredientId + '</td>' +
+				'<td>' + ingredientbatch.amount + '</td>' +
+				'</tr>';
+	}
+
+    //Takes the data in the form-batchamount cells and POSTs it to the datalayer.
+    function createIngredientBatch() {
+		var element = $("select#IngredientDropdown option:selected");
+		var ingredientBatchData = {};
+		ingredientBatchData.ingredientId = element.val();
+		ingredientBatchData.ibId = $("#inputBatchNumber").val();
+		ingredientBatchData.amount = $("#inputAmount").val();
+		Agent.postJson("rest/ingredientbatch", ingredientBatchData, function(){
+			loadIngredientBatches();
+		}, function(xhr, statusmsg, errormsg) {
+            alert(xhr.responseJSON.message);
+        })
+	}
+
+    //Hides the ingredientbatches table when the page loads.
+    $(function(){
+		$('#ingredientbatches').hide(0);
+		});
+
+    //shows the ingredientbatches table when the button is clicked.
+    $(function(){
+		$('#showIngredients').on('click', function(){
+			$('#ingredientbatches').slideToggle(400);
+		});
+	});
+	
+	</script>
+</head>
+
+<body>
+ <div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+ </div>
+	
+ <span id="tilbage" onclick="window.history.back()">Tilbage</span><br>
+
+<h2 class="header">Vælg råvare.</h2>
+
+<div id="batchamount-container">
+	<form class="form-batchamount" id="form-batchamount" onsubmit="createIngredientBatch(); return false;">
+		<select id="IngredientDropdown">
+		</select>
+		<label for="inputBatchNumber" class="sr-only">Batch nummer</label>
+        <input type="number" id="inputBatchNumber" class="form-control" min="1" max="99999999" placeholder="Batch nummer">
+		<label for="inputAmount" class="sr-only">Mængde</label>
+        <input type="number" id="inputAmount" class="form-control" min="1" max="99999999" placeholder="Mængde" autofocus>
+        <input type="submit" value="Opret">
+	</form>
+</div><br>
+
+<button id="showIngredients">Vis Råvarebatches</button>
+<div class="container" id="ingredientbatches">
+	<h1>Råvarebatches</h1>
+		<table class="lefttable" id="fullwidth">
+			<thead>
+				<tr>
+					<td class="align3">Råvarebatch ID</td>
+					<td class="align3">Råvare ID</td>
+					<td class="align3">Mængde</td>
+				</tr>
+			</thead>
+			<tbody id="ingredientbatchtablebody"></tbody>
+		</table>
+</div>
+
+
+</body>
+
+</html>
+
+

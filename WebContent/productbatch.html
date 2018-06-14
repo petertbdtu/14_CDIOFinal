@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Produktbatch Administration</title></head>
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="jquery-3.3.1.js"></script>
+<script src="Agent.js"></script>
+<script>
+
+$(function(){//calls the method loadProductBatches. calls createProductBatch when a button is pressed
+    loadProductBatches();
+    $("#createproductbatch").click(function() {
+    	createProductBatch();
+	});
+
+    //changes the site to one with the url id of the pbId in the current row.
+    $("#productbatchtablebody").on('click', '.printProdBatch', function() {
+    	var id = $(this).closest('tr').find(".pbId").text();
+    	window.location.href = "printproductbatch.html?id=" + id;
+    })
+})
+
+//GETs productBatches from the datalayer and appends them.
+function loadProductBatches() {
+	Agent.getJson("rest/productbatch",
+		function(data) {
+			$.each(data, function (i, element) {
+				$("#productbatchtablebody").append(generateProductBatchHTML(element));
+			});
+		}
+	);
+}
+
+//Convenience function for generating html
+function generateProductBatchHTML(productbatch) {
+	var pbstatus = '';
+	switch (productbatch.status) {
+	case 0: pbstatus = 'Startet';
+		break;
+	case 1: pbstatus = 'Under produktion';
+		break;
+	case 2: pbstatus = 'Afsluttet';
+		break;
+	default: pbstatus = 'UKENDT';
+		break;
+	}
+	return 	'<tr><td class="pbId">' + productbatch.pbId + '</td>' +
+			'<td>' + productbatch.recipeId + '</td>' +
+			'<td>' + pbstatus + '</td>' +
+			'<td><button class="printProdBatch">Vis</button></td>' +
+			'</tr>';
+}
+
+//POSTs the productBatch to the datalayer. Also loads it into the table.
+function createProductBatch() {
+   	var productbatchData = {}
+   	productbatchData.pbId = $("#pbId").val();
+   	productbatchData.recipeId = $("#recipeId").val();
+   	productbatchData.status = 0;
+   	Agent.postJson('rest/productbatch', productbatchData, function(data){
+			$("#productbatchtablebody").append(generateProductBatchHTML(productbatchData));
+		}, function(xhr, statusmsg, errormsg) {
+			alert(xhr.responseJSON.message);
+		});
+}
+
+</script>
+<body>
+	 <div id="menu">
+		<b>Menu</b><br>
+		<a href="index.html">Log ud</a>
+	</div>
+	
+<span id="tilbage" onclick="window.history.back()">Tilbage</span><br>	
+<br>
+	
+	ID: <input type="text" id="pbId"> <br>
+	Recept: <input type="text" id="recipeId"> <br>
+	<button id="createproductbatch">Opret Produktbatch</button>
+	
+	<div class="container" id="productbatches">
+	<h1>Produktbatches</h1>
+		<table class="lefttable">
+			<thead>
+				<tr>
+					<td>ID</td>
+					<td>Recept</td>
+					<td>Status</td>
+					<td> </td> <!-- This is where the print button goes under. -->
+				</tr>
+			</thead>
+			<tbody id="productbatchtablebody"></tbody>
+		</table>
+	</div>
+</body>
+</html>
