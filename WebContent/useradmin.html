@@ -9,12 +9,13 @@
 
 <script >
 
-$(function(){
+$(function(){ //calls the method loadUsers. Calls the method createUser, when button with id userCreate is clicked
    loadUsers();
    $( "#userCreate" ).click(function() {
         createUser();
     });
 
+    //changes the closest row so it can be edited when the button with the class editbutton is clicked.
     $("#userTable").on('click', '.editbutton', function() {
         var row = $(this).closest("tr");
         var col2_value = row.find(".name").text();
@@ -83,6 +84,7 @@ $(function(){
     });
 })
 
+//GETs users from the datalayer and appends them
 function loadUsers() {
     $("#userTableBody").empty();
     //Hints: $.each(data, function(i, element){ } iterates over a JSON-collection (data).

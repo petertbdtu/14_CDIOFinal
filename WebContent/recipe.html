@@ -7,12 +7,13 @@
 <script src="jquery-3.3.1.js"></script>
 <script src="Agent.js"></script>
 <script>
-$(function(){
+$(function(){ //calls the method loadRecipes, and calls a the function createRecipe when a button is clicked.
     loadRecipes();
     $( "#createRecipe" ).click(function() {
     	createRecipe();
 	});
 
+	//finds the closest id on click and calls the method redirectId based on that.
     $("#recepter").on('click', '.recShow', function() {
         var self = $(this).closest("tr");
         var recipeId = self.find(".curId").text();
@@ -20,6 +21,7 @@ $(function(){
     });
 })
 
+//GETs a list of recipe components and appends it.
 function loadRecipeCompList () {
 	var urlid = $.urlParam('id');
 	Agent.getJson("rest/recipecomp/" + urlid, 
@@ -31,6 +33,7 @@ function loadRecipeCompList () {
 	);
 }
 
+//greates a row of components from an element.
 function generateRow(element) {
  	return '<tr><td class="ingId">' + element.id + '</td>' +
 	'<td class="recName">' + element.name + '</td>' + 
@@ -40,15 +43,18 @@ function generateRow(element) {
 	'</tr>';
 }
 
+//redirect to a new page with the recipe id as url id
 function redirect() {
 	var id = $("#recipeID").val();
 	window.location.href = "recipecomp.html?id=" + id;
 }
 
+//redirect to a new page with the specified id as url id
 function redirectId(id){
     window.location.href = "printrecipecomp.html?id=" + id
 }
 
+//GETs a list with the recipes and appends them
 function loadRecipes() {
 	Agent.getJson("rest/recipe",
 		function(data) {
@@ -65,6 +71,8 @@ function generateRecipeHTML(recipe) {
 			'<td> <button class="recShow">Vis</button></td>' +
 			'</tr>';
 }
+
+//POSTs a recipe to the datalayer
 function createRecipe() {
    	var recipeData = {};
    	recipeData.recipeId = $("#recipeID").val();

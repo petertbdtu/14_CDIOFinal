@@ -8,18 +8,20 @@
 <script src="Agent.js"></script>
 <script>
 
-$(function(){
+$(function(){//calls the method loadProductBatches. calls createProductBatch when a button is pressed
     loadProductBatches();
     $("#createproductbatch").click(function() {
     	createProductBatch();
 	});
-    
+
+    //changes the site to one with the url id of the pbId in the current row.
     $("#productbatchtablebody").on('click', '.printProdBatch', function() {
     	var id = $(this).closest('tr').find(".pbId").text();
     	window.location.href = "printproductbatch.html?id=" + id;
     })
 })
 
+//GETs productBatches from the datalayer and appends them.
 function loadProductBatches() {
 	Agent.getJson("rest/productbatch",
 		function(data) {
@@ -50,6 +52,7 @@ function generateProductBatchHTML(productbatch) {
 			'</tr>';
 }
 
+//POSTs the productBatch to the datalayer. Also loads it into the table.
 function createProductBatch() {
    	var productbatchData = {}
    	productbatchData.pbId = $("#pbId").val();

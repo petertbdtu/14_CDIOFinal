@@ -8,12 +8,13 @@
 	<script src="jquery-3.3.1.js"></script>
 	<script src="Agent.js"></script>
 	<script>
-	$(function() {
+	$(function() { //calls the methods when the page has loaded
 		loadIngredient();
 		loadIngredientBatches();
 	})
-	
-	function loadIngredientBatches() {
+
+    //Empties the ingredientbatch table and loads the ingredientbatches from the datalayer
+    function loadIngredientBatches() {
   $("#ingredientbatchtablebody").empty();
 	Agent.getJson("rest/ingredientbatch",
 		function(data) {
@@ -23,7 +24,8 @@
 		}
 	);
 }
-	
+
+    //GETs the ingredients from the datalayer
 	function loadIngredient() {
 	     Agent.getJson("rest/ingredient", function(data) { 
 	            $.each(data, function (i, element) { 
@@ -33,20 +35,21 @@
 	    ); 
 	}
 
-	function generateIngredientHTML(element) {
+    //Takes the loaded element makes it into an option element with the value of it's id.
+    function generateIngredientHTML(element) {
 		return "<option value=" + element.id +">" + element.name + "</option>";
 	}
-	
-	function generateIngredientBatchHTML2(ingredientbatch) {
+
+    //Takes the loaded element and makes it into a tablerow with three cells
+    function generateIngredientBatchHTML2(ingredientbatch) {
 		return 	'<tr><td>' + ingredientbatch.ibId + '</td>' +
 				'<td>' + ingredientbatch.ingredientId + '</td>' +
 				'<td>' + ingredientbatch.amount + '</td>' +
 				'</tr>';
 	}
-	
-	
-	
-	function createIngredientBatch() {
+
+    //Takes the data in the form-batchamount cells and POSTs it to the datalayer.
+    function createIngredientBatch() {
 		var element = $("select#IngredientDropdown option:selected");
 		var ingredientBatchData = {};
 		ingredientBatchData.ingredientId = element.val();
@@ -58,13 +61,14 @@
             alert(xhr.responseJSON.message);
         })
 	}
-	
-	$(function(){
+
+    //Hides the ingredientbatches table when the page loads.
+    $(function(){
 		$('#ingredientbatches').hide(0);
 		});
-	
-	
-	$(function(){
+
+    //shows the ingredientbatches table when the button is clicked.
+    $(function(){
 		$('#showIngredients').on('click', function(){
 			$('#ingredientbatches').slideToggle(400);
 		});
