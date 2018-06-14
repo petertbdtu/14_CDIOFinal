@@ -13,6 +13,9 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	
 	private static ProductBatchDAO instance = new ProductBatchDAO();
 	
+	/*
+	 * Constructor which ensures that a file exists.
+	 */
 	private ProductBatchDAO() {
 		try {
 			Map<Integer,ProductBatchDTO> productBatches = (HashMap<Integer, ProductBatchDTO>) super.load();
@@ -21,10 +24,17 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 		}
 	}
 	
+    /*
+     * Used for static reference to instance.
+     */
 	public static ProductBatchDAO getInstance() {
 		return instance;
 	}
 	
+	/*
+	 * Returns a specific Product batch with
+	 * the specific ID
+	 */
 	@Override
 	public synchronized ProductBatchDTO getProductBatch(int pbId) throws DALException {
 		try {
@@ -43,7 +53,9 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 		return null;
 	}
 
-	
+	/*
+	 * Returns a list with all Product batches
+	 */
 	@Override
 	public synchronized List<ProductBatchDTO> getProductBatchList() {
 		try {
@@ -55,6 +67,12 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 		return null;
 	}
 
+	/*
+	 * Puts a product batch to the map and saves
+	 * to file.
+	 * 
+	 * ERROR if it already exists
+	 */
 	@Override
 	public synchronized void createProductBatch(ProductBatchDTO productBatch) throws DALException {
 		try {
@@ -70,6 +88,10 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 		}
 	}
 
+	/*
+	 * Replaces an already created product batch with
+	 * the inputed one
+	 */
 	@Override
 	public synchronized void updateProductBatch(ProductBatchDTO productBatch) throws DALException {
 		try {

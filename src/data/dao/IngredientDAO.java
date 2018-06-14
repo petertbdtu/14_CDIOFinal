@@ -15,8 +15,10 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 
 	private static IngredientDAO instance = new IngredientDAO();
 
+	/*
+	 * Constructor which ensures that a file exists.
+	 */
 	private IngredientDAO() {
-
 		try {
 			Map<Integer,IngredientDTO> ingredients = (HashMap<Integer, IngredientDTO>) super.load();
 		} catch (ClassNotFoundException | IOException e) {
@@ -25,11 +27,18 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 
 	}
   
+    /*
+     * Used for static reference to instance.
+     */
 	public static IngredientDAO getInstance()
 	{
 		return instance;
 	} 
 
+	/*
+	 * Returns a specific ingredient with
+	 * the specific ID
+	 */
 	@Override
 	public synchronized IngredientDTO getIngredient(int ingredientId)  {
 		try {
@@ -41,6 +50,9 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 		return null;
 	}
 
+	/*
+	 * Returns a list with all ingredients
+	 */
 	@Override
 	public synchronized List<IngredientDTO> getIngredientList() {
 		try {
@@ -52,6 +64,12 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 		return null;
 	}
 
+	/*
+	 * Puts a ingredient to the map and saves
+	 * to file.
+	 * 
+	 * ERROR if it already exists
+	 */
 	@Override
 	public synchronized void createIngredient(IngredientDTO ingredient) throws DALException { 
 		try {
@@ -66,6 +84,10 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 		}
 	}
 
+	/*
+	 * Replaces an already created ingredient with
+	 * the inputed one
+	 */
 	@Override
 	public synchronized void updateIngredient(IngredientDTO ingredient) throws DALException {
 		try {

@@ -16,6 +16,9 @@ public class RecipeDAO extends StorageDAO implements IRecipeDAO {
 
     private static RecipeDAO instance = new RecipeDAO();
 
+	/*
+	 * Constructor which ensures that a file exists.
+	 */
     private RecipeDAO() {
         try {
             Map<Integer,RecipeDTO> recipes = (Map<Integer, RecipeDTO>) super.load();
@@ -29,6 +32,10 @@ public class RecipeDAO extends StorageDAO implements IRecipeDAO {
         return instance;
     }
 
+	/*
+	 * Returns a specific RecipeDTO with
+	 * the specific ID
+	 */
     @Override
     public synchronized RecipeDTO getRecipe(int RecipeId) throws DALException {
         try {
@@ -38,12 +45,15 @@ public class RecipeDAO extends StorageDAO implements IRecipeDAO {
             else
                 throw new DALException("Recipe with this ID does not exist.");
         } catch (ClassNotFoundException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
     }
 
+    
+	/*
+	 * Returns a list with all RecipeDTOs
+	 */
     @Override
     public synchronized List<RecipeDTO> getRecipeList() {
         try {
@@ -55,6 +65,13 @@ public class RecipeDAO extends StorageDAO implements IRecipeDAO {
         return null;
     }
 
+    
+	/*
+	 * Puts a eecipe to the map and saves
+	 * to file.
+	 * 
+	 * ERROR if it already exists
+	 */
     @Override
     public synchronized void createRecipe(RecipeDTO recipe) throws DALException {
         try {
@@ -65,11 +82,14 @@ public class RecipeDAO extends StorageDAO implements IRecipeDAO {
             } else
                 throw new DALException("Recipe with this ID already exists.");
         } catch (ClassNotFoundException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
+	/*
+	 * Replaces an already created recipe with
+	 * the inputted one
+	 */
     @Override
     public synchronized void updateRecipe(RecipeDTO recipe) {
         try {
@@ -77,7 +97,6 @@ public class RecipeDAO extends StorageDAO implements IRecipeDAO {
             recipes.replace(recipe.getRecipeId(), recipe);
             super.save(recipes);
         } catch (ClassNotFoundException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
