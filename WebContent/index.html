@@ -4,9 +4,29 @@
 <meta charset="UTF-8">
 <title>Forside</title>
 <link rel="stylesheet" type="text/css" href="style.css">
+<script src="jquery-3.3.1.js"></script>
+<script src="Agent.js"></script>
+<script>
+$(function() {
+	$("#reset").click(function() {
+		Agent.delete("rest/debug",
+			function() {
+			Agent.postJson("rest/debug"), null,
+			function() {
+				alert("Data nulstillet.");
+			},
+			function () {
+				alert("fAck, vi slette alt og oprettede ikke noget nyt.");
+			}
+		}, function() {
+			alert("du dum.");
+		}
+		)
+	})
+})
+</script>
 </head>
 <body>
-
 <br>
 <div class="centered">
 <h1>Velkommen til Novo Nordisk A/S</h1>
@@ -14,6 +34,18 @@
 <br>
 <br>
 <a id="logIn" href="menu.html">Log ind</a>
+</div>
+<br> <!-- PAS PÅ DU IKKE TRYKKER NULSTIL -->
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="centered">
+	<button id="reset"> NULSTIL </button>
 </div>
 </body>
 </html>

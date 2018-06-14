@@ -18,6 +18,13 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	 * Constructor which ensures that a file exists.
 	 */
 	private ProductBatchCompDAO() {
+		init();
+	}
+
+	/**
+	 * Used to ensure file existence.
+	 */
+	public void init() {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (Map<String, ProductBatchCompDTO>) super.load();
 		} catch (ClassNotFoundException | IOException e) {

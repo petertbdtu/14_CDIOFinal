@@ -17,6 +17,13 @@ public class ProductBatchDAO extends StorageDAO implements IProductBatchDAO {
 	 * Constructor which ensures that a file exists.
 	 */
 	private ProductBatchDAO() {
+		init();
+	}
+
+	/**
+	 * Used to ensure file existence.
+	 */
+	public void init() {
 		try {
 			Map<Integer,ProductBatchDTO> productBatches = (HashMap<Integer, ProductBatchDTO>) super.load();
 		} catch (ClassNotFoundException | IOException e) {

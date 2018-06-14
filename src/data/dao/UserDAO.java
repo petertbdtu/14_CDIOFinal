@@ -19,12 +19,19 @@ public class UserDAO extends StorageDAO implements IUserDAO {
 	 * Constructor which ensures that a file exists.
 	 */
     private UserDAO() {
-        try {
+        init();
+    }
+
+	/**
+	 * Used to ensure file existence.
+	 */
+	public void init() {
+		try {
             Map<Integer, UserDTO> users = (Map<Integer, UserDTO>) super.load();
         } catch (ClassNotFoundException | IOException e) {
             super.save(new HashMap<Integer, UserDTO>());
         }
-    }
+	}
 
     /*
      * Used for static reference to instance.

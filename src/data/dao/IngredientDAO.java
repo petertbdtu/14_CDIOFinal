@@ -19,14 +19,19 @@ public class IngredientDAO extends StorageDAO implements IIngredientDAO {
 	 * Constructor which ensures that a file exists.
 	 */
 	private IngredientDAO() {
+		init();
+
+	}
+	/**
+	 * Used to ensure file existence.
+	 */
+	public void init() {
 		try {
 			Map<Integer,IngredientDTO> ingredients = (HashMap<Integer, IngredientDTO>) super.load();
 		} catch (ClassNotFoundException | IOException e) {
 			super.save(new HashMap<Integer, IngredientDTO>());
 		}
-
 	}
-  
     /*
      * Used for static reference to instance.
      */

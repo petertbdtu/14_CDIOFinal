@@ -14,6 +14,13 @@ public class RecipeCompDAO extends StorageDAO implements IRecipeCompDAO {
 	 * Constructor which ensures that a file exists.
 	 */
 	private RecipeCompDAO() {
+		init();
+	}
+
+	/**
+	 * Used to ensure file existence.
+	 */
+	public void init() {
 		try {
 			Map<String, RecipeCompDTO> component = (Map<String, RecipeCompDTO>) super.load();
 		} catch (ClassNotFoundException | IOException e) {

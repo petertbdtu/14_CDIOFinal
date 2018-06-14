@@ -20,12 +20,19 @@ public class RecipeDAO extends StorageDAO implements IRecipeDAO {
 	 * Constructor which ensures that a file exists.
 	 */
     private RecipeDAO() {
-        try {
+        init();
+    }
+
+	/**
+	 * Used to ensure file existence.
+	 */
+	public void init() {
+		try {
             Map<Integer,RecipeDTO> recipes = (Map<Integer, RecipeDTO>) super.load();
         } catch (ClassNotFoundException | IOException e) {
             super.save(new HashMap<Integer, RecipeDTO>());
         }
-    }
+	}
 
     public static RecipeDAO getInstance()
     {

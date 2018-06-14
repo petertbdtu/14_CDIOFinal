@@ -18,6 +18,13 @@ public class IngredientBatchDAO extends StorageDAO implements IIngredientBatchDA
 	 * Constructor which ensures that a file exists.
 	 */
 	private IngredientBatchDAO() {
+		init();
+	}
+
+	/**
+	 * Used to ensure file existence.
+	 */
+	public void init() {
 		try {
 			Map<Integer,IngredientBatchDTO> ingredientBatches = (Map<Integer, IngredientBatchDTO>) super.load();
 		} catch (ClassNotFoundException | IOException e) {
