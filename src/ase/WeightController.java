@@ -28,23 +28,23 @@ import data.dao.ProductBatchCompDAO;
 
 public class WeightController implements Runnable {
 	
-	IWeightSocket ws;
-	State state;
+	private IWeightSocket ws;
+	private State state;
 	
 	//DAOs - Access to datalayer
-	IUserDAO ud;
-	IRecipeDAO rd;
-	IRecipeCompDAO rcd;
-	IProductBatchDAO pbd;
-	IIngredientBatchDAO ibd;
-	IProductBatchCompDAO pbcd;
-		
+	private IUserDAO ud;
+	private IRecipeDAO rd;
+	private IRecipeCompDAO rcd;
+	private IProductBatchDAO pbd;
+	private IIngredientBatchDAO ibd;
+	private IProductBatchCompDAO pbcd;
+
 	//DTOs used to store values for saving
-	ProductBatchCompDTO curPbc;
-	IngredientBatchDTO curIb;
-	ProductBatchDTO curPb;
-	RecipeCompDTO curRc;
-	UserDTO curLab;
+	private ProductBatchCompDTO curPbc;
+	private IngredientBatchDTO curIb;
+	private ProductBatchDTO curPb;
+	private RecipeCompDTO curRc;
+	private UserDTO curLab;
 
 	public enum State {
 		LAB_ID, PB_ID, RB_ID, END_SYSTEM
