@@ -86,7 +86,6 @@
 <div id="batchamount-container">
 	<form class="form-batchamount" id="form-batchamount" onsubmit="createIngredientBatch(); return false;">
 		<select id="IngredientDropdown">
-			<option> Vælg Råvare
 		</select>
 		<label for="inputBatchNumber" class="sr-only">Batch nummer</label>
         <input type="number" id="inputBatchNumber" class="form-control" min="1" max="99999999" placeholder="Batch nummer">
@@ -96,14 +95,14 @@
 	</form>
 </div><br>
 
-<button id="showIngredients">Show Ingredient Batches</button>
+<button id="showIngredients">Vis Råvarebatches</button>
 <div class="container" id="ingredientbatches">
-	<h1>Ingredientbatches</h1>
+	<h1>Råvarebatches</h1>
 		<table class="lefttable" id="fullwidth">
 			<thead>
 				<tr>
-					<td class="align3">IngredientBatchID</td>
-					<td class="align3">råvareID</td>
+					<td class="align3">Råvarebatch ID</td>
+					<td class="align3">Råvare ID</td>
 					<td class="align3">Mængde</td>
 				</tr>
 			</thead>
