@@ -208,7 +208,7 @@ public class WeightSocket implements IWeightSocket{
 		pw.println("P111 \"" + msg + "\"");
 		pw.flush();
 
-		while (br.readLine().startsWith("K C 4")); //Key function code of the enter button [->
+		while (!br.readLine().startsWith("K C 4")); //Key function code of the enter button [->
 		clearText();
 
 		pw.println("K 1"); //K 1 mode, exec function - no code
