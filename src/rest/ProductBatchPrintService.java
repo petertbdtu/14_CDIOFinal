@@ -15,27 +15,31 @@ import data.dao.IngredientDAO;
 import data.dao.ProductBatchCompDAO;
 import data.dao.ProductBatchDAO;
 import data.dao.RecipeCompDAO;
-import data.dao.RecipeDAO;
 import data.dao.UserDAO;
 import data.dto.ProductBatchCompDTO;
 import data.dto.ProductBatchDTO;
 import data.dto.RecipeCompDTO;
-import data.dto.RecipeDTO;
 
-/**
- * Combines data from just about every DTO into one monstrosity.
- */
 @Path("printproductbatch")
 public class ProductBatchPrintService {
+	/*
+	 * Used to return a list of ProductBatchPrintCompDTOs
+	 * It collects information from:
+	 * 	ProductBatch
+	 * 	Recipe
+	 * 	RecipeComp
+	 * 	ProductBatchComp
+	 * 	IngredientBatch
+	 * And saves in one object:
+	 * 	ProductBatchPrintCompDTO
+	 */
 	@GET
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ProductBatchPrintCompDTO> readProductBatch(@PathParam("id") int pbId) throws WebDAOException {
 		try {
 			ProductBatchDTO productBatch = ProductBatchDAO.getInstance().getProductBatch(pbId);
-			
-			RecipeDTO recipe = RecipeDAO.getInstance().getRecipe(productBatch.getRecipeId());
-			
+				
 			List<RecipeCompDTO> recipeComponents = RecipeCompDAO.getInstance()
 					.getRecipeCompList(productBatch.getRecipeId());
 			
@@ -77,13 +81,17 @@ public class ProductBatchPrintService {
 		}
 	}
 
+	/*
+	 * Private innerclass to warp around multiple 
+	 * object's information
+	 */
 	private class ProductBatchPrintCompDTO {
 
-		private String name; // Name of the ingredient
+		private String name; 
 		private int ingredientId;
-		private int amount; // Amount in the batch
+		private int amount; 
 		private double tolerance;
-		private int ibId; // The ingredient batch it is from
+		private int ibId; 
 		private double tara;
 		private double netto;
 		private String ini; // Initials of the operator that weighed it

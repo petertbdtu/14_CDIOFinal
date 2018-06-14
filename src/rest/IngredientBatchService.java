@@ -20,6 +20,10 @@ import data.dto.IngredientBatchDTO;
 @Path("ingredientbatch")
 public class IngredientBatchService {
 
+	/*
+	 * Used to call DAO.createIngredientBatch with
+	 * input IngredientBatchDTO
+	 */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createIngredientBatch(IngredientBatchDTO IngredientBatchDTO)
@@ -33,6 +37,9 @@ public class IngredientBatchService {
         }
     }
 
+    /*
+     * Used to returns ALL ingredientBatches
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public ArrayList<IngredientBatchDTO> readIngredientBatchList()
@@ -40,6 +47,10 @@ public class IngredientBatchService {
         return new ArrayList<>(IngredientBatchDAO.getInstance().getIngredientBatchList());
     }
 
+    /*
+     * Used to return specific ingredientBatch
+     * given the id
+     */
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)

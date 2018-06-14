@@ -9,6 +9,10 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class WebDAOExceptionMapper implements ExceptionMapper<WebDAOException> {
 	
+	/*
+	 * override existing toResponse method and add out
+	 * ErrorMsg
+	 */
 	@Override
 	public Response toResponse(WebDAOException ex) {
 		return Response.status(Status.BAD_REQUEST)
@@ -17,8 +21,12 @@ public class WebDAOExceptionMapper implements ExceptionMapper<WebDAOException> {
 				.build();
 	}
 	
-	public class ErrorMsg{
-		String message;
+	/*
+	 * Private inner class to encapsulate
+	 * message in an object
+	 */
+	private class ErrorMsg{
+		private String message;
 		public ErrorMsg(String msg) {
 			this.message = msg;
 		}

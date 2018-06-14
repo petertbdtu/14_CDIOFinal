@@ -12,6 +12,10 @@ import ase.WeightThreadController;
 @Path("WeightService")
 public class WeightService {
 
+	/*
+	 * method to get WeightThreadController instance
+	 * which can help create thread if none is alive
+	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -26,6 +30,10 @@ public class WeightService {
 		return Response.status(500).build();
 	}
 
+	/*
+	 * method to get status of WheightThreadController.thread
+	 * returns false if no thread created or not alive
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean checkStatus() {

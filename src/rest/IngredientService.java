@@ -19,6 +19,10 @@ import data.dto.IngredientDTO;
 @Path("ingredient")
 public class IngredientService {
 
+	/*
+	 * Used to call DAO.createIngredient with
+	 * input ingredientDTO
+	 */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createIngredient(IngredientDTO ingredientDTO) throws WebDAOException
@@ -31,6 +35,10 @@ public class IngredientService {
         }
     }
 
+    /*
+     * Used to return af list of all
+     * ingredients
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public ArrayList<IngredientDTO> readIngredientList()
@@ -38,6 +46,10 @@ public class IngredientService {
         return new ArrayList<>(IngredientDAO.getInstance().getIngredientList());
     }
 
+    /*
+     * Used to return a specific ingredient
+     * with param id
+     */
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -46,6 +58,10 @@ public class IngredientService {
         return IngredientDAO.getInstance().getIngredient(id);
     }
 
+    /*
+     * Used to call DAO.updateIngredient
+     * with input ingredientDTO
+     */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateIngredient(IngredientDTO ingredientDTO) throws WebDAOException

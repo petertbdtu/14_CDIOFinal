@@ -19,13 +19,16 @@ import data.dto.ProductBatchDTO;
 @Path("productbatch")
 public class ProductBatchService {
 
+	/*
+	 * Used to call DAO.createProductBatch with
+	 * input productBatchDTO
+	 */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createProductBatch(ProductBatchDTO productBatchDTO) throws WebDAOException
     {
         try {
             productBatchDTO.setStatus(0);
-        	// RecipeDAO getRecipe throws DALException if recipe does not exist.
         	RecipeDAO.getInstance().getRecipe(productBatchDTO.getRecipeId());
         	ProductBatchDAO.getInstance().createProductBatch(productBatchDTO);
             return Response.ok().build();
@@ -34,6 +37,10 @@ public class ProductBatchService {
         }
     }
 
+    /*
+     * Used to return list of all
+     * productBatchDTOs
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<ProductBatchDTO> readProductBatchList()
@@ -41,6 +48,10 @@ public class ProductBatchService {
         return ProductBatchDAO.getInstance().getProductBatchList();
     }
 
+    /*
+     * Used to get specific productBatch
+     * from given param id
+     */
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)

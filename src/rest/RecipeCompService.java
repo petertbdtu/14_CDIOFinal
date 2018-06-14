@@ -19,6 +19,10 @@ import data.dto.RecipeCompDTO;
 @Path("recipeComp")
 public class RecipeCompService {
 
+	/*
+	 * Used to call DAO.createRecipeComp with
+	 * input RecipeCompDTO
+	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createRecipeComp(RecipeCompDTO recipeCompDTO)
@@ -31,6 +35,10 @@ public class RecipeCompService {
 		}
 	}
 	
+	/*
+	 * Used to call DAO.createRecipeComp on
+	 * each element in compList
+	 */
 	@Path("list")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -46,6 +54,9 @@ public class RecipeCompService {
 		}
 	}
 	
+	/*
+	 * Used to return all recipeCompDTOs
+	 */
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
     public ArrayList<RecipeCompDTO> readRecipeCompList()
@@ -53,6 +64,10 @@ public class RecipeCompService {
         return new ArrayList<>(RecipeCompDAO.getInstance().getRecipeCompList());
     }
 	
+	/*
+	 * Used to return a list of all recipeCompDTOs
+	 * with specific recipeID
+	 */
 	@GET
 	  @Path("{recipeid}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -61,6 +76,10 @@ public class RecipeCompService {
         return new ArrayList<>(RecipeCompDAO.getInstance().getRecipeCompList(recipeid));
     }
 
+	/*
+	 * Used to return specific recipeCompDTO
+	 * with recipeID and ingredientID
+	 */
     @GET
     @Path("{recipeid}+{ingredientid}")
     @Produces(MediaType.APPLICATION_JSON)

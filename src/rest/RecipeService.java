@@ -2,15 +2,11 @@ package rest;
 
 import data.DALException;
 import data.dao.RecipeDAO;
-import data.dao.RecipeDAO;
-import data.dto.RecipeDTO;
 import data.dto.RecipeDTO;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -23,6 +19,10 @@ import java.util.ArrayList;
 @Path("recipe")
 public class RecipeService {
 
+	/*
+	 * Used to call DAO.createRecipe with
+	 * input recipeDTO
+	 */
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createRecipe(RecipeDTO recipeDTO)
@@ -35,6 +35,10 @@ public class RecipeService {
 		}
 	}
 	
+	/*
+	 * Used to return a list of all
+	 * recipeDTOs
+	 */
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
     public ArrayList<RecipeDTO> readRecipeList()
@@ -42,6 +46,10 @@ public class RecipeService {
         return new ArrayList<>(RecipeDAO.getInstance().getRecipeList());
     }
 
+	/*
+	 * Used to return specific recipeDTO
+	 * with specified id
+	 */
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
