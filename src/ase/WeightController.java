@@ -46,6 +46,7 @@ public class WeightController implements Runnable {
 	private RecipeCompDTO curRc;
 	private UserDTO curLab;
 
+	//Enumerator for keeping track of states
 	public enum State {
 		LAB_ID, PB_ID, RB_ID, END_SYSTEM
 	}
@@ -62,15 +63,20 @@ public class WeightController implements Runnable {
 		pbcd = ProductBatchCompDAO.getInstance();
 	}
 
+	/*
+	    Main loop
+	    The functions LabId() & PbId() return a boolean value that lets us know
+	    if a value has been obtained
+	 */
 	@Override
 	public void run() {
 		boolean isRunning = true;
 
-		while(isRunning) {
+		while(isRunning) { //Using a boolean here lets us break the loop elegantly
 			switch (state) {
 			case LAB_ID:
 				try {
-					if(LabId())
+					if(LabId()) //Get value - UserID
 						state = State.PB_ID;
 				} catch (IOException e) {
 					isRunning = false;
@@ -78,7 +84,7 @@ public class WeightController implements Runnable {
 				break;
 			case PB_ID:
 				try {
-					if(PbId())
+					if(PbId()) //Get value - ProductBatchID
 						state = State.RB_ID;
 					else
 						state = State.LAB_ID;
@@ -88,7 +94,7 @@ public class WeightController implements Runnable {
 				break;
 			case RB_ID:
 				try {
-					RbId();
+					RbId(); //Get value - IngredientBatchID + register weight
 					if(moreIngredients())
 						state = State.RB_ID;
 					else
@@ -108,7 +114,7 @@ public class WeightController implements Runnable {
 					isRunning = false;
 				}
 				break;
-			default:
+			default: //Default - should not be possible with an enumerator, but just in case
 				state = State.LAB_ID;
 				break;
 			}
@@ -116,7 +122,7 @@ public class WeightController implements Runnable {
 	}
 
 	private boolean LabId() throws IOException {
-		curLab = null;
+		curLab = null; //Ensure curLab is not set to anything
 		
 		ws.clearText();
 		ws.tare();
@@ -247,7 +253,8 @@ public class WeightController implements Runnable {
 			errorInState("Udenfor tolerence");
 			return;
 		}
-		
+
+		//Catch and warn user that the current session has not been saved
 		try {
 			pbcd.createProductBatchComp(curPbc);
 		} catch (DALException e) {
@@ -260,17 +267,24 @@ public class WeightController implements Runnable {
 		ws.clearText();
 	}
 
+	//Final check that will end the system
 	private boolean EndSystem() throws IOException {
 		return ws.getConfirmation("Skal systemet afslutte?");
 	}
-	
+
+	/*
+	 *  Utility method for showing an error on the screen
+	 */
 	private void errorInState(String msg) throws IOException {
 		ws.showError();
 		ws.showText(msg);
 		ws.sleep(3);
 		ws.clearText();
 	}
-	
+
+	/*
+	 *  Method for checking if the current working batch is in the recipe
+	 */
 	private boolean pbcInRecipe() {
 		for (RecipeCompDTO rcTemp : rcd.getRecipeCompList(curPb.getRecipeId())) {
 			if(rcTemp.getIngredientId() == curIb.getIngredientId()) {
@@ -281,6 +295,9 @@ public class WeightController implements Runnable {
 		return false;
 	}
 
+	/*
+	 *  Method for checking if the current working batch has already been measured
+	 */
 	private boolean pbcAlreadyDone() {
 		try {
 			for(ProductBatchCompDTO pbcTemp : pbcd.getProductBatchCompList(curPb.getPbId()))
@@ -292,6 +309,9 @@ public class WeightController implements Runnable {
 		return false;
 	}
 
+    /*
+     *  Method for checking if there are more ingredients to be measured in the current productbatch
+     */
 	private boolean moreIngredients() throws IOException {
 		boolean moreIngredients = false;
 		try {

@@ -15,6 +15,9 @@ public class UserDAO extends StorageDAO implements IUserDAO {
 
     private static UserDAO instance = new UserDAO();
 
+	/*
+	 * Constructor which ensures that a file exists.
+	 */
     private UserDAO() {
         try {
             Map<Integer, UserDTO> users = (Map<Integer, UserDTO>) super.load();
@@ -23,11 +26,18 @@ public class UserDAO extends StorageDAO implements IUserDAO {
         }
     }
 
+    /*
+     * Used for static reference to instance.
+     */
     public static UserDAO getInstance()
     {
         return instance;
     }
   
+	/*
+	 * Returns a specific user with
+	 * the specific IDs
+	 */
     @Override
     public synchronized UserDTO getUser(int id) throws DALException {
         try {
@@ -37,12 +47,14 @@ public class UserDAO extends StorageDAO implements IUserDAO {
             else
                 throw new DALException("User with this ID does not exist.");
         } catch (ClassNotFoundException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
     }
 
+	/*
+	 * Returns a list with all users
+	 */
     @Override
     public synchronized List<UserDTO> getUserList() {
         try {
@@ -53,7 +65,13 @@ public class UserDAO extends StorageDAO implements IUserDAO {
         }
         return null;
     }
-
+    
+	/*
+	 * Puts a user to the map and saves
+	 * to file.
+	 * 
+	 * ERROR if it already exists
+	 */
     @Override
     public synchronized void createUser(UserDTO userDTO) throws DALException {
         try {
@@ -64,11 +82,14 @@ public class UserDAO extends StorageDAO implements IUserDAO {
             } else
                 throw new DALException("User with this ID already exists.");
         } catch (ClassNotFoundException | IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
+	/*
+	 * Replaces an already created user with
+	 * the inputted one
+	 */
     @Override
     public synchronized void updateUser(UserDTO userDTO) throws DALException {
         try {
