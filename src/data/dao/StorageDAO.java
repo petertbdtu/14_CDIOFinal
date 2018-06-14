@@ -7,13 +7,17 @@ import java.util.Map;
 public class StorageDAO {
     String path = System.getProperty("user.home");
 
+    /*
+     * Saves the input map to a file named
+     * after this.class.simplename
+     */
     protected synchronized void save(Map<?, ?> map) {
         String newpath = getFilePath();
-
         File tempFile = new File(newpath);
-        if(tempFile.exists()) { while (!tempFile.canWrite()){} }
+        if(tempFile.exists())
+        	while (!tempFile.canWrite()); 
 
-        //Start stream to file(path)
+        //TODO throw instead of catch
         try {
             FileOutputStream fos = new FileOutputStream(tempFile);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -24,43 +28,44 @@ public class StorageDAO {
         }
     }
 
+    /*
+     * Loades a map from the file layer
+     * Path to file is given from the class simplename
+     */
     protected synchronized Map<?, ?> load() throws ClassNotFoundException, IOException {
         String newpath = getFilePath();
-
         File tempFile = new File(newpath);
-        if(tempFile.exists()) { while (!tempFile.canRead()){} }
-
-        //Start stream to file(path)
+        if(tempFile.exists()) 
+        	while (!tempFile.canRead());
+        
         FileInputStream fis = new FileInputStream(tempFile);
         ObjectInputStream ois = new ObjectInputStream(fis);
         Map<?, ?> map = (Map<?, ?>) ois.readObject();
-
-        //Close stream
         ois.close();
 
         return map;
     }
 
-    public String getPath(String simpleName) {
-		String filePath = path + "/.weightData/";
-		filePath += simpleName.substring(0, simpleName.length()-3) + ".data";
-		return filePath;
-    }
-
+    /*
+     * Returns a string containing a filepath
+     * Also ensures that the directory exists
+     */
     private String getFilePath(){
-        //Check Dir Path
         String newpath = path + "/.weightData/";
-
         File file = new File(newpath);
         if(!file.exists())
             file.mkdir();
 
-        //Get File Path
         String className = this.getClass().getSimpleName();
         newpath += className.substring(0, className.length()-3) + ".data";
         return newpath;
     }
-
+    
+    /*
+     * Makes it possible to delete the file
+     * ONLY USED FOR UNIT TEST!
+     * SINCE WE NEVER DELETE DATA
+     */
 	public boolean deleteFile(String simpleName) {
 		String filePath = path + "/.weightData/";
 		filePath += simpleName.substring(0, simpleName.length()-3) + ".data";

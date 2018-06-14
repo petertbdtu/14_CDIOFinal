@@ -13,7 +13,10 @@ import java.util.List;
 public class ProductBatchCompDAO extends StorageDAO implements IProductBatchCompDAO {
 
 	private static ProductBatchCompDAO instance = new ProductBatchCompDAO();
-
+	
+	/*
+	 * Constructor which ensures that a file exists.
+	 */
 	private ProductBatchCompDAO() {
 		try {
 			Map<String,ProductBatchCompDTO> complist = (Map<String, ProductBatchCompDTO>) super.load();
@@ -25,7 +28,11 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 	public static ProductBatchCompDAO getInstance() {
 		return instance;
 	}
-
+	
+	/*
+	 * Returns a specific ProductBatchCompDTO with
+	 * the specific IDs
+	 */
 	@Override
 	public synchronized ProductBatchCompDTO getProductBatchComp(int pbId, int ibId) throws DALException {
 		try {
@@ -37,12 +44,15 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 				throw new DALException("No product batch with these IDs exists.");
 		}
 		catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
 
+	/*
+	 * Returns a list of ProductBatchCompDTOs which
+	 * have the given pbID
+	 */
 	@Override
 	public synchronized List<ProductBatchCompDTO> getProductBatchCompList(int pbId) {
 		try {
@@ -54,13 +64,15 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 			return batchesOfProduct;
 		}
 		catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 
 	}
 
+	/*
+	 * Returns a list with all ProductBatchCompDTOs
+	 */
 	@Override
 	public synchronized List<ProductBatchCompDTO> getProductBatchCompList() {
 		try {
@@ -68,11 +80,17 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 			return new ArrayList<>(complist.values());
 		}
 		catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
+	
+	/*
+	 * Puts a productBatchComp to the map and saves
+	 * to file.
+	 * 
+	 * ERROR if it already exists
+	 */
 	@Override
 	public synchronized void createProductBatchComp(ProductBatchCompDTO productBatchComp) throws DALException {
 		try {
@@ -87,12 +105,14 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 			} 
 		}
 		catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-
+	/*
+	 * Replaces an already created productBatchComp with
+	 * the inputted one
+	 */
 	@Override
 	public synchronized void updateProductBatchComp(ProductBatchCompDTO productBatchComp) throws DALException {
 		try {
@@ -106,13 +126,20 @@ public class ProductBatchCompDAO extends StorageDAO implements IProductBatchComp
 			} 
 		}
 		catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+	
+	/*
+	 * Generates a string from 2 keys
+	 */
 	private String generateKey(int pbID, int ibID) {
 		return pbID + "," + ibID;
 	}
+	
+	/*
+	 * Generates a string from 2 keys
+	 */
 	private String generateKey(ProductBatchCompDTO pbc) {
 		return pbc.getpbID() + "," + pbc.getibID();
   }

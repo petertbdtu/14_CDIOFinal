@@ -1,8 +1,5 @@
 package data.dto;
 
-import data.dao.*;
-import data.idao.*;
-
 import java.io.Serializable;
 
 public class ProductBatchCompDTO implements Serializable{
@@ -11,10 +8,8 @@ public class ProductBatchCompDTO implements Serializable{
 	private double tara;
 	private double netto;
 	private int usrID;
-	public ProductBatchCompDTO() 
-	{
-
-	}
+	public ProductBatchCompDTO(){}
+	
 	// getters and setters below
 	public int getpbID() {
 		return pbID;
